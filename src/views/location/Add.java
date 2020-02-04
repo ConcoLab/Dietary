@@ -64,31 +64,31 @@ public class Add extends JFrame {
 
         locationList.setModel(model);
 
-        locationList.getColumn("Delete").setCellRenderer(new TableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JButton deleteButton = new JButton("Delete");
-                deleteButton.setForeground(Color.white);
-                deleteButton.setBackground(Color.RED);
-                deleteButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        JOptionPane.showMessageDialog(null, "test");
-                    }
-                });
-                return deleteButton;
-            }
-        });
-
-        locationList.getColumn("Edit").setCellRenderer(new TableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                JButton editButton = new JButton("Edit");
-                editButton.setForeground(Color.black);
-                editButton.setBackground(Color.YELLOW);
-                return editButton;
-            }
-        });
+//        locationList.getColumn("Delete").setCellRenderer(new TableCellRenderer() {
+//            @Override
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//                JButton deleteButton = new JButton("Delete");
+//                deleteButton.setForeground(Color.white);
+//                deleteButton.setBackground(Color.RED);
+//                deleteButton.addActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        JOptionPane.showMessageDialog(null, "test");
+//                    }
+//                });
+//                return deleteButton;
+//            }
+//        });
+//
+//        locationList.getColumn("Edit").setCellRenderer(new TableCellRenderer() {
+//            @Override
+//            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+//                JButton editButton = new JButton("Edit");
+//                editButton.setForeground(Color.black);
+//                editButton.setBackground(Color.YELLOW);
+//                return editButton;
+//            }
+//        });
     }
 
 }
