@@ -1,12 +1,12 @@
 package models;
 
-public class location {
+public class Location {
 
     private long id;
     private String name;
     private String address;
 
-    public location(int id, String name, String address) {
+    public Location(int id, String name, String address) {
         this.id = id;
         this.name = name;
         this.address = address;
