@@ -1,6 +1,6 @@
 package daos.concrete;
 
-import doas.interfaces.LocationDoa;
+import daos.interfaces.LocationDoa;
 import models.Location;
 
 import java.util.List;

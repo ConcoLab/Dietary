@@ -1,4 +1,4 @@
-package doas.interfaces;
+package daos.interfaces;
 
 import models.Location;
 
