@@ -2,11 +2,12 @@ package daos.interfaces;
 
 import models.Location;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface LocationDoa {
     Location insert(Location location);
-    List<Location> all();
+    ArrayList<Location> all();
     int deleteAll();
     int delete(Location location);
     Location findById(long id);

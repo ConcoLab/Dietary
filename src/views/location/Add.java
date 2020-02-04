@@ -1,17 +1,17 @@
 package views.location;
 
+import daos.concrete.MysqlLocationDao;
 import models.Location;
 
 import javax.swing.*;
+import javax.swing.event.CellEditorListener;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.EventObject;
 
 public class Add extends JFrame {
     private JFrame frame;
@@ -23,25 +23,13 @@ public class Add extends JFrame {
     private JLabel address;
     private JPanel locationPanel;
 
-    public ArrayList<Location> locations() {
-        ArrayList<Location> locations = new ArrayList<Location>();
-        Location l1 = new Location(1, "Parham", "Shiraz");
-        Location l2 = new Location(1, "Parham", "Shiraz");
-        Location l3 = new Location(1, "Parham", "Shiraz");
-        Location l4 = new Location(1, "Parham", "Shiraz");
-        locations.add(l1);
-        locations.add(l2);
-        locations.add(l3);
-        locations.add(l4);
-        return locations;
-    }
-
     public Add() {
 //        locationList.setModel();
 
 
         setContentPane(locationPanel);
-        updateLocations(locations());
+        MysqlLocationDao locations = new MysqlLocationDao();
+        updateLocations(locations.all());
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
@@ -50,9 +38,8 @@ public class Add extends JFrame {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Location> data = locations();
-                data.add(new Location(2, "Ali", "Tehran"));
-                updateLocations(data);
+                locations.insert(new Location(1, textField1.getText(), textField2.getText()));
+                updateLocations(locations.all());
             }
         });
     }
@@ -74,6 +61,34 @@ public class Add extends JFrame {
 //            rowData[3] = new JButton("Edit");
             model.addRow(rowData);
         }
+
         locationList.setModel(model);
+
+        locationList.getColumn("Delete").setCellRenderer(new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JButton deleteButton = new JButton("Delete");
+                deleteButton.setForeground(Color.white);
+                deleteButton.setBackground(Color.RED);
+                deleteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        JOptionPane.showMessageDialog(null, "test");
+                    }
+                });
+                return deleteButton;
+            }
+        });
+
+        locationList.getColumn("Edit").setCellRenderer(new TableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                JButton editButton = new JButton("Edit");
+                editButton.setForeground(Color.black);
+                editButton.setBackground(Color.YELLOW);
+                return editButton;
+            }
+        });
     }
+
 }
