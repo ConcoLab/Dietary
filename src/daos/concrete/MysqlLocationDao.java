@@ -45,11 +45,17 @@ public class MysqlLocationDao implements LocationDoa {
 
     @Override
     public Location findByName(String name) {
-        return locations.stream().filter(location -> location.getName().contains(name)).findFirst().orElse(null);
+        return locations.stream()
+                .filter(location -> location.getName().contains(name))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public Location findByAddress(String address) {
-        return locations.stream().filter(location -> location.getAddress().contains(address)).findFirst().orElse(null);
+        return locations.stream()
+                .filter(location -> location.getAddress().contains(address))
+                .findFirst()
+                .orElse(null);
     }
 }
