@@ -4,6 +4,7 @@ NO relations added!
 
 package models;
 
+
 public class Food {
     private static int count;
 

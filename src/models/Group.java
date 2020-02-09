@@ -1,5 +1,7 @@
 package models;
 
+import java.util.ArrayList;
+
 public class Group {
 
     private long id;
