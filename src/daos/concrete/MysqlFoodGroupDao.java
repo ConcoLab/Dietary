@@ -1,9 +1,7 @@
 package daos.concrete;
 
 import daos.interfaces.FoodGroupDao;
-import models.Food;
 import models.FoodGroup;
-import models.Group;
 
 import java.util.ArrayList;
 
@@ -16,6 +14,14 @@ public class MysqlFoodGroupDao implements FoodGroupDao {
         fg1.setFoodId(1);
         fg1.setGroupId(1);
         foodGroups.add(fg1);
+        FoodGroup fg2 = new FoodGroup();
+        fg1.setFoodId(2);
+        fg1.setGroupId(3);
+        foodGroups.add(fg2);
+        FoodGroup fg3 = new FoodGroup();
+        fg1.setFoodId(2);
+        fg1.setGroupId(4);
+        foodGroups.add(fg3);
     }
 
     @Override
@@ -25,12 +31,14 @@ public class MysqlFoodGroupDao implements FoodGroupDao {
     }
 
     @Override
-    public ArrayList<Food> getFoodsInGroup(long foodId) {
+    public ArrayList<FoodGroup> getFoodsInGroup(long groupId) {
+//        return foodGroups.stream()
+//                .filter(foodGroup -> foodGroup.getGroupId() == groupId).;
         return null;
     }
 
     @Override
-    public ArrayList<Group> getGroupsOfOneFood(long groupId) {
+    public ArrayList<FoodGroup> getGroupsOfOneFood(long foodId) {
         return null;
     }
 

@@ -10,7 +10,7 @@ public class MysqlGroupDao implements GroupDao {
     public MysqlGroupDao(){
         String [] g = {"Fruit", "Vegetables", "Grains", "Protein", "Dairy", "Sweets"};
         int gg_size = g.length;
-        for (int i = 0; i < gg_size; i++)
+        for (int i = 1; i < gg_size+1; i++)
             this.insert(new Group(i, g[i]));
     }
 

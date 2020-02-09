@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface FoodGroupDao {
     FoodGroup insert(FoodGroup foodGroup);
-    ArrayList<Food> getFoodsInGroup(long foodId);
-    ArrayList<Group> getGroupsOfOneFood(long groupId);
+    ArrayList<FoodGroup> getFoodsInGroup(long groupId);
+    ArrayList<FoodGroup> getGroupsOfOneFood(long foodId);
     void deleteAll();
 }
