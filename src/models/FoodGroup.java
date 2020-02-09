@@ -4,24 +4,24 @@ import java.util.ArrayList;
 
 public class FoodGroup {
 
-    private ArrayList<Food> foods;
+    private long foodId;
 
-    private ArrayList<Group> groups;
+    private long groupId;
 
-    public ArrayList<Food> getFoods() {
-        return foods;
+    public long getFoodId() {
+        return foodId;
     }
 
-    public void setFoods(ArrayList<Food> foods) {
-        this.foods = foods;
+    public void setFoodId(long foodId) {
+        this.foodId = foodId;
     }
 
-    public ArrayList<Group> getGroups() {
-        return groups;
+    public long getGroupId() {
+        return groupId;
     }
 
-    public void setGroups(ArrayList<Group> groups) {
-        this.groups = groups;
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
     }
 
 }

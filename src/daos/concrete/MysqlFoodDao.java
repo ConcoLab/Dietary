@@ -10,6 +10,10 @@ public class MysqlFoodDao implements FoodDao {
     public MysqlFoodDao(){
         Food f1 = new Food(1, "Apple", 80, 1);
         this.insert(f1);
+        Food f2 = new Food(2, "Chicken Pasta", 80, 1);
+        this.insert(f2);
+        Food f3 = new Food(3, "Soup", 80, 1);
+        this.insert(f3);
     }
     @Override
     public Food insert(Food food) {
