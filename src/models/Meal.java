@@ -1,14 +1,16 @@
 package models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Meal {
     private long id;
-    private Date date;
+    private long mealTypeId;
+    private LocalDateTime dateTime;
 
-    public Meal(long id, Date date){
+    public Meal(long id, long mealTypeId, LocalDateTime dateTime){
         this.id = id;
-        this.date = date;
+        this.mealTypeId = mealTypeId;
+        this.dateTime = dateTime;
     }
 
     public long getId(){
@@ -19,11 +21,19 @@ public class Meal {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public long getMealTypeId(){
+        return mealTypeId;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setMealTypeId(long mealTypeId){
+        this.mealTypeId = mealTypeId;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 }

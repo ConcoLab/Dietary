@@ -2,20 +2,20 @@ package daos.concrete;
 
 import daos.interfaces.MealDao;
 import models.Meal;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class MysqlMealDao implements MealDao {
     public static ArrayList<Meal> meals = new ArrayList<Meal>();
 
     public MysqlMealDao(){
         // for example only
-        Meal m1 = new Meal(1, Calendar.getInstance().getTime());
+        Meal m1 = new Meal(0, 0, LocalDateTime.now());
         this.insert(m1);
+        Meal m2 = new Meal(1, 3, LocalDateTime.now());
+        this.insert(m2);
+        Meal m3 = new Meal(2, 2, LocalDateTime.now());
+        this.insert(m3);
     }
 
     @Override
@@ -47,18 +47,22 @@ public class MysqlMealDao implements MealDao {
     }
 
     @Override
-    public Meal findByDate(Date date) {
+    public Meal findByDate(LocalDateTime dateTime) {
         return meals.stream()
-                .filter(meal -> meal.getDate() == date)
+                .filter(meal -> meal.getDateTime() == dateTime)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public List<Meal> findInRange(Date start, Date end) {
+    public ArrayList<Meal> findInRange(LocalDateTime start, LocalDateTime end) {
+        ArrayList<Meal> mealsInRange = new ArrayList<Meal>();
         // needs a second look
-        return meals.stream()
-                .filter(meal -> meal.getDate().after(start) && meal.getDate().before(end))
-                .collect(Collectors.toList());
+        meals.stream()
+                .forEach(meal -> {
+                    if (meal.getDateTime().isAfter(start) && meal.getDateTime().isBefore(end))
+                        mealsInRange.add(meal);
+                });
+        return mealsInRange;
     }
 }
