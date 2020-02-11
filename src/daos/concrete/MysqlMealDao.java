@@ -1,15 +1,16 @@
 package daos.concrete;
 
+import daoFactories.Context;
 import daos.interfaces.MealDao;
 import models.Meal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class MysqlMealDao implements MealDao {
-    public static ArrayList<Meal> meals = new ArrayList<Meal>();
+    private Context _context;
 
-    public MysqlMealDao(){
-        // for example only
+    public MysqlMealDao(Context context){
+        _context = context;
         Meal m1 = new Meal(0, 0, LocalDateTime.now());
         this.insert(m1);
         Meal m2 = new Meal(1, 3, LocalDateTime.now());
@@ -20,13 +21,13 @@ public class MysqlMealDao implements MealDao {
 
     @Override
     public Meal insert(Meal meal) {
-        meals.add(meal);
+        _context.meals.add(meal);
         return null;
     }
 
     @Override
     public ArrayList<Meal> all() {
-        return meals;
+        return _context.meals;
     }
 
     @Override
@@ -37,18 +38,18 @@ public class MysqlMealDao implements MealDao {
 
     @Override
     public int delete(Meal meal) {
-        meals.remove(meal);
+        _context.meals.remove(meal);
         return 0;
     }
 
     @Override
     public Meal findById(long id) {
-        return meals.stream().filter(meal -> meal.getId() == id).findFirst().orElse(null);
+        return _context.meals.stream().filter(meal -> meal.getId() == id).findFirst().orElse(null);
     }
 
     @Override
     public Meal findByDate(LocalDateTime dateTime) {
-        return meals.stream()
+        return _context.meals.stream()
                 .filter(meal -> meal.getDateTime() == dateTime)
                 .findFirst()
                 .orElse(null);
@@ -58,7 +59,7 @@ public class MysqlMealDao implements MealDao {
     public ArrayList<Meal> findInRange(LocalDateTime start, LocalDateTime end) {
         ArrayList<Meal> mealsInRange = new ArrayList<Meal>();
         // needs a second look
-        meals.stream()
+        _context.meals.stream()
                 .forEach(meal -> {
                     if (meal.getDateTime().isAfter(start) && meal.getDateTime().isBefore(end))
                         mealsInRange.add(meal);

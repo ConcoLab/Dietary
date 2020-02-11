@@ -1,8 +1,6 @@
 package daoFactories;
 
-import daos.concrete.MysqlFoodDao;
-import daos.concrete.MysqlFoodGroupDao;
-import daos.concrete.MysqlGroupDao;
+import daos.concrete.*;
 
 public class ContextFactory {
 
@@ -10,6 +8,9 @@ public class ContextFactory {
     private MysqlGroupDao _mysqlGroupDao;
     private MysqlFoodGroupDao _mysqlFoodGroupDao;
     private MysqlFoodDao _mysqlFoodDao;
+    private MysqlFoodMealDao _mysqlFoodMealDao;
+    private MysqlMealDao _mysqlMealDao;
+    private MysqlLocationDao _mysqlLocationDao;
     private Context _context;
 
     public ContextFactory(){
@@ -17,6 +18,9 @@ public class ContextFactory {
         _mysqlFoodDao = new MysqlFoodDao(_context);
         _mysqlGroupDao = new MysqlGroupDao(_context);
         _mysqlFoodGroupDao = new MysqlFoodGroupDao(_context);
+        _mysqlFoodMealDao = new MysqlFoodMealDao(_context);
+        _mysqlMealDao = new MysqlMealDao(_context);
+        _mysqlLocationDao = new MysqlLocationDao(_context);
     }
 
     public MysqlGroupDao get_mysqlGroupDao() {
@@ -29,6 +33,18 @@ public class ContextFactory {
 
     public MysqlFoodDao get_mysqlFoodDao() {
         return _mysqlFoodDao;
+    }
+
+    public MysqlFoodMealDao get_mysqlFoodMealDao() {
+        return _mysqlFoodMealDao;
+    }
+
+    public MysqlMealDao get_mysqlMealDao() {
+        return _mysqlMealDao;
+    }
+
+    public MysqlLocationDao get_mysqlLocationDao() {
+        return _mysqlLocationDao;
     }
 
 
