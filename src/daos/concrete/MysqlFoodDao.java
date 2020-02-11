@@ -1,13 +1,17 @@
 package daos.concrete;
 
+import daoFactories.Context;
+import daoFactories.ContextFactory;
 import daos.interfaces.FoodDao;
 import models.Food;
 import java.util.ArrayList;
 
 public class MysqlFoodDao implements FoodDao {
-    public static ArrayList<Food> foods = new ArrayList<Food>();
+    private Context _context;
 
-    public MysqlFoodDao(){
+
+    public MysqlFoodDao(Context context){
+        _context = context;
         Food f1 = new Food(1, "Apple", 80, 1);
         this.insert(f1);
         Food f2 = new Food(2, "Chicken Pasta", 80, 1);
@@ -17,13 +21,13 @@ public class MysqlFoodDao implements FoodDao {
     }
     @Override
     public Food insert(Food food) {
-        foods.add(food);
+        _context.foods.add(food);
         return null;
     }
 
     @Override
     public ArrayList<Food> all() {
-        return foods;
+        return _context.foods;
     }
 
     @Override
@@ -34,13 +38,13 @@ public class MysqlFoodDao implements FoodDao {
 
     @Override
     public int delete(Food food) {
-        foods.remove(food);
+        _context.foods.remove(food);
         return 0;
     }
 
     @Override
     public Food findById(long id) {
-        return foods.stream()
+        return _context.foods.stream()
                 .filter(food -> food.getId() == id)
                 .findFirst()
                 .orElse(null);
@@ -48,7 +52,7 @@ public class MysqlFoodDao implements FoodDao {
 
     @Override
     public Food findByName(String name) {
-        return foods.stream()
+        return _context.foods.stream()
                 .filter(food -> food.getName().contains(name))
                 .findFirst()
                 .orElse(null);

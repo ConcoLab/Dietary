@@ -1,45 +1,66 @@
 package daos.concrete;
 
+import daoFactories.Context;
+import daoFactories.ContextFactory;
 import daos.interfaces.FoodGroupDao;
+import models.Food;
 import models.FoodGroup;
+import models.Group;
 
 import java.util.ArrayList;
 
 public class MysqlFoodGroupDao implements FoodGroupDao {
-    private ArrayList<FoodGroup> foodGroups;
+    private Context _context;
 
 
-    public MysqlFoodGroupDao() {
+    public MysqlFoodGroupDao(Context context) {
+        _context = context;
         FoodGroup fg1 = new FoodGroup();
         fg1.setFoodId(1);
         fg1.setGroupId(1);
-        foodGroups.add(fg1);
+        this.insert(fg1);
         FoodGroup fg2 = new FoodGroup();
-        fg1.setFoodId(2);
-        fg1.setGroupId(3);
-        foodGroups.add(fg2);
+        fg2.setFoodId(2);
+        fg2.setGroupId(3);
+        this.insert(fg2);
         FoodGroup fg3 = new FoodGroup();
-        fg1.setFoodId(2);
-        fg1.setGroupId(4);
-        foodGroups.add(fg3);
+        fg3.setFoodId(2);
+        fg3.setGroupId(4);
+        this.insert(fg3);
     }
 
     @Override
     public FoodGroup insert(FoodGroup foodGroup) {
-        foodGroups.add(foodGroup);
+        _context.foodGroups.add(foodGroup);
         return foodGroup;
     }
 
     @Override
-    public ArrayList<FoodGroup> getFoodsInGroup(long groupId) {
+    public ArrayList<Food> getFoodsInGroup(long groupId) {
 //        return foodGroups.stream()
 //                .filter(foodGroup -> foodGroup.getGroupId() == groupId).;
-        return null;
+        ArrayList<Food> foods = new ArrayList<Food>();
+        _context.foodGroups.stream().forEach(foodGroup -> {
+            if(foodGroup.getFoodId() == groupId)
+                foods.add(_context.foods.stream()
+                        .filter(food -> food.getId() == foodGroup.getFoodId())
+                        .findFirst()
+                        .orElse(null));
+        });
+        return foods;
     }
 
     @Override
-    public ArrayList<FoodGroup> getGroupsOfOneFood(long foodId) {
-        return null;
+    public ArrayList<Group> getGroupsOfOneFood(long foodId) {
+        ArrayList<Group> groups = new ArrayList<Group>();
+        _context.foodGroups.stream().forEach(foodGroup -> {
+            if(foodGroup.getFoodId() == foodId)
+                groups.add(_context.groups.stream()
+                        .filter(group -> group.getId() == foodGroup.getGroupId())
+                        .findFirst()
+                        .orElse(null));
+        });
+        return groups;
     }
 
     @Override
