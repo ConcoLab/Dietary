@@ -1,14 +1,16 @@
 package daos.concrete;
 
+import daoFactories.Context;
 import daos.interfaces.UnitDao;
 import models.Unit;
 
 import java.util.ArrayList;
 
 public class MysqlUnitDao implements UnitDao {
-    public static ArrayList<Unit> units = new ArrayList<Unit>();
+    private Context _context;
 
-    public MysqlUnitDao(){
+    public MysqlUnitDao(Context context){
+        _context = context;
         String [] u = {"g", "ml", "cup", "glass", "piece"};
         int u_size = u.length;
         for (int i = 0; i < u_size; i++)
@@ -16,13 +18,13 @@ public class MysqlUnitDao implements UnitDao {
     }
     @Override
     public Unit insert(Unit unit) {
-        units.add(unit);
+        _context.units.add(unit);
         return null;
     }
 
     @Override
     public ArrayList<Unit> all() {
-        return units;
+        return _context.units;
     }
 
     @Override
@@ -33,13 +35,13 @@ public class MysqlUnitDao implements UnitDao {
 
     @Override
     public int delete(Unit unit) {
-        units.remove(unit);
+        _context.units.remove(unit);
         return 0;
     }
 
     @Override
     public Unit findById(long id) {
-        return units.stream()
+        return _context.units.stream()
                 .filter(unit -> unit.getId() == id)
                 .findFirst()
                 .orElse(null);
@@ -47,7 +49,7 @@ public class MysqlUnitDao implements UnitDao {
 
     @Override
     public Unit findByName(String name) {
-        return units.stream()
+        return _context.units.stream()
                 .filter(unit -> unit.getName().contains(name))
                 .findFirst()
                 .orElse(null);

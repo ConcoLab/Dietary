@@ -17,21 +17,22 @@ public class GroupGUI extends JFrame{
     private JButton deleteBtn;
     private JButton addBtn;
     private JTextField newGroupTextField;
+    private JPanel bottomPanel;
 
 
     public GroupGUI(){
         setContentPane(groupPanel);
         Context context = new Context();
         MysqlGroupDao groups = new MysqlGroupDao(context);
-        String[] header = {"Food Group"};
-        DefaultTableModel tableModel = new DefaultTableModel(0, 1);
+        DefaultTableModel tableModel = new DefaultTableModel();
+        //tableModel.setDataVector(new Object[][]{}, new Object[]{"Food Group"});
         ArrayList<Group> gr = groups.all();
-        tableModel.addRow(header);
+        JScrollPane scroll = new JScrollPane(groupTable);
+        //groupTable.setPreferredScrollableViewportSize(groupTable.getPreferredSize());
+//        add(scroll);
         for (Group g : gr)
-            tableModel.addRow(new String[]{g.getName()});
-
-        groupTable.setModel(new DefaultTableModel());
-
+            tableModel.addRow(new Object[]{g.getName()});
+        System.out.print(gr.get(0).getName());
         groupTable.setModel(tableModel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -4,22 +4,25 @@ import daos.concrete.*;
 
 public class ContextFactory {
 
-
-    private MysqlGroupDao _mysqlGroupDao;
-    private MysqlFoodGroupDao _mysqlFoodGroupDao;
     private MysqlFoodDao _mysqlFoodDao;
+    private MysqlFoodGroupDao _mysqlFoodGroupDao;
+    private MysqlGroupDao _mysqlGroupDao;
+    private MysqlUnitDao _mysqlUnitDao;
     private MysqlFoodMealDao _mysqlFoodMealDao;
     private MysqlMealDao _mysqlMealDao;
+    private MysqlMealTypeDao _mysqlMealTypeDao;
     private MysqlLocationDao _mysqlLocationDao;
     private Context _context;
 
     public ContextFactory(){
         _context = new Context();
         _mysqlFoodDao = new MysqlFoodDao(_context);
-        _mysqlGroupDao = new MysqlGroupDao(_context);
         _mysqlFoodGroupDao = new MysqlFoodGroupDao(_context);
+        _mysqlGroupDao = new MysqlGroupDao(_context);
+        _mysqlUnitDao = new MysqlUnitDao(_context);
         _mysqlFoodMealDao = new MysqlFoodMealDao(_context);
         _mysqlMealDao = new MysqlMealDao(_context);
+        _mysqlMealTypeDao = new MysqlMealTypeDao(_context);
         _mysqlLocationDao = new MysqlLocationDao(_context);
     }
 
