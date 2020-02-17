@@ -14,7 +14,7 @@ public class MysqlUnitDao implements UnitDao {
         String [] u = {"g", "ml", "cup", "glass", "piece"};
         int u_size = u.length;
         for (int i = 0; i < u_size; i++)
-            this.insert(new Unit(i, u[i]));
+            this.insert(new Unit(u[i]));
     }
     @Override
     public Unit insert(Unit unit) {

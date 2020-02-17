@@ -13,8 +13,8 @@ public class MysqlLocationDao implements LocationDoa {
 
     public MysqlLocationDao(Context context) {
         _context = context;
-        Location l0 = new Location(0,"Home", "Mi Casa");
-        Location l1 = new Location(1, "Tim Hortons", "Snowdon");
+        Location l0 = new Location("Home", "Mi Casa");
+        Location l1 = new Location("Tim Hortons", "Snowdon");
         this.insert(l0);
         this.insert(l1);
     }

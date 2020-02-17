@@ -4,14 +4,14 @@ import daos.concrete.*;
 
 public class ContextFactory {
 
-    private MysqlFoodDao _mysqlFoodDao;
-    private MysqlFoodGroupDao _mysqlFoodGroupDao;
-    private MysqlGroupDao _mysqlGroupDao;
-    private MysqlUnitDao _mysqlUnitDao;
-    private MysqlFoodMealDao _mysqlFoodMealDao;
-    private MysqlMealDao _mysqlMealDao;
-    private MysqlMealTypeDao _mysqlMealTypeDao;
-    private MysqlLocationDao _mysqlLocationDao;
+    private static MysqlFoodDao _mysqlFoodDao;
+    private static MysqlFoodGroupDao _mysqlFoodGroupDao;
+    private static MysqlGroupDao _mysqlGroupDao;
+    private static MysqlUnitDao _mysqlUnitDao;
+    private static MysqlFoodMealDao _mysqlFoodMealDao;
+    private static MysqlMealDao _mysqlMealDao;
+    private static MysqlMealTypeDao _mysqlMealTypeDao;
+    private static MysqlLocationDao _mysqlLocationDao;
     private Context _context;
 
     public ContextFactory(){
@@ -26,29 +26,37 @@ public class ContextFactory {
         _mysqlLocationDao = new MysqlLocationDao(_context);
     }
 
-    public MysqlGroupDao get_mysqlGroupDao() {
+    public static MysqlGroupDao get_mysqlGroupDao() {
         return _mysqlGroupDao;
     }
 
-    public MysqlFoodGroupDao get_mysqlFoodGroupDao() {
+    public static MysqlFoodGroupDao get_mysqlFoodGroupDao() {
         return _mysqlFoodGroupDao;
     }
 
-    public MysqlFoodDao get_mysqlFoodDao() {
+    public static MysqlFoodDao get_mysqlFoodDao() {
         return _mysqlFoodDao;
     }
 
-    public MysqlFoodMealDao get_mysqlFoodMealDao() {
+    public static MysqlFoodMealDao get_mysqlFoodMealDao() {
         return _mysqlFoodMealDao;
     }
 
-    public MysqlMealDao get_mysqlMealDao() {
+    public static MysqlMealDao get_mysqlMealDao() {
         return _mysqlMealDao;
     }
 
-    public MysqlLocationDao get_mysqlLocationDao() {
+    public static MysqlLocationDao get_mysqlLocationDao() {
         return _mysqlLocationDao;
     }
+
+    public static MysqlUnitDao get_mysqlUnitDao(){return _mysqlUnitDao;};
+
+    public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
+
+    public Context getContext(){return _context;}
+
+
 
 
 }

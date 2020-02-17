@@ -14,7 +14,7 @@ public class MysqlGroupDao implements GroupDao {
         _context = context;
         String [] g = {"Fruit", "Vegetables", "Grains", "Protein", "Dairy", "Sweets"};
         for (int i = 0; i < g.length; i++)
-            this.insert(new Group(i, g[i]));
+            this.insert(new Group(g[i]));
     }
 
     @Override

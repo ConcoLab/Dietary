@@ -14,9 +14,6 @@ public class Context {
     public ArrayList<MealType> mealTypes;
     public ArrayList<Location> locations;
 
-
-
-
     public Context() {
         foods = new ArrayList<Food>();
         foodGroups = new ArrayList<FoodGroup>();

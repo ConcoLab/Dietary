@@ -1,13 +1,14 @@
 package models;
 
 public class Group {
-
+    private static long ITERATOR = 0;
     private long id;
     private String name;
 
-    public Group(long id, String name){
-        this.id = id;
+    public Group(String name){
+        this.id = ITERATOR;
         this.name = name;
+        ITERATOR++;
     }
 
     public long getId(){

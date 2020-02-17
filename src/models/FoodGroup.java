@@ -1,9 +1,7 @@
 package models;
 
 public class FoodGroup {
-
     private long foodId;
-
     private long groupId;
 
     public long getFoodId() {
