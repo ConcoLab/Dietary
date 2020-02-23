@@ -5,17 +5,17 @@ public class Group {
     private long id;
     private String name;
 
-    public Group(String name){
+    public Group(String name) {
         this.id = ITERATOR;
         this.name = name;
         ITERATOR++;
     }
 
-    public long getId(){
+    public long getId() {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
     }
 

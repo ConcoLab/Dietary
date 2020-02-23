@@ -72,7 +72,7 @@ public class FoodPanel extends JPanel{
                 long calories = Long.parseLong(foodCalories.getText());
 //                if(name.length()== 0)
 //                    return;
-                Food newFood = new Food(name,calories, thisUnit.getId(), quantity);
+                Food newFood = new Food(name, calories, thisUnit.getId(), quantity);
                 ContextFactory.get_mysqlFoodDao().insert(newFood);
                 model.addRow(new Object[]{newFood.getId(),
                         newFood.getName(),

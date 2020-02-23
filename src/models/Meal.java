@@ -8,27 +8,27 @@ public class Meal {
     private long mealTypeId;
     private LocalDateTime dateTime;
 
-    public Meal( long mealTypeId, LocalDateTime dateTime){
+    // taken from FoodMeal
+    private long mealId;
+    private long foodId;
+    private long locationId;
+    private long amount;
+
+
+    public Meal(long mealTypeId, LocalDateTime dateTime) {
         this.id = ITERATOR;
         this.mealTypeId = mealTypeId;
         this.dateTime = dateTime;
+
         ITERATOR++;
     }
 
-    public long getId(){
+    public long getId() {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
-    }
-
-    public long getMealTypeId(){
-        return mealTypeId;
-    }
-
-    public void setMealTypeId(long mealTypeId){
-        this.mealTypeId = mealTypeId;
     }
 
     public LocalDateTime getDateTime() {
@@ -37,5 +37,37 @@ public class Meal {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public long getMealId() {
+        return mealId;
+    }
+
+    public void setMealId(long mealId) {
+        this.mealId = mealId;
+    }
+
+    public long getFoodId() {
+        return foodId;
+    }
+
+    public void setFoodId(long foodId) {
+        this.foodId = foodId;
+    }
+
+    public long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(long locationId) {
+        this.locationId = locationId;
+    }
+
+    public long getAmount() {
+        return amount;
+    }
+
+    public void setAmount(long amount) {
+        this.amount = amount;
     }
 }
