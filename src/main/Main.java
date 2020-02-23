@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args){
         ContextFactory _context = new ContextFactory();
-        Food test = _context.get_mysqlFoodDao().findById(1);
+        Food test = _context.get_mysqlFoodDao().findByName("Soup");
         System.out.println(test.getName());
         ArrayList<Group> groups = _context.get_mysqlGroupDao().all();
         ArrayList<Group> fg = _context.get_mysqlFoodGroupDao().getGroupsOfOneFood(2);

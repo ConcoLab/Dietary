@@ -9,7 +9,7 @@ public class MysqlUnitDao implements UnitDao {
     public static ArrayList<Unit> units = new ArrayList<Unit>();
 
     public MysqlUnitDao(){
-        String [] u = {"g", "ml", "cup", "piece"};
+        String [] u = {"g", "ml", "cup", "glass", "piece"};
         int u_size = u.length;
         for (int i = 0; i < u_size; i++)
             this.insert(new Unit(i, u[i]));
