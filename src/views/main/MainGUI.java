@@ -1,9 +1,7 @@
 package views.main;
 
-import views.panels.FoodPanel;
-import views.panels.GroupPanel;
-import views.panels.LocationPanel;
-import views.panels.UnitPanel;
+import javafx.scene.control.DatePicker;
+import views.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +12,9 @@ public class MainGUI extends JFrame{
     private JPanel mainPanel;
     private JPanel northPanel;
     private JPanel southPanel;
-    private JPanel centerPanel;
+    private JPanel rightPanel;
+    private JPanel rightTopPanel;
+    private JPanel leftPanel;
     private JMenuBar mainMenuBar;
     private JLabel statusText;
     private JTabbedPane tabbedPane;
@@ -23,6 +23,7 @@ public class MainGUI extends JFrame{
     public MainGUI(){
         setTitle("Project");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainPanel = new JPanel();
         add(mainPanel);
         mainPanel.setLayout(new BorderLayout(3,3));
@@ -68,11 +69,25 @@ public class MainGUI extends JFrame{
         dbMenu.add(mealMenu);
         dbMenu.add(mealTypeMenu);
         dbMenu.add(locationMenu);
-        centerPanel = new JPanel();
-        mainPanel.add(centerPanel,BorderLayout.CENTER);
-        centerPanel.setLayout(new GridLayout());
+        leftPanel = new JPanel();
+        mainPanel.add(leftPanel,BorderLayout.LINE_START);
+        leftPanel.setLayout(new GridLayout());
         tabbedPane = new JTabbedPane();
-        centerPanel.add(tabbedPane);
+        leftPanel.add(tabbedPane);
+        tabbedPane.addTab("Units", null, new UnitPanel());
+        tabbedPane.addTab("Locations", null, new LocationPanel());
+        tabbedPane.addTab("Food Groups", null, new GroupPanel());
+        tabbedPane.addTab("Foods", null, new FoodPanel());
+
+        rightPanel = new JPanel();
+        mainPanel.add(rightPanel,BorderLayout.CENTER);
+        rightPanel.setLayout(new GridLayout(0,1));
+        rightPanel.add(new EatenMealsPanel());
+        rightPanel.add(new ReportPanel());
+
+
+//        tabbedPane = new JTabbedPane();
+//        rightPanel.add(tabbedPane);
 //        JPanel pnlTab = new JPanel(new FlowLayout());
 //        pnlTab.setOpaque(false);
 //        JLabel lblTitle = new JLabel("Food Groups");
@@ -95,8 +110,8 @@ public class MainGUI extends JFrame{
         //southPanel.add(statusText);
 
         pack();
-        setLocationRelativeTo(null);
-        setSize(300,300);
+//        setLocationRelativeTo(null);
+//        setSize(300,300);
         setVisible(true);
 
     }
