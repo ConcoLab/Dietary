@@ -6,7 +6,7 @@ package models;
 
 
 public class Food {
-    private static int count;
+    private static long ITERATOR = 0;
 
     private long id;
     private String name;
@@ -14,13 +14,13 @@ public class Food {
     private long unit_id;
     private long quantity;
 
-    public Food(long id, String name, long calories, long unit_id, long quantity){
-        this.id = id;
+    public Food(String name, long calories, long unit_id, long quantity){
+        this.id = ITERATOR;
         this.name = name;
         this.calories = calories;
         this.unit_id = unit_id;
         this.quantity = quantity;
-
+        ITERATOR++;
     }
 
     public long getId(){

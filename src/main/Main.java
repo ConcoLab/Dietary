@@ -2,7 +2,7 @@ package main;
 
 import daoFactories.ContextFactory;
 import models.*;
-import views.group.GroupGUI;
+import views.main.MainGUI;
 
 import java.util.ArrayList;
 
@@ -17,9 +17,7 @@ public class Main {
 //        LocalDateTime end = LocalDateTime.of(2030, Month.JANUARY, 1, 0,0,0);
 //        m.findInRange(start,end).forEach(meal -> System.out.print(meal.getMealTypeId() + " "));
         System.out.println();
-        GroupGUI groupGUI = new GroupGUI();
-        ArrayList<Group> groups = _context.get_mysqlGroupDao().all();
-        ArrayList<Group> fg = _context.get_mysqlFoodGroupDao().getGroupsOfOneFood(2);
+        MainGUI main = new MainGUI();
 //        System.out.println(test.getName());
 
 

@@ -11,11 +11,11 @@ public class MysqlMealDao implements MealDao {
 
     public MysqlMealDao(Context context){
         _context = context;
-        Meal m1 = new Meal(0, 0, LocalDateTime.now());
+        Meal m1 = new Meal(0, LocalDateTime.now());
         this.insert(m1);
-        Meal m2 = new Meal(1, 3, LocalDateTime.now());
+        Meal m2 = new Meal(3, LocalDateTime.now());
         this.insert(m2);
-        Meal m3 = new Meal(2, 2, LocalDateTime.now());
+        Meal m3 = new Meal(2, LocalDateTime.now());
         this.insert(m3);
     }
 

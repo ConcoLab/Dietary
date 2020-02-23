@@ -12,11 +12,11 @@ public class MysqlFoodDao implements FoodDao {
 
     public MysqlFoodDao(Context context){
         _context = context;
-        Food f1 = new Food(1, "Apple", 80, 4,1);
+        Food f1 = new Food("Apple", 80, 4,1);
         this.insert(f1);
-        Food f2 = new Food(2, "Chicken Pasta", 80, 0, 250);
+        Food f2 = new Food("Chicken Pasta", 80, 0, 250);
         this.insert(f2);
-        Food f3 = new Food(3, "Soup", 80, 2,250);
+        Food f3 = new Food("Soup", 80, 1,250);
         this.insert(f3);
     }
     @Override
