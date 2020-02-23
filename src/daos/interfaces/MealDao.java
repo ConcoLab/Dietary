@@ -1,10 +1,8 @@
 package daos.interfaces;
 
 import models.Meal;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public interface MealDao {
     Meal insert(Meal meal);
@@ -12,6 +10,6 @@ public interface MealDao {
     int deleteAll();
     int delete(Meal meal);
     Meal findById(long id);
-    Meal findByDate(Date date);
-    List<Meal> findInRange(Date start, Date end);
+    Meal findByDate(LocalDateTime date);
+    ArrayList<Meal> findInRange(LocalDateTime start, LocalDateTime end);
 }

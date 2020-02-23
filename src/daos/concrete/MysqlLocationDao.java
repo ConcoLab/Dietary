@@ -11,7 +11,9 @@ public class MysqlLocationDao implements LocationDoa {
     public static ArrayList<Location> locations = new ArrayList<Location>();
 
     public MysqlLocationDao() {
+        Location l0 = new Location(0,"Home", "Mi Casa");
         Location l1 = new Location(1, "Tim Hortons", "Snowdon");
+        this.insert(l0);
         this.insert(l1);
     }
 
