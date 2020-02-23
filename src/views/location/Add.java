@@ -23,26 +23,26 @@ public class Add extends JFrame {
     private JLabel address;
     private JPanel locationPanel;
 
-    public Add() {
-//        locationList.setModel();
-
-
-        setContentPane(locationPanel);
-        MysqlLocationDao locations = new MysqlLocationDao();
-        updateLocations(locations.all());
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(null);
-        setVisible(true);
-        button1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                locations.insert(new Location(1, textField1.getText(), textField2.getText()));
-                updateLocations(locations.all());
-            }
-        });
-    }
+//    public Add() {
+////        locationList.setModel();
+//
+//
+//        setContentPane(locationPanel);
+//        MysqlLocationDao locations = new MysqlLocationDao();
+//        updateLocations(locations.all());
+//
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        pack();
+//        setLocationRelativeTo(null);
+//        setVisible(true);
+//        button1.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                locations.insert(new Location(1, textField1.getText(), textField2.getText()));
+//                updateLocations(locations.all());
+//            }
+//        });
+//    }
 
 
 

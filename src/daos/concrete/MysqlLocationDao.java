@@ -1,5 +1,6 @@
 package daos.concrete;
 
+import daoFactories.Context;
 import daos.interfaces.LocationDoa;
 import models.Location;
 
@@ -8,9 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MysqlLocationDao implements LocationDoa {
-    public static ArrayList<Location> locations = new ArrayList<Location>();
+    private Context _context;
 
-    public MysqlLocationDao() {
+    public MysqlLocationDao(Context context) {
+        _context = context;
         Location l0 = new Location(0,"Home", "Mi Casa");
         Location l1 = new Location(1, "Tim Hortons", "Snowdon");
         this.insert(l0);
@@ -19,13 +21,13 @@ public class MysqlLocationDao implements LocationDoa {
 
     @Override
     public Location insert(Location location) {
-        locations.add(location);
+        _context.locations.add(location);
         return null;
     }
 
     @Override
     public ArrayList<Location> all() {
-        return locations;
+        return _context.locations;
     }
 
     @Override
@@ -36,18 +38,18 @@ public class MysqlLocationDao implements LocationDoa {
 
     @Override
     public int delete(Location location) {
-        locations.remove(location);
+        _context.locations.remove(location);
         return 0;
     }
 
     @Override
     public Location findById(long id) {
-        return locations.stream().filter(location -> location.getId()==id).findFirst().orElse(null);
+        return _context.locations.stream().filter(location -> location.getId()==id).findFirst().orElse(null);
     }
 
     @Override
     public Location findByName(String name) {
-        return locations.stream()
+        return _context.locations.stream()
                 .filter(location -> location.getName().contains(name))
                 .findFirst()
                 .orElse(null);
@@ -55,7 +57,7 @@ public class MysqlLocationDao implements LocationDoa {
 
     @Override
     public Location findByAddress(String address) {
-        return locations.stream()
+        return _context.locations.stream()
                 .filter(location -> location.getAddress().contains(address))
                 .findFirst()
                 .orElse(null);

@@ -1,5 +1,5 @@
 /*
-NO relations added!
+The class represents abstract a Food servings that can be added to a certain Meal.
  */
 
 package models;
