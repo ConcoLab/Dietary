@@ -122,6 +122,7 @@ public class FoodPanel extends JPanel{
 
 
         JPanel bottomPanel = new JPanel();
+
         bottomPanel.setLayout(new BorderLayout());
         deleteButton = new JButton("DELETE");
         deleteButton.setBackground(Color.red);
