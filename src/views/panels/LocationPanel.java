@@ -8,13 +8,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class LocationPanel extends JPanel{
-    public JButton addButton;
-    public JButton deleteButton;
-    public JTable table;
+public class LocationPanel extends TemplatePanel {
 
     public LocationPanel(){
-        setLayout(new BorderLayout());
         ArrayList<Location> data = ContextFactory.get_mysqlLocationDao().all();
 
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME", "ADDRESS"});

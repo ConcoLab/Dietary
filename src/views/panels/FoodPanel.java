@@ -9,14 +9,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class FoodPanel extends JPanel{
-    public JButton addButton;
-    public JButton deleteButton;
-    public JTable table;
-
+public class FoodPanel extends TemplatePanel {
 
     public FoodPanel(){
-        setLayout(new BorderLayout());
         ArrayList<Food> foods = ContextFactory.get_mysqlFoodDao().all();
         ArrayList<Unit> units = ContextFactory.get_mysqlUnitDao().all();
 

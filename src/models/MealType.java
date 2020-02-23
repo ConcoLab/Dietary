@@ -4,6 +4,7 @@ public class MealType {
     private long id;
     private String name;
 
+
     public MealType(long id, String name){
         this.id = id;
         this.name = name;

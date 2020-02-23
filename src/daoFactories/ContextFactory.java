@@ -8,7 +8,6 @@ public class ContextFactory {
     private static MysqlFoodGroupDao _mysqlFoodGroupDao;
     private static MysqlGroupDao _mysqlGroupDao;
     private static MysqlUnitDao _mysqlUnitDao;
-    private static MysqlFoodMealDao _mysqlFoodMealDao;
     private static MysqlMealDao _mysqlMealDao;
     private static MysqlMealTypeDao _mysqlMealTypeDao;
     private static MysqlLocationDao _mysqlLocationDao;
@@ -20,7 +19,6 @@ public class ContextFactory {
         _mysqlFoodGroupDao = new MysqlFoodGroupDao(_context);
         _mysqlGroupDao = new MysqlGroupDao(_context);
         _mysqlUnitDao = new MysqlUnitDao(_context);
-        _mysqlFoodMealDao = new MysqlFoodMealDao(_context);
         _mysqlMealDao = new MysqlMealDao(_context);
         _mysqlMealTypeDao = new MysqlMealTypeDao(_context);
         _mysqlLocationDao = new MysqlLocationDao(_context);
@@ -29,31 +27,20 @@ public class ContextFactory {
     public static MysqlGroupDao get_mysqlGroupDao() {
         return _mysqlGroupDao;
     }
-
     public static MysqlFoodGroupDao get_mysqlFoodGroupDao() {
         return _mysqlFoodGroupDao;
     }
-
     public static MysqlFoodDao get_mysqlFoodDao() {
         return _mysqlFoodDao;
     }
-
-    public static MysqlFoodMealDao get_mysqlFoodMealDao() {
-        return _mysqlFoodMealDao;
-    }
-
     public static MysqlMealDao get_mysqlMealDao() {
         return _mysqlMealDao;
     }
-
     public static MysqlLocationDao get_mysqlLocationDao() {
         return _mysqlLocationDao;
     }
-
     public static MysqlUnitDao get_mysqlUnitDao(){return _mysqlUnitDao;};
-
     public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
-
     public Context getContext(){return _context;}
 
 

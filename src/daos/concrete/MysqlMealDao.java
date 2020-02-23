@@ -2,7 +2,11 @@ package daos.concrete;
 
 import daoFactories.Context;
 import daos.interfaces.MealDao;
+import models.Food;
+import models.Location;
 import models.Meal;
+
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -11,11 +15,11 @@ public class MysqlMealDao implements MealDao {
 
     public MysqlMealDao(Context context){
         _context = context;
-        Meal m1 = new Meal(0, LocalDateTime.now());
+        Meal m1 = new Meal(0, 1,1,2, LocalDateTime.now());
         this.insert(m1);
-        Meal m2 = new Meal(3, LocalDateTime.now());
+        Meal m2 = new Meal(3, 1,2,2, LocalDateTime.now());
         this.insert(m2);
-        Meal m3 = new Meal(2, LocalDateTime.now());
+        Meal m3 = new Meal(2, 2, 1, 1, LocalDateTime.now());
         this.insert(m3);
     }
 
@@ -48,12 +52,32 @@ public class MysqlMealDao implements MealDao {
     }
 
     @Override
-    public Meal findByDate(LocalDateTime dateTime) {
-        return _context.meals.stream()
-                .filter(meal -> meal.getDateTime() == dateTime)
-                .findFirst()
-                .orElse(null);
+    public ArrayList<Meal> findMealsByDate(LocalDateTime dateTime) {
+        ArrayList<Meal> meals = new ArrayList<Meal>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        _context.meals.stream()
+                .forEach(meal -> {
+                    if (formatter.format(meal.getDateTime()).equals(formatter.format(dateTime)))
+                        meals.add(meal);
+                });
+        return meals;
     }
+
+//    @Override
+//    public Food getFood(Meal meal) {
+//        return _context.foods.stream()
+//                .filter(food -> meal.getFoodId() == food.getId())
+//                .findFirst()
+//                .orElse(null);
+//    }
+//
+//    @Override
+//    public Location getLocation(Meal meal) {
+//        return _context.locations.stream()
+//                .filter(location -> meal.getLocationId() == location.getId())
+//                .findFirst()
+//                .orElse(null);
+//    }
 
     @Override
     public ArrayList<Meal> findInRange(LocalDateTime start, LocalDateTime end) {

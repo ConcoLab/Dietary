@@ -8,13 +8,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class UnitPanel extends JPanel{
-    public JButton addButton;
-    public JButton deleteButton;
-    public JTable table;
+public class UnitPanel extends TemplatePanel {
 
     public UnitPanel(){
-        setLayout(new BorderLayout());
         ArrayList<Unit> data = ContextFactory.get_mysqlUnitDao().all();
 
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
