@@ -14,7 +14,6 @@ public class Meal {
     private long locationId;
     private long amount;
 
-
     public Meal(long mealTypeId, LocalDateTime dateTime) {
         this.id = ITERATOR;
         this.mealTypeId = mealTypeId;

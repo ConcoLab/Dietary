@@ -1,7 +1,6 @@
 package daos.concrete;
 
 import daoFactories.Context;
-import daoFactories.ContextFactory;
 import daos.interfaces.FoodGroupDao;
 import models.Food;
 import models.FoodGroup;

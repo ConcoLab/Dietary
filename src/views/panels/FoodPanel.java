@@ -1,61 +1,30 @@
 package views.panels;
 
-import controllers.FoodController;
 import daoFactories.ContextFactory;
 import models.Food;
-import models.FoodGroup;
-import models.Group;
 import models.Unit;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Vector;
 
 public class FoodPanel extends JPanel{
-    private JButton addButton;
-    private JButton deleteButton;
-    private JTable table;
-    private JCheckBox checkBoxes[];
-
-    class Item
-    {
-        private long id;
-        private String description;
-
-        public Item(long id, String description)
-        {
-            this.id = id;
-            this.description = description;
-        }
-
-        public long getId()
-        {
-            return id;
-        }
-
-        public String getDescription()
-        {
-            return description;
-        }
-
-        public String toString()
-        {
-            return description;
-        }
-    }
+    public JButton addButton;
+    public JButton deleteButton;
+    public JTable table;
 
 
     public FoodPanel(){
-        setLayout(new GridLayout(0,1));
+
+        setLayout(new BorderLayout());
         ArrayList<Food> foods = ContextFactory.get_mysqlFoodDao().all();
         ArrayList<Unit> units = ContextFactory.get_mysqlUnitDao().all();
-        ArrayList<Group> groups = ContextFactory.get_mysqlGroupDao().all();
 
         DefaultTableModel model = new DefaultTableModel(
-                new Object[][]{}, new Object[]{"ID", "NAME", "QUANTITY", "UNITS", "CALORIES", "GROUPS"});
+                new Object[][]{}, new Object[]{"ID", "NAME", "QUANTITY", "UNITS", "CALORIES"});
         table = new JTable(model);
+
         for (Food food: foods)
             model.addRow(new Object[]{
                     food.getId(),
@@ -64,69 +33,66 @@ public class FoodPanel extends JPanel{
                     units.stream().filter(unit -> unit.getId() == food.getUnit_id()).findFirst().get().getName(),
                     food.getCalories()});
 
-        JPanel dataEntryPanel = new JPanel();
-        dataEntryPanel.setLayout(new GridLayout(0, 1));
-        dataEntryPanel.add(new JLabel("Food Name:"));
-        JTextField foodNameTextField = new JTextField();
-        dataEntryPanel.add(foodNameTextField);
-        dataEntryPanel.add(new JLabel("Quantity:"));
-        JTextField quantityTextField = new JTextField();
-        dataEntryPanel.add(quantityTextField);
-        dataEntryPanel.add(new JLabel("Unit:"));
-        Vector unitVector = new Vector();
-        for (Unit unit:units){
-            unitVector.addElement(new Item(unit.getId(), unit.getName()));
-        }
-        JComboBox unitsComboBox = new JComboBox(unitVector);
-        dataEntryPanel.add(unitsComboBox);
-        dataEntryPanel.add(new JLabel("Calories:"));
-        JTextField caloriesTextField = new JTextField();
-        dataEntryPanel.add(caloriesTextField);
-        JPanel foodGroupPanel = new JPanel();
-        foodGroupPanel.setLayout(new FlowLayout());
-        checkBoxes = new JCheckBox[groups.size()];
-        int i = 0;
-        for(Group group:groups){
-            checkBoxes[i] = new JCheckBox(group.getName());
-            Long groupId = group.getId();
-            checkBoxes[i].setActionCommand(groupId.toString());
-            foodGroupPanel.add(checkBoxes[i]);
-            i++;
-        }
-        dataEntryPanel.add(foodGroupPanel);
-        JButton insertButton = new JButton("Insert");
-        insertButton.addActionListener(e -> {
-            int a = unitsComboBox.getSelectedIndex();
-            Food newFood = new Food(foodNameTextField.getText(), Long.parseLong(caloriesTextField.getText()), unitsComboBox.getSelectedIndex(), 25);
-            for(JCheckBox checkBox:checkBoxes){
-                if(checkBox.isSelected()){
-                    ContextFactory.get_mysqlFoodGroupDao().insert(new FoodGroup(newFood.getId(), Long.parseLong(checkBox.getActionCommand())));
-                }
-            }
-
-            model.addRow(new Object[]{
-                    newFood.getId(),
-                    newFood.getName(),
-                    newFood.getQuantity(),
-                    units.stream().filter(unit -> unit.getId() == newFood.getUnit_id()).findFirst().get().getName(),
-                    newFood.getCalories()});
-        });
-        dataEntryPanel.add(insertButton);
-        add(dataEntryPanel);
-
-
-
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
         add(scrollPane);
 
-
         JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(1,5));
+        addButton = new JButton("ADD");
+        addButton.addActionListener(e -> {
 
-        bottomPanel.setLayout(new BorderLayout());
+            JFrame addGroup = new JFrame("Add Food ...");
+            JPanel panel = new JPanel();
+            panel.setLayout(new GridLayout(9,1));
+            addGroup.add(panel);
+
+            panel.add(new JLabel("Enter New Food:"));
+            JTextField foodName = new JTextField();
+            panel.add(foodName);
+
+            panel.add(new JLabel("Enter Quantity:"));
+            JTextField foodQuantity = new JTextField();
+            panel.add(foodQuantity);
+
+            panel.add(new JLabel("Enter Units:"));
+            JComboBox unitComboBox = new JComboBox();
+            for (Unit unit : units)
+                unitComboBox.addItem(unit.getName());
+            panel.add(unitComboBox);
+
+            panel.add(new JLabel("Enter Calories:"));
+            JTextField foodCalories = new JTextField();
+            panel.add(foodCalories);
+
+            JButton submitButton = new JButton("SUBMIT");
+            panel.add(submitButton);
+
+            addGroup.pack();
+            addGroup.setLocationRelativeTo(null);
+            addGroup.setSize(200,300);
+            addGroup.setVisible(true);
+
+            submitButton.addActionListener(event -> {
+                String name = foodName.getText();
+                long quantity = Long.parseLong(foodQuantity.getText());
+                String unit_name = (String)unitComboBox.getSelectedItem();
+                Unit thisUnit = units.stream().filter(unit -> unit.getName().contains(unit_name)).findFirst().get();
+                long calories = Long.parseLong(foodCalories.getText());
+//                if(name.length()== 0)
+//                    return;
+                Food newFood = new Food(name, calories, thisUnit.getId(), quantity);
+                ContextFactory.get_mysqlFoodDao().insert(newFood);
+                model.addRow(new Object[]{newFood.getId(),
+                        newFood.getName(),
+                        newFood.getQuantity(),
+                        units.stream().filter(unit -> unit.getId() == newFood.getUnit_id()).findFirst().get().getName(),
+                        newFood.getCalories()});
+                //groupName.setText("");
+            });
+        });
+
         deleteButton = new JButton("DELETE");
-        deleteButton.setBackground(Color.red);
-        deleteButton.setForeground(Color.white);
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -135,12 +101,14 @@ public class FoodPanel extends JPanel{
             ContextFactory.get_mysqlFoodDao().delete(foods.get(row));
             model.removeRow(row);
         });
-        bottomPanel.add(deleteButton, BorderLayout.NORTH);
+
+        bottomPanel.add(addButton);
+        bottomPanel.add(deleteButton);
 //        bottomPanel.add(new JButton("FIND"));
 //        JButton exitButton = new JButton("CLOSE");
 //        bottomPanel.add(exitButton);
 
-        add(bottomPanel);
+        add(bottomPanel, BorderLayout.SOUTH);
     }
 
 }

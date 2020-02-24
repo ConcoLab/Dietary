@@ -4,8 +4,7 @@ The class represents abstract a Food servings that can be added to a certain Mea
 
 package models;
 
-
-public class Food {
+public class Food extends FoodGroup {
     private static long ITERATOR = 0;
 
     private long id;
@@ -15,7 +14,28 @@ public class Food {
     private long quantity;
     private boolean eaten;
 
+    // constructor with no FoodGroup variables (same as before)
     public Food(String name, long calories, long unit_id, long quantity) {
+
+        this.id = ITERATOR;
+        this.name = name;
+        this.calories = calories;
+        this.unit_id = unit_id;
+        this.quantity = quantity;
+
+        ITERATOR++;
+    }
+
+    // OVERLOADED constructor with FoodGroup variables
+    public Food(String name, long calories, long unit_id, long quantity, boolean dairy, boolean meat, boolean fruit, boolean vegetables, boolean sweets) {
+
+        // determining FoodGroup properties for a Food (e.g. dairy = True, vegetables = False, etc.)
+        super.setDairy(dairy);
+        super.setMeat(meat);
+        super.setFruit(fruit);
+        super.setVegetables(vegetables);
+        super.setSweets(sweets);
+
         this.id = ITERATOR;
         this.name = name;
         this.calories = calories;
