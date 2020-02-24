@@ -8,24 +8,20 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class GroupPanel extends JPanel {
-    public JButton addButton;
-    public JButton deleteButton;
-    public JTable table;
+public class GroupPanel extends TemplatePanel {
 
     public GroupPanel(){
-        setLayout(new BorderLayout());
         ArrayList<Group> data = ContextFactory.get_mysqlGroupDao().all();
 
-        DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
+        model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
         table = new JTable(model);
         for (Group group : data)
             model.addRow(new Object[]{group.getId(), group.getName()});
 
-        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
         add(scrollPane, BorderLayout.CENTER);
-        JPanel bottomPanel = new JPanel();
+        bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
         addButton = new JButton("ADD");
         addButton.addActionListener(e -> {
