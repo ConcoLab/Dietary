@@ -9,7 +9,7 @@ public class ContextFactory {
     private static MysqlGroupDao _mysqlGroupDao;
     private static MysqlUnitDao _mysqlUnitDao;
     private static MysqlMealDao _mysqlMealDao;
-    private static MysqlMealTypeDao _mysqlMealTypeDao;
+//    private static MysqlMealTypeDao _mysqlMealTypeDao;
     private static MysqlLocationDao _mysqlLocationDao;
     private Context _context;
 
@@ -20,7 +20,7 @@ public class ContextFactory {
         _mysqlGroupDao = new MysqlGroupDao(_context);
         _mysqlUnitDao = new MysqlUnitDao(_context);
         _mysqlMealDao = new MysqlMealDao(_context);
-        _mysqlMealTypeDao = new MysqlMealTypeDao(_context);
+//        _mysqlMealTypeDao = new MysqlMealTypeDao(_context);
         _mysqlLocationDao = new MysqlLocationDao(_context);
     }
 
