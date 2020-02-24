@@ -15,17 +15,11 @@ public class MysqlFoodGroupDao implements FoodGroupDao {
 
     public MysqlFoodGroupDao(Context context) {
         _context = context;
-        FoodGroup fg1 = new FoodGroup();
-        fg1.setFoodId(1);
-        fg1.setGroupId(1);
+        FoodGroup fg1 = new FoodGroup(1, 1);
         this.insert(fg1);
-        FoodGroup fg2 = new FoodGroup();
-        fg2.setFoodId(2);
-        fg2.setGroupId(3);
+        FoodGroup fg2 = new FoodGroup(2,3);
         this.insert(fg2);
-        FoodGroup fg3 = new FoodGroup();
-        fg3.setFoodId(2);
-        fg3.setGroupId(4);
+        FoodGroup fg3 = new FoodGroup(2,4);
         this.insert(fg3);
     }
 

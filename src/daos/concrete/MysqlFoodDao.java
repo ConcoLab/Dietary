@@ -22,7 +22,7 @@ public class MysqlFoodDao implements FoodDao {
     @Override
     public Food insert(Food food) {
         _context.foods.add(food);
-        return null;
+        return food;
     }
 
     @Override

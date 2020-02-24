@@ -4,6 +4,11 @@ public class FoodGroup {
     private long foodId;
     private long groupId;
 
+    public FoodGroup(long foodId, long groupId){
+        this.setFoodId(foodId);
+        this.setGroupId(groupId);
+    }
+
     public long getFoodId() {
         return foodId;
     }
