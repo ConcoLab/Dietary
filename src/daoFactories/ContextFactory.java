@@ -40,7 +40,7 @@ public class ContextFactory {
         return _mysqlLocationDao;
     }
     public static MysqlUnitDao get_mysqlUnitDao(){return _mysqlUnitDao;};
-    public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
+//    public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
     public Context getContext(){return _context;}
 
 
