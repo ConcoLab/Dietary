@@ -10,7 +10,6 @@ public class Context {
     public ArrayList<Group> groups;
     public ArrayList<Unit> units;
     public ArrayList<Meal> meals;
-    public ArrayList<MealType> mealTypes;
     public ArrayList<Location> locations;
 
     public Context() {
@@ -19,7 +18,6 @@ public class Context {
         groups = new ArrayList<Group>();
         units = new ArrayList<Unit>();
         meals = new ArrayList<Meal>();
-        mealTypes = new ArrayList<MealType>();
         locations = new ArrayList<Location>();
     }
 }

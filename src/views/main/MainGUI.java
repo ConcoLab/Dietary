@@ -23,41 +23,53 @@ public class MainGUI extends JFrame{
     public MainGUI(){
         setTitle("Project");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         mainPanel = new JPanel();
+
         add(mainPanel);
+
         mainPanel.setLayout(new BorderLayout(3,3));
         northPanel = new JPanel();
         mainPanel.add(northPanel,BorderLayout.NORTH);
         northPanel.setLayout(new GridLayout());
         mainMenuBar = new JMenuBar();
         northPanel.add(mainMenuBar);
+
         JMenu fileMenu = new JMenu("File");
         JMenu dbMenu = new JMenu("DB");
         JMenu helpMenu = new JMenu("Help");
+
         mainMenuBar.add(fileMenu);
         mainMenuBar.add(dbMenu);
         mainMenuBar.add(helpMenu);
+
         JMenuItem foodGroupMenu = new JMenuItem("Food Groups");
+
         foodGroupMenu.addActionListener((e) -> {
             addTabPane(foodGroupMenu.getText());
         });
+
         JMenuItem unitMenu = new JMenuItem("Units");
+
         unitMenu.addActionListener((e) -> {
             addTabPane(unitMenu.getText());
         });
+
         JMenuItem foodMenu = new JMenuItem("Foods");
+
         foodMenu.addActionListener((e) -> {
             addTabPane(foodMenu.getText());
         });
 
-        JMenuItem eatenFoodMenu = new JMenuItem("Eaten Food");
         JMenuItem mealMenu = new JMenuItem("Meals");
         JMenuItem mealTypeMenu = new JMenuItem("Meal Types");
         JMenuItem locationMenu = new JMenuItem("Locations");
+
         locationMenu.addActionListener((e) -> {
             addTabPane(locationMenu.getText());
         });
+
         JMenuItem exitMenu = new JMenuItem("Exit");
         exitMenu.addActionListener((e)->System.exit(0));
 
@@ -65,10 +77,10 @@ public class MainGUI extends JFrame{
         dbMenu.add(foodGroupMenu);
         dbMenu.add(unitMenu);
         dbMenu.add(foodMenu);
-        dbMenu.add(eatenFoodMenu);
         dbMenu.add(mealMenu);
         dbMenu.add(mealTypeMenu);
         dbMenu.add(locationMenu);
+
         leftPanel = new JPanel();
         mainPanel.add(leftPanel,BorderLayout.LINE_START);
         leftPanel.setLayout(new GridLayout());
@@ -99,6 +111,7 @@ public class MainGUI extends JFrame{
 //        tabbedPane.addTab("Tab 1",null, new JPanel());
 //        int index = tabbedPane.indexOfTab("Tab 1");
 //        tabbedPane.setTabComponentAt(index, pnlTab);
+
         southPanel = new JPanel();
         mainPanel.add(southPanel,BorderLayout.SOUTH);
 

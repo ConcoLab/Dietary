@@ -13,21 +13,23 @@ public class Food {
     private long calories;
     private long unit_id;
     private long quantity;
+    private boolean eaten;
 
-    public Food(String name, long calories, long unit_id, long quantity){
+    public Food(String name, long calories, long unit_id, long quantity) {
         this.id = ITERATOR;
         this.name = name;
         this.calories = calories;
         this.unit_id = unit_id;
         this.quantity = quantity;
+
         ITERATOR++;
     }
 
-    public long getId(){
+    public long getId() {
         return id;
     }
 
-    public void setId(long id){
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -39,28 +41,30 @@ public class Food {
         this.name = name;
     }
 
-    public long getCalories(){
+    public long getCalories() {
         return calories;
     }
 
-    public void setCalories(long calories){
+    public void setCalories(long calories) {
         this.calories = calories;
     }
 
-    public long getUnit_id(){
+    public long getUnit_id() {
         return unit_id;
     }
 
-    public void setUnit_id(long unit_id){
+    public void setUnit_id(long unit_id) {
         this.unit_id = unit_id;
     }
 
-    public long getQuantity(){
+    public long getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(long quantity){
+    public void setQuantity(long quantity) {
         this.quantity = quantity;
     }
+
+
 }
 
