@@ -21,16 +21,16 @@ The functionality thus far includes the following capabilities:
 1. Add units of measurement.
 2. Delete units of measurement.
 3. Add locations (outdining).
-    3. location name
-    3. location address
-3. Add food groups.
-4. Delete food groups.
-5. Add foods.
-   5. food name
-   5. quantity
-   5. units of measurement
-   5. calories
-6. Delete foods.
+   * location name
+   * location address
+4. Add food groups.
+5. Delete food groups.
+6. Add foods.
+   * food name
+   * quantity
+   * units of measurement
+   * calories
+7. Delete foods.
 
 ### (Near) future functionality
 
