@@ -30,15 +30,15 @@ public class GroupPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
 
-        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
+        // Bottom panel where buttons are added
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
 
 
-        // MAKES ADD BUTTON
+        // Makes add button
         addButton = new JButton("ADD");
 
-        // MAIN FUNCTIONALITY FOR ADDING GROUPS (FOOD GROUPS)
+        // Main functionality for adding groups (food groups)
         addButton.addActionListener(e -> {
             JFrame addGroup = new JFrame("Add Group ...");
             JPanel panel = new JPanel();
@@ -66,10 +66,10 @@ public class GroupPanel extends JPanel {
         });
 
 
-        // MAKES DELETE BUTTON
+        // Makes delete button
         deleteButton = new JButton("DELETE");
 
-        // MAIN FUNCTIONALITY FOR DELETING GROUPS (FOOD GROUPS)
+        // Main functionality for deleting groups (food groups)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -80,7 +80,7 @@ public class GroupPanel extends JPanel {
         });
 
 
-        // Adding Buttons to GUI; for manipulating Groups in bottomPanel (BOTTOM LEFT)
+        // Adding Buttons to GUI; for manipulating Groups in bottomPanel (bottom left)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
 //        bottomPanel.add(new JButton("FIND"));

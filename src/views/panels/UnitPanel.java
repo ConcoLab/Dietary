@@ -27,15 +27,15 @@ public class UnitPanel extends JPanel{
         add(scrollPane);
 
 
-        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
+        // Bottom panel where buttons are added
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
 
 
-        // MAKES ADD BUTTON
+        // Makes add button
         addButton = new JButton("ADD");
 
-        // MAIN FUNCTIONALITY FOR ADDING UNITS (UNITS OF MEASUREMENT)
+        // Main functionality for adding units (units of measurement)
         addButton.addActionListener(e -> {
             JFrame addGroup = new JFrame("Add Unit ...");
             JPanel panel = new JPanel();
@@ -62,10 +62,10 @@ public class UnitPanel extends JPanel{
         });
 
 
-        // MAKES DELETE BUTTON
+        // Makes delete button
         deleteButton = new JButton("DELETE");
 
-        // MAIN FUNCTIONALITY FOR DELETING UNITS (UNITS OF MEASUREMENT)
+        // Main functionality for deleting units (units of measurement)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -76,7 +76,7 @@ public class UnitPanel extends JPanel{
         });
 
 
-        // ADDING BUTTONS TO GUI; for manipulating Locations in bottomPanel (BOTTOM LEFT)
+        // Adding button to GUI; for manipulating Locations in bottomPanel (bottom left)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
 //        bottomPanel.add(new JButton("FIND"));

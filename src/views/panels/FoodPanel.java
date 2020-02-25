@@ -42,15 +42,15 @@ public class FoodPanel extends JPanel{
         add(scrollPane);
 
 
-        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
+        // Bottom panel where buttons are added
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
 
 
-        // MAKES ADD BUTTON
+        // Makes add button
         addButton = new JButton("ADD");
 
-        // MAIN FUNCTIONALITY FOR ADDING FOODS (INDIVIDUAL FOODS)
+        // Main functionality for adding foods (individual foods)
         addButton.addActionListener(e -> {
 
             JFrame addGroup = new JFrame("Add Food ...");
@@ -108,10 +108,10 @@ public class FoodPanel extends JPanel{
         });
 
 
-        // MAKES DELETE BUTTON
+        // Makes delete button
         deleteButton = new JButton("DELETE");
 
-        // MAIN FUNCTIONALITY FOR DELETING FOODS (INDIVIDUAL FOODS)
+        // Main functionality for deleting foods (individual foods)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -122,13 +122,13 @@ public class FoodPanel extends JPanel{
         });
 
 
-        // MAKES BUTTONS TO TRIGGER WHETHER FOOD IS EATEN OR NOT (WILL CHANGE BOOLEAN eaten in a Food object() )
+        // Makes buttons to trigger whether a food is eaten or not (will change Boolean eaten in a Food object() )
         // Functionality not yet added
         eatenButton = new JButton("EATEN");
         uneatenButton = new JButton("UNEATEN");
 
 
-        // ADDING BUTTONS TO GUI; for manipulating Foods in bottomPanel (BOTTOM LEFT)
+        // Adding buttons to GUI; for manipulating Foods in bottomPanel (bottom left)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
         bottomPanel.add(eatenButton);

@@ -19,7 +19,7 @@ public class ReportPanel extends JPanel {
         JPanel eatenPanel = new JPanel();
         eatenPanel.setLayout(new BorderLayout());
 
-        // BOTTOM RIGHT (LEFT), 'Eaten'
+        // Bottom right (left), 'Eaten'
         eatenPanel.add(new JLabel("Eaten"), BorderLayout.NORTH);
 
         DefaultTableModel eatenModel = new DefaultTableModel(
@@ -45,7 +45,7 @@ public class ReportPanel extends JPanel {
         JPanel notEatenPanel = new JPanel();
         notEatenPanel.setLayout(new BorderLayout());
 
-        // BOTTOM RIGHT (RIGHT), Not Eaten
+        // Bottom right (right), 'Not Eaten'
         notEatenPanel.add(new JLabel("Not Eaten"), BorderLayout.NORTH);
 
         DefaultTableModel notEatenModel = new DefaultTableModel(

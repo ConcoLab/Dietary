@@ -30,15 +30,15 @@ public class LocationPanel extends JPanel{
         add(scrollPane);
 
 
-        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
+        // Bottom panel where buttons are added
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
 
 
-        // MAKES ADD BUTTON
+        // Makes add button
         addButton = new JButton("ADD");
 
-        // MAIN FUNCTIONALITY FOR ADDING LOCATIONS (OUTDINING LOCATIONS)
+        // Main functionality for adding locations (outdining locations)
         addButton.addActionListener(e -> {
             JFrame addGroup = new JFrame("Add Location ...");
             JPanel panel = new JPanel();
@@ -71,10 +71,10 @@ public class LocationPanel extends JPanel{
         });
 
 
-        // MAKES DELETE BUTTON
+        // Makes delete button
         deleteButton = new JButton("DELETE");
 
-        // MAIN FUNCTIONALITY FOR DELETING LOCATIONS (OUTDINING LOCATIONS)
+        // Main functionality for deleting locations (outdining locations)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -85,7 +85,7 @@ public class LocationPanel extends JPanel{
         });
 
 
-        // ADDING BUTTONS TO GUI; for manipulating Locations in bottomPanel (BOTTOM LEFT)
+        // Adding buttons to GUI; for manipulating Locations in bottomPanel (bottom left)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
 
