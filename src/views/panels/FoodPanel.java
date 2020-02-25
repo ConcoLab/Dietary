@@ -12,6 +12,10 @@ import java.util.ArrayList;
 public class FoodPanel extends JPanel{
     public JButton addButton;
     public JButton deleteButton;
+
+    public JButton eatenButton;
+    public JButton uneatenButton;
+
     public JTable table;
 
 
@@ -37,9 +41,16 @@ public class FoodPanel extends JPanel{
         table.setFillsViewportHeight(true);
         add(scrollPane);
 
+
+        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
+
+
+        // MAKES ADD BUTTON
         addButton = new JButton("ADD");
+
+        // MAIN FUNCTIONALITY FOR ADDING FOODS (INDIVIDUAL FOODS)
         addButton.addActionListener(e -> {
 
             JFrame addGroup = new JFrame("Add Food ...");
@@ -57,8 +68,10 @@ public class FoodPanel extends JPanel{
 
             panel.add(new JLabel("Enter Units:"));
             JComboBox unitComboBox = new JComboBox();
+
             for (Unit unit : units)
                 unitComboBox.addItem(unit.getName());
+
             panel.add(unitComboBox);
 
             panel.add(new JLabel("Enter Calories:"));
@@ -74,6 +87,7 @@ public class FoodPanel extends JPanel{
             addGroup.setVisible(true);
 
             submitButton.addActionListener(event -> {
+
                 String name = foodName.getText();
                 long quantity = Long.parseLong(foodQuantity.getText());
                 String unit_name = (String)unitComboBox.getSelectedItem();
@@ -83,6 +97,7 @@ public class FoodPanel extends JPanel{
 //                    return;
                 Food newFood = new Food(name, calories, thisUnit.getId(), quantity);
                 ContextFactory.get_mysqlFoodDao().insert(newFood);
+
                 model.addRow(new Object[]{newFood.getId(),
                         newFood.getName(),
                         newFood.getQuantity(),
@@ -92,7 +107,11 @@ public class FoodPanel extends JPanel{
             });
         });
 
+
+        // MAKES DELETE BUTTON
         deleteButton = new JButton("DELETE");
+
+        // MAIN FUNCTIONALITY FOR DELETING FOODS (INDIVIDUAL FOODS)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -102,8 +121,19 @@ public class FoodPanel extends JPanel{
             model.removeRow(row);
         });
 
+
+        // MAKES BUTTONS TO TRIGGER WHETHER FOOD IS EATEN OR NOT (WILL CHANGE BOOLEAN eaten in a Food object() )
+        // Functionality not yet added
+        eatenButton = new JButton("EATEN");
+        uneatenButton = new JButton("UNEATEN");
+
+
+        // ADDING BUTTONS TO GUI; for manipulating Foods in bottomPanel (BOTTOM LEFT)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
+        bottomPanel.add(eatenButton);
+        bottomPanel.add(uneatenButton);
+
 //        bottomPanel.add(new JButton("FIND"));
 //        JButton exitButton = new JButton("CLOSE");
 //        bottomPanel.add(exitButton);

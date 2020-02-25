@@ -1,6 +1,6 @@
 package views.main;
 
-// import javafx.scene.control.DatePicker;
+import javafx.scene.control.DatePicker;
 import views.panels.*;
 
 import javax.swing.*;
@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainGUI extends JFrame{
+
     private JPanel mainPanel;
     private JPanel northPanel;
     private JPanel southPanel;

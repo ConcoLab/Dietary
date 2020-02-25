@@ -14,11 +14,14 @@ public class LocationPanel extends JPanel{
     public JTable table;
 
     public LocationPanel(){
+
         setLayout(new BorderLayout());
         ArrayList<Location> data = ContextFactory.get_mysqlLocationDao().all();
 
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME", "ADDRESS"});
+
         table = new JTable(model);
+
         for (Location location : data)
             model.addRow(new Object[]{location.getId(), location.getName(), location.getAddress()});
 
@@ -26,9 +29,16 @@ public class LocationPanel extends JPanel{
         table.setFillsViewportHeight(true);
         add(scrollPane);
 
+
+        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
+
+
+        // MAKES ADD BUTTON
         addButton = new JButton("ADD");
+
+        // MAIN FUNCTIONALITY FOR ADDING LOCATIONS (OUTDINING LOCATIONS)
         addButton.addActionListener(e -> {
             JFrame addGroup = new JFrame("Add Location ...");
             JPanel panel = new JPanel();
@@ -46,6 +56,7 @@ public class LocationPanel extends JPanel{
             addGroup.setLocationRelativeTo(null);
             addGroup.setSize(200,200);
             addGroup.setVisible(true);
+
             submitButton.addActionListener(event -> {
                 String name = locationName.getText();
                 String address = locationAddress.getText();
@@ -58,7 +69,12 @@ public class LocationPanel extends JPanel{
                 locationAddress.setText("");
             });
         });
+
+
+        // MAKES DELETE BUTTON
         deleteButton = new JButton("DELETE");
+
+        // MAIN FUNCTIONALITY FOR DELETING LOCATIONS (OUTDINING LOCATIONS)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -67,8 +83,12 @@ public class LocationPanel extends JPanel{
             ContextFactory.get_mysqlLocationDao().delete(data.get(row));
             model.removeRow(row);
         });
+
+
+        // ADDING BUTTONS TO GUI; for manipulating Locations in bottomPanel (BOTTOM LEFT)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
+
 //        bottomPanel.add(new JButton("FIND"));
 //        JButton exitButton = new JButton("CLOSE");
 //        bottomPanel.add(exitButton);

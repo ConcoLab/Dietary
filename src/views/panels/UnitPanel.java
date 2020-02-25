@@ -26,9 +26,16 @@ public class UnitPanel extends JPanel{
         table.setFillsViewportHeight(true);
         add(scrollPane);
 
+
+        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
+
+
+        // MAKES ADD BUTTON
         addButton = new JButton("ADD");
+
+        // MAIN FUNCTIONALITY FOR ADDING UNITS (UNITS OF MEASUREMENT)
         addButton.addActionListener(e -> {
             JFrame addGroup = new JFrame("Add Unit ...");
             JPanel panel = new JPanel();
@@ -53,7 +60,12 @@ public class UnitPanel extends JPanel{
                 unitName.setText("");
             });
         });
+
+
+        // MAKES DELETE BUTTON
         deleteButton = new JButton("DELETE");
+
+        // MAIN FUNCTIONALITY FOR DELETING UNITS (UNITS OF MEASUREMENT)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -62,6 +74,9 @@ public class UnitPanel extends JPanel{
             ContextFactory.get_mysqlUnitDao().delete(data.get(row));
             model.removeRow(row);
         });
+
+
+        // ADDING BUTTONS TO GUI; for manipulating Locations in bottomPanel (BOTTOM LEFT)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
 //        bottomPanel.add(new JButton("FIND"));

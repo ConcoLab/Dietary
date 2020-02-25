@@ -14,20 +14,31 @@ public class GroupPanel extends JPanel {
     public JTable table;
 
     public GroupPanel(){
+
         setLayout(new BorderLayout());
         ArrayList<Group> data = ContextFactory.get_mysqlGroupDao().all();
 
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
         table = new JTable(model);
+
         for (Group group : data)
             model.addRow(new Object[]{group.getId(), group.getName()});
+
 
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
         add(scrollPane, BorderLayout.CENTER);
+
+
+        // BOTTOM PANEL WHERE BUTTONS ARE ADDED
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
+
+
+        // MAKES ADD BUTTON
         addButton = new JButton("ADD");
+
+        // MAIN FUNCTIONALITY FOR ADDING GROUPS (FOOD GROUPS)
         addButton.addActionListener(e -> {
             JFrame addGroup = new JFrame("Add Group ...");
             JPanel panel = new JPanel();
@@ -42,6 +53,7 @@ public class GroupPanel extends JPanel {
             addGroup.setLocationRelativeTo(null);
             addGroup.setSize(200,120);
             addGroup.setVisible(true);
+
             submitButton.addActionListener(event -> {
                 String name = groupName.getText();
                 if(name.length()== 0)
@@ -52,7 +64,12 @@ public class GroupPanel extends JPanel {
                 groupName.setText("");
             });
         });
+
+
+        // MAKES DELETE BUTTON
         deleteButton = new JButton("DELETE");
+
+        // MAIN FUNCTIONALITY FOR DELETING GROUPS (FOOD GROUPS)
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
@@ -61,6 +78,9 @@ public class GroupPanel extends JPanel {
             ContextFactory.get_mysqlGroupDao().delete(data.get(row));
             model.removeRow(row);
         });
+
+
+        // Adding Buttons to GUI; for manipulating Groups in bottomPanel (BOTTOM LEFT)
         bottomPanel.add(addButton);
         bottomPanel.add(deleteButton);
 //        bottomPanel.add(new JButton("FIND"));
