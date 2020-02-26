@@ -3,6 +3,7 @@ package daos.concrete;
 import daoFactories.Context;
 import daoFactories.ContextFactory;
 import daos.interfaces.FoodDao;
+import javafx.collections.ObservableList;
 import models.Food;
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class MysqlFoodDao implements FoodDao {
     }
 
     @Override
-    public ArrayList<Food> all() {
+    public ObservableList<Food> all() {
         return _context.foods;
     }
 

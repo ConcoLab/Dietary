@@ -2,6 +2,7 @@ package daos.concrete;
 
 import daoFactories.Context;
 import daos.interfaces.LocationDoa;
+import javafx.collections.ObservableList;
 import models.Location;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class MysqlLocationDao implements LocationDoa {
     }
 
     @Override
-    public ArrayList<Location> all() {
+    public ObservableList<Location> all() {
         return _context.locations;
     }
 

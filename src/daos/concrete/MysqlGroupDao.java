@@ -3,6 +3,7 @@ package daos.concrete;
 import daoFactories.Context;
 import daoFactories.ContextFactory;
 import daos.interfaces.GroupDao;
+import javafx.collections.ObservableList;
 import models.Group;
 import java.util.ArrayList;
 
@@ -24,7 +25,7 @@ public class MysqlGroupDao implements GroupDao {
     }
 
     @Override
-    public ArrayList<Group> all() {
+    public ObservableList<Group> all() {
         return _context.groups;
     }
 

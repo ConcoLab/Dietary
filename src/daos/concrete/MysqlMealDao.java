@@ -2,6 +2,8 @@ package daos.concrete;
 
 import daoFactories.Context;
 import daos.interfaces.MealDao;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import models.Food;
 import models.Location;
 import models.Meal;
@@ -15,11 +17,11 @@ public class MysqlMealDao implements MealDao {
 
     public MysqlMealDao(Context context){
         _context = context;
-        Meal m1 = new Meal(0, 1,1,2, LocalDateTime.now());
+        Meal m1 = new Meal(0, 1,1,2, 4, LocalDateTime.now());
         this.insert(m1);
-        Meal m2 = new Meal(3, 1,2,2, LocalDateTime.now());
+        Meal m2 = new Meal(1, 1,0,2, 4, LocalDateTime.now());
         this.insert(m2);
-        Meal m3 = new Meal(2, 2, 1, 1, LocalDateTime.now());
+        Meal m3 = new Meal(2, 2, 1, 1, 4, LocalDateTime.now());
         this.insert(m3);
     }
 
@@ -30,7 +32,7 @@ public class MysqlMealDao implements MealDao {
     }
 
     @Override
-    public ArrayList<Meal> all() {
+    public ObservableList<Meal> all() {
         return _context.meals;
     }
 
@@ -52,8 +54,8 @@ public class MysqlMealDao implements MealDao {
     }
 
     @Override
-    public ArrayList<Meal> findMealsByDate(LocalDateTime dateTime) {
-        ArrayList<Meal> meals = new ArrayList<Meal>();
+    public ObservableList<Meal> findMealsByDate(LocalDateTime dateTime) {
+        ObservableList<Meal> meals = FXCollections.observableList(new ArrayList<Meal>());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         _context.meals.stream()
                 .forEach(meal -> {
@@ -80,8 +82,8 @@ public class MysqlMealDao implements MealDao {
 //    }
 
     @Override
-    public ArrayList<Meal> findInRange(LocalDateTime start, LocalDateTime end) {
-        ArrayList<Meal> mealsInRange = new ArrayList<Meal>();
+    public ObservableList<Meal> findInRange(LocalDateTime start, LocalDateTime end) {
+        ObservableList<Meal> mealsInRange = FXCollections.observableList(new ArrayList<Meal>());
         // needs a second look
         _context.meals.stream()
                 .forEach(meal -> {

@@ -2,6 +2,7 @@ package daos.concrete;
 
 import daoFactories.Context;
 import daos.interfaces.UnitDao;
+import javafx.collections.ObservableList;
 import models.Unit;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class MysqlUnitDao implements UnitDao {
     }
 
     @Override
-    public ArrayList<Unit> all() {
+    public ObservableList<Unit> all() {
         return _context.units;
     }
 
