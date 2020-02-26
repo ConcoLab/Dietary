@@ -1,6 +1,8 @@
 package views.main;
 
-import javafx.scene.control.DatePicker;
+import daoFactories.ContextFactory;
+import javafx.collections.ObservableList;
+import models.*;
 import views.panels.*;
 
 import javax.swing.*;
@@ -21,6 +23,17 @@ public class MainGUI extends JFrame{
 
 
     public MainGUI(){
+        // DATA
+        ObservableList<Food> foods = ContextFactory._FoodDao().all();
+        ObservableList<Unit> units = ContextFactory._UnitDao().all();
+        ObservableList<Group> groups = ContextFactory._GroupDao().all();
+        ObservableList<Location> locations = ContextFactory._LocationDao().all();
+        ObservableList<Meal> meals = ContextFactory._MealDao().all();
+        String[] mealTypes = {"Breakfast", "Lunch", "Dinner", "Brunch", "Coffee"};
+
+        // Init panels
+//        mealPanel = new MealPanel(foods, units, groups, locations, mealTypes);
+
         setTitle("Project");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -86,16 +99,17 @@ public class MainGUI extends JFrame{
         leftPanel.setLayout(new GridLayout());
         tabbedPane = new JTabbedPane();
         leftPanel.add(tabbedPane);
-        tabbedPane.addTab("Units", null, new UnitPanel());
-        tabbedPane.addTab("Locations", null, new LocationPanel());
-        tabbedPane.addTab("Food Groups", null, new GroupPanel());
-        tabbedPane.addTab("Foods", null, new FoodPanel());
+        tabbedPane.addTab("Meals", null, new MealPanel(foods, units, groups, locations, mealTypes));
+        tabbedPane.addTab("Units", null, new UnitPanel(units));
+        tabbedPane.addTab("Locations", null, new LocationPanel(locations));
+        tabbedPane.addTab("Food Groups", null, new GroupPanel(groups));
+        tabbedPane.addTab("Foods", null, new FoodPanel(foods, units, groups));
 
         rightPanel = new JPanel();
         mainPanel.add(rightPanel,BorderLayout.CENTER);
         rightPanel.setLayout(new GridLayout(0,1));
-        rightPanel.add(new EatenMealsPanel());
-        rightPanel.add(new ReportPanel());
+        rightPanel.add(new EatenMealPanel(meals, foods, mealTypes, locations, groups));
+        rightPanel.add(new ReportPanel(meals, groups));
 
 
 //        tabbedPane = new JTabbedPane();
@@ -129,18 +143,13 @@ public class MainGUI extends JFrame{
 
     }
 
+//    public static void updateModels(){
+//        mealPanel.
+//    }
+
     public void addTabPane(String name){
         int index = tabbedPane.indexOfTab(name);
-        if (index == -1) {
-            if (name.contains("Food Groups"))
-                tabbedPane.addTab(name, null, new GroupPanel());
-            if (name.contains("Units"))
-                tabbedPane.addTab(name, null, new UnitPanel());
-            if (name.contains("Locations"))
-                tabbedPane.addTab(name, null, new LocationPanel());
-            if (name.contains("Foods"))
-                tabbedPane.addTab(name, null, new FoodPanel());
-        }
+
 
         index = tabbedPane.indexOfTab(name);
         tabbedPane.setSelectedIndex(index);
