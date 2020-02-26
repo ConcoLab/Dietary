@@ -9,15 +9,17 @@ public class Meal {
     private long mealTypeId;
     private long locationId;
     private long amount;
+    private long calories;
     private LocalDateTime dateTime;
 
-    public Meal(long foodId, long mealTypeId, long locationId, long amount, LocalDateTime dateTime){
+    public Meal(long foodId, long mealTypeId, long locationId, long amount, long calories, LocalDateTime dateTime){
         this.id = ITERATOR;
         this.foodId = foodId;
         this.mealTypeId = mealTypeId;
         this.locationId = locationId;
         this.amount = amount;
         this.dateTime = dateTime;
+        this.calories = calories;
         ITERATOR++;
     }
 
@@ -51,9 +53,13 @@ public class Meal {
     public long getAmount(){
         return amount;
     }
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public void setCalories(long amount){
+        this.calories = calories;
     }
+    public long getCalories(){
+        return calories;
+    }
+    public LocalDateTime getDateTime() { return dateTime; }
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
