@@ -1,74 +1,86 @@
 package views.panels;
 
 import daoFactories.ContextFactory;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import models.Location;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class LocationPanel extends TemplatePanel {
 
-    public LocationPanel(){
-        ArrayList<Location> data = ContextFactory.get_mysqlLocationDao().all();
-
+    public LocationPanel(ObservableList<Location> locations){
+        // Creating a model for the table in this panel
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME", "ADDRESS"});
-        table = new JTable(model);
-        for (Location location : data)
+        for (Location location : locations)
             model.addRow(new Object[]{location.getId(), location.getName(), location.getAddress()});
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.setFillsViewportHeight(true);
-        add(scrollPane);
+        // Refreshing the components' models according to any changes in the model
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(1,5));
-        addButton = new JButton("ADD");
-        addButton.addActionListener(e -> {
-            JFrame addGroup = new JFrame("Add Location ...");
-            JPanel panel = new JPanel();
-            panel.setLayout(new GridLayout(5,1));
-            addGroup.add(panel);
-            panel.add(new JLabel("Location Name:"));
-            JTextField locationName = new JTextField();
-            panel.add(locationName);
-            panel.add(new JLabel("Location Address:"));
-            JTextField locationAddress = new JTextField();
-            panel.add(locationAddress);
-            JButton submitButton = new JButton("SUBMIT");
-            panel.add(submitButton);
-            addGroup.pack();
-            addGroup.setLocationRelativeTo(null);
-            addGroup.setSize(200,200);
-            addGroup.setVisible(true);
-            submitButton.addActionListener(event -> {
-                String name = locationName.getText();
-                String address = locationAddress.getText();
-                if(name.length()== 0 || address.length() == 0)
-                    return;
-                Location newLocation = new Location(name, address);
-                ContextFactory.get_mysqlLocationDao().insert(newLocation);
-                model.addRow(new Object[]{newLocation.getId(), newLocation.getName(), newLocation.getAddress()});
-                locationName.setText("");
-                locationAddress.setText("");
-            });
+        locations.addListener((ListChangeListener.Change<? extends Location> l) -> {
+            JOptionPane.showMessageDialog(this,"Change is applied successfully.");
+            while(model.getRowCount() != 0){
+                model.removeRow(0);
+            }
+            for (Location location : locations)
+                model.addRow(new Object[]{location.getId(), location.getName(), location.getAddress()});
         });
-        deleteButton = new JButton("DELETE");
+
+        // Creating different Components
+        JTable table = new JTable(model);
+
+        JLabel locationNameLabel = new JLabel("Location Name:");
+        JTextField locationName = new JTextField();
+
+        JLabel locationAddressLabel = new JLabel("Location Address:");
+        JTextField locationAddress = new JTextField();
+
+        JButton insertButton = new JButton("Insert");
+        insertButton.addActionListener(e->{
+            String name = locationName.getText();
+            String address = locationAddress.getText();
+            if(name.length()== 0 || address.length() == 0)
+                return;
+            Location newLocation = new Location(name, address);
+            ContextFactory._LocationDao().insert(newLocation);
+            locationName.setText("");
+            locationAddress.setText("");
+        });
+
+        JButton deleteButton = new JButton("DELETE");
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
                 return;
-            System.out.println("DEBUG: DELETING - " + data.get(row).getId() + "  " + data.get(row).getName());
-            ContextFactory.get_mysqlLocationDao().delete(data.get(row));
-            model.removeRow(row);
+            System.out.println("DEBUG: DELETING - " + locations.get(row).getId() + "  " + locations.get(row).getName());
+            ContextFactory._LocationDao().delete(locations.get(row));
         });
-        bottomPanel.add(addButton);
-        bottomPanel.add(deleteButton);
-//        bottomPanel.add(new JButton("FIND"));
-//        JButton exitButton = new JButton("CLOSE");
-//        bottomPanel.add(exitButton);
 
+        // Adding Components to the Panel And Design
+        setLayout(new BorderLayout(1,1));
+
+        JPanel dataEntryPanel = new JPanel();
+        dataEntryPanel.setLayout(new GridLayout(0, 1,1,1));
+        dataEntryPanel.add(locationNameLabel);
+        dataEntryPanel.add(locationName);
+        dataEntryPanel.add(locationAddressLabel);
+        dataEntryPanel.add(locationAddress);
+        dataEntryPanel.add(insertButton);
+        add(dataEntryPanel, BorderLayout.NORTH);
+
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(1,5));
+
+        deleteButton.setBackground(Color.RED);
+        deleteButton.setForeground(Color.WHITE);
+        bottomPanel.add(deleteButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 

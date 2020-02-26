@@ -1,68 +1,80 @@
 package views.panels;
 
 import daoFactories.ContextFactory;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import models.Group;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class GroupPanel extends TemplatePanel {
 
-    public GroupPanel(){
-        ArrayList<Group> data = ContextFactory.get_mysqlGroupDao().all();
-
+    public GroupPanel(ObservableList<Group> groups){
+        // Creating a model for the table in this panel
         model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
-        table = new JTable(model);
-        for (Group group : data)
+        for (Group group : groups)
             model.addRow(new Object[]{group.getId(), group.getName()});
 
-        scrollPane = new JScrollPane(table);
-        table.setFillsViewportHeight(true);
-        add(scrollPane, BorderLayout.CENTER);
-        bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(1,5));
-        addButton = new JButton("ADD");
-        addButton.addActionListener(e -> {
-            JFrame addGroup = new JFrame("Add Group ...");
-            JPanel panel = new JPanel();
-            panel.setLayout(new GridLayout(3,1));
-            addGroup.add(panel);
-            panel.add(new JLabel("Enter New Group:"));
-            JTextField groupName = new JTextField();
-            panel.add(groupName);
-            JButton submitButton = new JButton("SUBMIT");
-            panel.add(submitButton);
-            addGroup.pack();
-            addGroup.setLocationRelativeTo(null);
-            addGroup.setSize(200,120);
-            addGroup.setVisible(true);
-            submitButton.addActionListener(event -> {
-                String name = groupName.getText();
-                if(name.length()== 0)
-                    return;
-                Group newGroup = new Group(name);
-                ContextFactory.get_mysqlGroupDao().insert(newGroup);
-                model.addRow(new Object[]{newGroup.getId(), newGroup.getName()});
-                groupName.setText("");
-            });
+        // Refreshing the components' models according to any changes in the model
+        groups.addListener((ListChangeListener.Change<? extends Group> g) -> {
+            JOptionPane.showMessageDialog(this,"Change is applied successfully.");
+            while(model.getRowCount() != 0){
+                model.removeRow(0);
+            }
+            for (Group group : groups)
+                model.addRow(new Object[]{group.getId(), group.getName()});
         });
+
+        //Components
+        JTable table = new JTable(model);
+
+        JLabel groupNameLable = new JLabel("Enter New Group:");
+
+        JTextField groupName = new JTextField();
+
+        JButton insertButton = new JButton("Insert");
+        insertButton.addActionListener(event -> {
+            String name = groupName.getText();
+            if(name.length()== 0)
+                return;
+            Group newGroup = new Group(name);
+            ContextFactory._GroupDao().insert(newGroup);
+            groupName.setText("");
+        });
+
         deleteButton = new JButton("DELETE");
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
                 return;
-            System.out.println("DEBUG: DELETING - " + data.get(row).getId() + "  " + data.get(row).getName());
-            ContextFactory.get_mysqlGroupDao().delete(data.get(row));
-            model.removeRow(row);
+            System.out.println("DEBUG: DELETING - " + groups.get(row).getId() + "  " + groups.get(row).getName());
+            ContextFactory._GroupDao().delete(groups.get(row));
         });
-        bottomPanel.add(addButton);
-        bottomPanel.add(deleteButton);
-//        bottomPanel.add(new JButton("FIND"));
-//        JButton exitButton = new JButton("CLOSE");
-//        bottomPanel.add(exitButton);
 
+
+        // Adding Components to the Panel And Design
+        setLayout(new BorderLayout(1,1));
+
+        JPanel dataEntryPanel = new JPanel();
+        dataEntryPanel.setLayout(new GridLayout(0, 1,1,1));
+        dataEntryPanel.add(groupNameLable);
+        dataEntryPanel.add(groupName);
+        dataEntryPanel.add(insertButton);
+        add(dataEntryPanel, BorderLayout.NORTH);
+
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(1,5));
+
+        deleteButton.setBackground(Color.RED);
+        deleteButton.setForeground(Color.WHITE);
+        bottomPanel.add(deleteButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 }

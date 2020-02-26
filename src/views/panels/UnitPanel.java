@@ -1,69 +1,78 @@
 package views.panels;
 
 import daoFactories.ContextFactory;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import models.Unit;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class UnitPanel extends TemplatePanel {
 
-    public UnitPanel(){
-        ArrayList<Unit> data = ContextFactory.get_mysqlUnitDao().all();
-
+    public UnitPanel(ObservableList<Unit> units){
+        setLayout(new BorderLayout(3,1));
+        // Creating a model for the table in this panel
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
-        table = new JTable(model);
-        for (Unit unit : data)
+        for (Unit unit : units)
             model.addRow(new Object[]{unit.getId(), unit.getName()});
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.setFillsViewportHeight(true);
-        add(scrollPane);
-
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(1,5));
-        addButton = new JButton("ADD");
-        addButton.addActionListener(e -> {
-            JFrame addGroup = new JFrame("Add Unit ...");
-            JPanel panel = new JPanel();
-            panel.setLayout(new GridLayout(3,1));
-            addGroup.add(panel);
-            panel.add(new JLabel("Enter New Unit:"));
-            JTextField unitName = new JTextField();
-            panel.add(unitName);
-            JButton submitButton = new JButton("SUBMIT");
-            panel.add(submitButton);
-            addGroup.pack();
-            addGroup.setLocationRelativeTo(null);
-            addGroup.setSize(200,120);
-            addGroup.setVisible(true);
-            submitButton.addActionListener(event -> {
-                String name = unitName.getText();
-                if(name.length()== 0)
-                    return;
-                Unit newUnit = new Unit(name);
-                ContextFactory.get_mysqlUnitDao().insert(newUnit);
-                model.addRow(new Object[]{newUnit.getId(), newUnit.getName()});
-                unitName.setText("");
-            });
+        // Refreshing the components' models according to any changes in the model
+        units.addListener((ListChangeListener.Change<? extends Unit> u) -> {
+            JOptionPane.showMessageDialog(this,"Change is applied successfully.");
+            while(model.getRowCount() != 0){
+                model.removeRow(0);
+            }
+            for (Unit unit : units)
+                model.addRow(new Object[]{unit.getId(), unit.getName()});
         });
-        deleteButton = new JButton("DELETE");
+
+        //Components
+        JTable table = new JTable(model);
+        JLabel unitNameLabel = new JLabel("Unit Name: ");
+        JTextField unitName = new JTextField();
+
+        JButton insertButton = new JButton("Insert");
+        insertButton.addActionListener(e -> {
+            String name = unitName.getText();
+            if(name.length()== 0)
+                return;
+            Unit newUnit = new Unit(name);
+            ContextFactory._UnitDao().insert(newUnit);
+            unitName.setText("");
+        });
+
+        JButton deleteButton = new JButton("DELETE");
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             if (row == -1)
                 return;
-            System.out.println("DEBUG: DELETING - " + data.get(row).getId() + "  " + data.get(row).getName());
-            ContextFactory.get_mysqlUnitDao().delete(data.get(row));
-            model.removeRow(row);
+            System.out.println("DEBUG: DELETING - " + units.get(row).getId() + "  " + units.get(row).getName());
+            ContextFactory._UnitDao().delete(units.get(row));
         });
-        bottomPanel.add(addButton);
-        bottomPanel.add(deleteButton);
-//        bottomPanel.add(new JButton("FIND"));
-//        JButton exitButton = new JButton("CLOSE");
-//        bottomPanel.add(exitButton);
 
+        // Adding Components to the Panel And Design
+        setLayout(new BorderLayout(1,1));
+
+        JPanel dataEntryPanel = new JPanel();
+        dataEntryPanel.setLayout(new GridLayout(0, 1,1,1));
+        dataEntryPanel.add(unitNameLabel);
+        dataEntryPanel.add(unitName);
+        dataEntryPanel.add(insertButton);
+        add(dataEntryPanel, BorderLayout.NORTH);
+
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        table.setFillsViewportHeight(true);
+        add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(1,5));
+
+        deleteButton.setBackground(Color.RED);
+        deleteButton.setForeground(Color.WHITE);
+        bottomPanel.add(deleteButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
