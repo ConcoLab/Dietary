@@ -13,7 +13,6 @@ public class Food {
     private long calories;
     private long unit_id;
     private long quantity;
-    private boolean eaten;
 
     public Food(String name, long calories, long unit_id, long quantity) {
         this.id = ITERATOR;
