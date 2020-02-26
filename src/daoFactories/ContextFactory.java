@@ -24,22 +24,22 @@ public class ContextFactory {
         _mysqlLocationDao = new MysqlLocationDao(_context);
     }
 
-    public static MysqlGroupDao get_mysqlGroupDao() {
+    public static MysqlGroupDao _GroupDao() {
         return _mysqlGroupDao;
     }
-    public static MysqlFoodGroupDao get_mysqlFoodGroupDao() {
+    public static MysqlFoodGroupDao _FoodGroupDao() {
         return _mysqlFoodGroupDao;
     }
-    public static MysqlFoodDao get_mysqlFoodDao() {
+    public static MysqlFoodDao _FoodDao() {
         return _mysqlFoodDao;
     }
-    public static MysqlMealDao get_mysqlMealDao() {
+    public static MysqlMealDao _MealDao() {
         return _mysqlMealDao;
     }
-    public static MysqlLocationDao get_mysqlLocationDao() {
+    public static MysqlLocationDao _LocationDao() {
         return _mysqlLocationDao;
     }
-    public static MysqlUnitDao get_mysqlUnitDao(){return _mysqlUnitDao;};
+    public static MysqlUnitDao _UnitDao(){return _mysqlUnitDao;};
 //    public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
     public Context getContext(){return _context;}
 
