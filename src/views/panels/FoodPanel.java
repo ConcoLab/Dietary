@@ -84,7 +84,10 @@ public class FoodPanel extends JPanel{
             // Todo: Validate the input data to be correct and not empty
 
             int a = unitsComboBox.getSelectedIndex();
-            Food newFood = new Food(foodNameTextField.getText(), Long.parseLong(caloriesTextField.getText()), unitsComboBox.getSelectedIndex(), 25);
+            Food newFood = new Food(foodNameTextField.getText()
+                    , Long.parseLong(caloriesTextField.getText())
+                    , unitsComboBox.getSelectedIndex()
+                    , Long.parseLong(quantityTextField.getText()));
             ContextFactory._FoodDao().insert(newFood);
             for(JCheckBox checkBox:checkBoxes){
                 if(checkBox.isSelected()){
@@ -101,7 +104,6 @@ public class FoodPanel extends JPanel{
                 return;
             System.out.println("DEBUG: DELETING - " + foods.get(row).getId() + "  " + foods.get(row).getName());
             ContextFactory._FoodDao().delete(foods.get(row));
-            model.removeRow(row);
         });
 
 
@@ -160,7 +162,7 @@ public class FoodPanel extends JPanel{
                         food.getName(),
                         food.getQuantity(),
                         units.stream().filter(unit -> unit.getId() == food.getUnit_id()).findFirst().get().getName(),
-                        food.getId(),
+                        food.getCalories(),
                         food.getName()});
         });
 
