@@ -1,11 +1,12 @@
 package daos.interfaces;
 
+import javafx.collections.ObservableList;
 import models.Unit;
 import java.util.ArrayList;
 
 public interface UnitDao {
     Unit insert(Unit unit);
-    ArrayList<Unit> all();
+    ObservableList<Unit> all();
     int deleteAll();
     int delete(Unit unit);
     Unit findById(long id);
