@@ -128,6 +128,7 @@ public class MealPanel extends JPanel{
             for (Food food:foods){
                 foodVector.addElement(new Item(food.getId(), food.getName()));
             }
+            foodsCombox.updateUI();
         });
 
         locations.addListener((ListChangeListener.Change<? extends Location> l) -> {
@@ -135,6 +136,7 @@ public class MealPanel extends JPanel{
             for (Location location:locations) {
                 locationVector.addElement(new Item(location.getId(), location.getName()));
             }
+            locationComboBox.updateUI();
         });
 
 

@@ -36,11 +36,14 @@ public class UnitPanel extends TemplatePanel {
         JButton insertButton = new JButton("Insert");
         insertButton.addActionListener(e -> {
             String name = unitName.getText();
-            if(name.length()== 0)
+            if(name.length()== 0){
+                JOptionPane.showMessageDialog(this, "Please insert a value!");
                 return;
-            Unit newUnit = new Unit(name);
-            ContextFactory._UnitDao().insert(newUnit);
-            unitName.setText("");
+            }else{
+                Unit newUnit = new Unit(name);
+                ContextFactory._UnitDao().insert(newUnit);
+                unitName.setText("");
+            }
         });
 
         JButton deleteButton = new JButton("DELETE");

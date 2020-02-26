@@ -13,6 +13,7 @@ public class MysqlGroupDao implements GroupDao {
 
     public MysqlGroupDao(Context context){
         _context = context;
+        // "SELECT * FROM groups"
         String [] g = {"Fruit", "Vegetables", "Grains", "Protein", "Dairy", "Sweets"};
         for (int i = 0; i < g.length; i++)
             this.insert(new Group(g[i]));
@@ -31,6 +32,7 @@ public class MysqlGroupDao implements GroupDao {
 
     @Override
     public int deleteAll() {
+        // "TRUNCATE groups"
         //groups.removeAll();
         return 0;
     }
@@ -51,6 +53,8 @@ public class MysqlGroupDao implements GroupDao {
 
     @Override
     public Group findByName(String name) {
+
+        // "SELECT * FROM groups WHERE groups.name IS LIKE "%name%"
         return _context.groups.stream()
                 .filter(group -> group.getName().contains(name))
                 .findFirst()

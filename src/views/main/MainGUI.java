@@ -50,49 +50,32 @@ public class MainGUI extends JFrame{
         northPanel.add(mainMenuBar);
 
         JMenu fileMenu = new JMenu("File");
-        JMenu dbMenu = new JMenu("DB");
         JMenu helpMenu = new JMenu("Help");
 
         mainMenuBar.add(fileMenu);
-        mainMenuBar.add(dbMenu);
         mainMenuBar.add(helpMenu);
 
         JMenuItem foodGroupMenu = new JMenuItem("Food Groups");
 
-        foodGroupMenu.addActionListener((e) -> {
-            addTabPane(foodGroupMenu.getText());
-        });
+
 
         JMenuItem unitMenu = new JMenuItem("Units");
 
-        unitMenu.addActionListener((e) -> {
-            addTabPane(unitMenu.getText());
-        });
+
 
         JMenuItem foodMenu = new JMenuItem("Foods");
 
-        foodMenu.addActionListener((e) -> {
-            addTabPane(foodMenu.getText());
-        });
+
 
         JMenuItem mealMenu = new JMenuItem("Meals");
         JMenuItem mealTypeMenu = new JMenuItem("Meal Types");
         JMenuItem locationMenu = new JMenuItem("Locations");
 
-        locationMenu.addActionListener((e) -> {
-            addTabPane(locationMenu.getText());
-        });
 
         JMenuItem exitMenu = new JMenuItem("Exit");
         exitMenu.addActionListener((e)->System.exit(0));
 
         fileMenu.add(exitMenu);
-        dbMenu.add(foodGroupMenu);
-        dbMenu.add(unitMenu);
-        dbMenu.add(foodMenu);
-        dbMenu.add(mealMenu);
-        dbMenu.add(mealTypeMenu);
-        dbMenu.add(locationMenu);
 
         leftPanel = new JPanel();
         mainPanel.add(leftPanel,BorderLayout.LINE_START);
@@ -100,10 +83,10 @@ public class MainGUI extends JFrame{
         tabbedPane = new JTabbedPane();
         leftPanel.add(tabbedPane);
         tabbedPane.addTab("Meals", null, new MealPanel(foods, units, groups, locations, mealTypes));
-        tabbedPane.addTab("Units", null, new UnitPanel(units));
-        tabbedPane.addTab("Locations", null, new LocationPanel(locations));
-        tabbedPane.addTab("Food Groups", null, new GroupPanel(groups));
         tabbedPane.addTab("Foods", null, new FoodPanel(foods, units, groups));
+        tabbedPane.addTab("Food Groups", null, new GroupPanel(groups));
+        tabbedPane.addTab("Locations", null, new LocationPanel(locations));
+        tabbedPane.addTab("Units", null, new UnitPanel(units));
 
         rightPanel = new JPanel();
         mainPanel.add(rightPanel,BorderLayout.CENTER);
@@ -112,7 +95,8 @@ public class MainGUI extends JFrame{
         rightPanel.add(new ReportPanel(meals, groups));
 
 
-//        tabbedPane = new JTabbedPane();
+//
+        tabbedPane = new JTabbedPane();
 //        rightPanel.add(tabbedPane);
 //        JPanel pnlTab = new JPanel(new FlowLayout());
 //        pnlTab.setOpaque(false);
@@ -125,7 +109,6 @@ public class MainGUI extends JFrame{
 //        tabbedPane.addTab("Tab 1",null, new JPanel());
 //        int index = tabbedPane.indexOfTab("Tab 1");
 //        tabbedPane.setTabComponentAt(index, pnlTab);
-
         southPanel = new JPanel();
         mainPanel.add(southPanel,BorderLayout.SOUTH);
 
@@ -143,28 +126,5 @@ public class MainGUI extends JFrame{
 
     }
 
-//    public static void updateModels(){
-//        mealPanel.
-//    }
-
-    public void addTabPane(String name){
-        int index = tabbedPane.indexOfTab(name);
-
-
-        index = tabbedPane.indexOfTab(name);
-        tabbedPane.setSelectedIndex(index);
-
-//        index = tabbedPane.indexOfTab(name);
-//        JPanel panelTab = new JPanel(new FlowLayout());
-//        panelTab.setOpaque(false);
-//        JLabel tabLabel = new JLabel(name);
-//        JButton buttonCloseTab = new JButton("x");
-//        buttonCloseTab.setBorderPainted(false);
-//        buttonCloseTab.setContentAreaFilled(false);
-//        panelTab.add(tabLabel);
-//        panelTab.add(buttonCloseTab);
-//        tabbedPane.setTabComponentAt(index, panelTab);
-
-    }
 
 }
