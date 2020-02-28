@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import models.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.stream.Collectors;
@@ -45,11 +46,15 @@ public class EatenMealPanel extends JPanel {
 
         // Components
         JTable table = new JTable(model);
+        JLabel eatenLabel = new JLabel("List of Consumed Food");
 
         //Design
+        setLayout(new BorderLayout(1,1));
+        eatenLabel.setFont(new Font("Arial", Font.PLAIN, 20));
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
-        add(scrollPane);
+        add(eatenLabel, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
 
         // Listeners
         meals.addListener((ListChangeListener.Change<? extends Meal> m) -> {

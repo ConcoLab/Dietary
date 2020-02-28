@@ -55,7 +55,7 @@ public class MealPanel extends JPanel{
 
         Vector foodVector = new Vector();
         for (Food food:foods){
-            foodVector.addElement(new Item(food.getId(), food.getName()));
+            foodVector.addElement(new Item(food.getId(), food.getName() + " (" + food.getQuantity() + " " + units.stream().filter(u->u.getId() == food.getUnit_id()).findFirst().get().getName() + ")"));
         }
 
         Vector locationVector = new Vector();
@@ -78,22 +78,22 @@ public class MealPanel extends JPanel{
         JLabel locationLabel = new JLabel("Location:");
         JComboBox locationComboBox = new JComboBox(locationVector);
 
-        JLabel amountLabel = new JLabel("Amount:");
+        JLabel amountLabel = new JLabel("Number of Servings:");
         JTextField amountTextField = new JTextField();
 
         JLabel dateLabel = new JLabel("Date:");
         JDatePicker datetimeTextField = new JDatePicker();
 
-        JButton insertButton = new JButton("Insert");
+        JButton insertButton = new JButton("Add to Consumed Food List");
         insertButton.addActionListener(e -> {
             long foodCalorie = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getCalories();
-            long foodQuantity = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getQuantity();
-            long calPerQuantity = foodCalorie/foodQuantity;
+//            long foodQuantity = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getQuantity();
+//            long calPerQuantity = foodCalorie/foodQuantity;
             Meal meal = new Meal(foodsCombox.getSelectedIndex(),
                     mealtypeCombobox.getSelectedIndex(),
                     locationComboBox.getSelectedIndex(),
                     Long.parseLong(amountTextField.getText()),
-                    calPerQuantity*Long.parseLong(amountTextField.getText()),
+                    foodCalorie*Long.parseLong(amountTextField.getText()),
                     LocalDateTime.now());
             ContextFactory._MealDao().insert(meal);
         });

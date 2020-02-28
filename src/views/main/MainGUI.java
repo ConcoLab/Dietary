@@ -82,7 +82,7 @@ public class MainGUI extends JFrame{
         leftPanel.setLayout(new GridLayout());
         tabbedPane = new JTabbedPane();
         leftPanel.add(tabbedPane);
-        tabbedPane.addTab("Meals", null, new MealPanel(foods, units, groups, locations, mealTypes));
+        tabbedPane.addTab("Diet Plan", null, new MealPanel(foods, units, groups, locations, mealTypes));
         tabbedPane.addTab("Foods", null, new FoodPanel(foods, units, groups));
         tabbedPane.addTab("Food Groups", null, new GroupPanel(groups));
         tabbedPane.addTab("Locations", null, new LocationPanel(locations));

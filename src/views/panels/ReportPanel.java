@@ -63,6 +63,7 @@ public class ReportPanel extends JPanel {
 
         JLabel caloriesValueLabel = new JLabel(calories);
         JLabel caloriesLabel = new JLabel("Calories");
+        JLabel reportsLabel = new JLabel("Report Panel");
 
         JTable eatenTable = new JTable(eatenModel);
 
@@ -70,9 +71,11 @@ public class ReportPanel extends JPanel {
 
 
         // Design
-        setLayout(new BorderLayout(0,4));
+        setLayout(new BorderLayout(1,1));
         JPanel textReportPanel = new JPanel();
         textReportPanel.setLayout(new GridLayout(1,4));
+        reportsLabel.setFont(new Font("Arial", Font.PLAIN, 20));
+        textReportPanel.add(reportsLabel);
         textReportPanel.add(caloriesLabel);
         textReportPanel.add(caloriesValueLabel);
         add(textReportPanel, BorderLayout.NORTH);
