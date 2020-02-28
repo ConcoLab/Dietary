@@ -10,13 +10,17 @@ As noted previously, the project is written in Java. Most members are using Java
 
 https://www.jetbrains.com/help/idea/javafx.html
 
+Additionally, this project is using JDatePicker (2.0.3) components for certain aspects of the GUI:
+
+https://jdatepicker.org/
+
 ### Launch
 
 The application can be run via the main method, and it is equipped with a Java Swing User Interface. 
 
 ### Present functionality
 
-The functionality thus far includes the following capabilities:
+The interactive functionality thus far includes the following capabilities:
 
 1. Add units of measurement.
 2. Delete units of measurement.
@@ -31,8 +35,26 @@ The functionality thus far includes the following capabilities:
    * units of measurement
    * calories
 7. Delete foods.
+8. Modify items within diet plan:
+   * meal type
+   * food name (shows quantity beside it)
+   * location
+   * number of servings
+   * date
+9. Add to consumed food list (from diet plan)
 
-### (Near) future functionality
+The non-interactive functionality thus far includes the following capabilities:
 
-1. Mark a food serving as eaten or uneaten.
-2. Remove a food serving.
+1. Report panel additions
+   * automatically adds or removes food group based upon whether an added food meets requirement 
+
+### Future functionality
+
+1. Create a new interface that provides user instructions
+2. Remove a food from consumed food list
+3. Mark a food serving as eaten or uneaten.
+4. Remove a food serving.
+5. Separate consumed food list panel into two separate panels for Indining and Outdining
+6. Create a database schema that will appropriately deal with Indining and Outdining diets
+7. Implementing a class for opening and closing database connection
+8. Extend functionality to let all diets to load from database at start-up
