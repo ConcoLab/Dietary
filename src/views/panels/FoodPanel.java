@@ -81,20 +81,61 @@ public class FoodPanel extends JPanel{
 
         JButton insertButton = new JButton("Insert");
         insertButton.addActionListener(e -> {
-            // Todo: Validate the input data to be correct and not empty
-
+            // validate the input for "Food Name", "Quantity", and "Calories" fields.
+            String foodName=foodNameTextField.getText();
+            Long quantity;
+            Long calories;
+            if(foodName.length()==0){
+                JOptionPane.showMessageDialog(this,"Please input the food name in the \"Food Name\" field!");
+                return;
+            }
+            if(quantityTextField.getText().length()==0 || quantityTextField.getText().equals("0") || quantityTextField.getText().substring(0,1).equals("-")){
+                JOptionPane.showMessageDialog(this,"Please input a positive integer in the \"Quantity\" field!");
+                return;
+            }
+            try{
+                quantity=Long.parseLong(quantityTextField.getText());
+            }
+            catch(NumberFormatException event){
+                JOptionPane.showMessageDialog(this,"Please input a positive integer in the \"Quantity\" field!");
+                return;
+            }
+            if(caloriesTextField.getText().length()==0 || caloriesTextField.getText().substring(0,1).equals("-")){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Calories\" field!");
+                return;
+            }
+            try{
+                calories=Long.parseLong(caloriesTextField.getText());
+            }
+            catch(NumberFormatException event){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Calories\" field!");
+                return;
+            }
             int a = unitsComboBox.getSelectedIndex();
-            Food newFood = new Food(foodNameTextField.getText()
-                    , Long.parseLong(caloriesTextField.getText())
-                    , unitsComboBox.getSelectedIndex()
-                    , Long.parseLong(quantityTextField.getText()));
-            ContextFactory._FoodDao().insert(newFood);
+            // validate the input for "Food Group" checkboxes.
+            int count=0;
             for(JCheckBox checkBox:checkBoxes){
+                if(checkBox.isSelected())
+                    count++;
+            }
+            if(count==0){
+                JOptionPane.showMessageDialog(this,"Please select at least one food group from the \"Food Groups\" field!");
+                return;
+            }
+
+            Food newFood = new Food(foodName
+                    , calories
+                    , unitsComboBox.getSelectedIndex()
+                    , quantity);
+            ContextFactory._FoodDao().insert(newFood);
+
+
+            for(JCheckBox checkBox:checkBoxes){
+
                 if(checkBox.isSelected()){
                     ContextFactory._FoodGroupDao().insert(new FoodGroup(newFood.getId(), Long.parseLong(checkBox.getActionCommand())));
                 }
             }
-
         });
 
         deleteButton = new JButton("DELETE");

@@ -36,9 +36,13 @@ public class GroupPanel extends TemplatePanel {
 
         JButton insertButton = new JButton("Insert");
         insertButton.addActionListener(event -> {
+            //validate the input for "New Group" field.
             String name = groupName.getText();
-            if(name.length()== 0)
+            if(name.length()== 0){
+                JOptionPane.showMessageDialog(this,"Please input the new food group name in the \" New Group\" field!");
                 return;
+            }
+
             Group newGroup = new Group(name);
             ContextFactory._GroupDao().insert(newGroup);
             groupName.setText("");
