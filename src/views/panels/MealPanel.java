@@ -139,7 +139,6 @@ public class MealPanel extends JPanel{
             locationComboBox.updateUI();
         });
 
-
     }
 
 }

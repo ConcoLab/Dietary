@@ -3,10 +3,12 @@ package views.panels;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import models.*;
+import models.Food;
+import models.Group;
+import models.Location;
+import models.Meal;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.stream.Collectors;
@@ -37,7 +39,7 @@ public class EatenMealPanel extends JPanel {
             model.addRow(new Object[]{
 //                    meal.getId(),
                     foods.stream().filter(food -> food.getId() == meal.getFoodId()).findFirst().get().getName(),
-                    mealTypes[(int) meal.getFoodId()],
+                    mealTypes[(int) meal.getMealTypeId()],
                     meal.getAmount(),
                     meal.getCalories(),
                     locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
@@ -55,6 +57,20 @@ public class EatenMealPanel extends JPanel {
         table.setFillsViewportHeight(true);
         add(eatenLabel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+        deleteButton = new JButton("REMOVE FROM CONSUMED FOOD LIST");
+        deleteButton.setBackground(Color.RED);
+        deleteButton.setForeground(Color.WHITE);
+        deleteButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1)
+                return;
+            System.out.println("DEBUG: DELETING - " + meals.get(row).getId() + "  " + meals.get(row).getDateTime());
+            ContextFactory._MealDao().delete(meals.get(row));
+        });
+
+        add(deleteButton, BorderLayout.SOUTH);
+
+
 
         // Listeners
         meals.addListener((ListChangeListener.Change<? extends Meal> m) -> {
@@ -66,7 +82,7 @@ public class EatenMealPanel extends JPanel {
                 model.addRow(new Object[]{
 //                        meal.getId(),
                         foods.stream().filter(food -> food.getId() == meal.getFoodId()).findFirst().get().getName(),
-                        mealTypes[(int) meal.getFoodId()],
+                        mealTypes[(int) meal.getMealTypeId()],
                         meal.getAmount(),
                         meal.getCalories(),
                         locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
