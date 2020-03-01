@@ -45,7 +45,7 @@ public class EatenMealPanel extends JPanel {
                     meal.getCalories(),
                     locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
                     String.join(",", ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId()).stream().map(group -> group.getName()).collect(Collectors.toList())),
-                    meal.getDateTime().format(DateTimeFormatter.ofPattern("dd.MMM.yyyy hh:mm"))});
+                    meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm"))});
 
         // Components
         JTable table = new JTable(model);
@@ -88,7 +88,7 @@ public class EatenMealPanel extends JPanel {
                         meal.getCalories(),
                         locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
                         String.join(",", ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId()).stream().map(group -> group.getName()).collect(Collectors.toList())),
-                        meal.getDateTime().format(DateTimeFormatter.ofPattern("dd.MMM.yyyy hh:mm"))});
+                        meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy hh:mm"))});
         });
 
 
