@@ -27,7 +27,7 @@ public class EatenMealPanel extends JPanel {
 //                "ID",
                 "Food Name",
                 "Meal Type",
-                "Amount",
+                "Number of Servings",
                 "Calories",
                 "Location",
                 "Food Group",
