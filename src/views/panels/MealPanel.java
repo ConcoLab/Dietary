@@ -132,7 +132,7 @@ public class MealPanel extends JPanel{
             JOptionPane.showMessageDialog(this, "Food Updated");
             foodVector.clear();
             for (Food food:foods){
-                foodVector.addElement(new Item(food.getId(), food.getName()));
+                foodVector.addElement(new Item(food.getId(), food.getName() + " (" + food.getQuantity() + " " + units.stream().filter(u->u.getId() == food.getUnit_id()).findFirst().get().getName() + ")"));
             }
             foodsCombox.updateUI();
         });
