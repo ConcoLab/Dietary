@@ -39,10 +39,17 @@ public class LocationPanel extends TemplatePanel {
 
         JButton insertButton = new JButton("Insert");
         insertButton.addActionListener(e->{
+            //Validate the input for the "Location Name" and "Location Address" fields.
             String name = locationName.getText();
             String address = locationAddress.getText();
-            if(name.length()== 0 || address.length() == 0)
+            if(name.length()==0){
+                JOptionPane.showMessageDialog(this,"Please input the location name in the \"Location Name\" field!");
                 return;
+            }
+            if(address.length() == 0){
+                JOptionPane.showMessageDialog(this, "Please input the location address in the \"Location Address\" field!");
+                return;
+            }
             Location newLocation = new Location(name, address);
             ContextFactory._LocationDao().insert(newLocation);
             locationName.setText("");

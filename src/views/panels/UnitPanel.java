@@ -35,15 +35,16 @@ public class UnitPanel extends TemplatePanel {
 
         JButton insertButton = new JButton("Insert");
         insertButton.addActionListener(e -> {
+            //Validate the input for the "Unit Name" field.
             String name = unitName.getText();
             if(name.length()== 0){
-                JOptionPane.showMessageDialog(this, "Please insert a value!");
+                JOptionPane.showMessageDialog(this, "Please input the unit name in the \"Unit Name\" field!");
                 return;
-            }else{
-                Unit newUnit = new Unit(name);
-                ContextFactory._UnitDao().insert(newUnit);
-                unitName.setText("");
             }
+
+            Unit newUnit = new Unit(name);
+            ContextFactory._UnitDao().insert(newUnit);
+            unitName.setText("");
         });
 
         JButton deleteButton = new JButton("DELETE");
