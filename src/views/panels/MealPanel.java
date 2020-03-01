@@ -117,14 +117,13 @@ public class MealPanel extends JPanel{
                 return;
             }
 
-
             long foodCalorie = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getCalories();
 //            long foodQuantity = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getQuantity();
 //            long calPerQuantity = foodCalorie/foodQuantity;
 
             int y, m, d, M, h;
             y = datetimeTextField.getModel().getYear();
-            m = datetimeTextField.getModel().getMonth();
+            m = datetimeTextField.getModel().getMonth() + 1; // JDatePicker returns 0-11 for months
             d = datetimeTextField.getModel().getDay();
             M = (int) minuteTextField.getValue();
             h = (int) hourTextField.getValue();;
