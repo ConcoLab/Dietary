@@ -136,6 +136,23 @@ public class FoodPanel extends JPanel{
                     ContextFactory._FoodGroupDao().insert(new FoodGroup(newFood.getId(), Long.parseLong(checkBox.getActionCommand())));
                 }
             }
+
+            //clear the contents in the text fileds.
+            foodNameTextField.setText("");
+            quantityTextField.setText("");
+            caloriesTextField.setText("");
+            //Error: foodGroupPanel can't be resolved, need to correct
+//            foodGroupPanel.removeAll();
+//            checkBoxes = new JCheckBox[groups.size()];
+//            int j = 0;
+//            for(Group group:groups){
+//                checkBoxes[j] = new JCheckBox(group.getName());
+//                Long groupId = group.getId();
+//                checkBoxes[j].setActionCommand(groupId.toString());
+//                foodGroupPanel.add(checkBoxes[j]);
+//                j++;
+//            }
+
         });
 
         deleteButton = new JButton("DELETE");
