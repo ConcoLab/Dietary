@@ -11,6 +11,7 @@ import models.Meal;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 public class EatenMealPanel extends JPanel {
@@ -44,7 +45,7 @@ public class EatenMealPanel extends JPanel {
                     meal.getCalories(),
                     locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
                     String.join(",", ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId()).stream().map(group -> group.getName()).collect(Collectors.toList())),
-                    meal.getDateTime()});
+                    meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"))});
 
         // Components
         JTable table = new JTable(model);
@@ -87,7 +88,7 @@ public class EatenMealPanel extends JPanel {
                         meal.getCalories(),
                         locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
                         String.join(",", ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId()).stream().map(group -> group.getName()).collect(Collectors.toList())),
-                        meal.getDateTime()});
+                        meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"))});
         });
 
 
