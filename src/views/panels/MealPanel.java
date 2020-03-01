@@ -84,6 +84,16 @@ public class MealPanel extends JPanel{
         JLabel dateLabel = new JLabel("Date:");
         JDatePicker datetimeTextField = new JDatePicker();
 
+        JLabel timeLabel = new JLabel("Time");
+        JPanel timePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        SpinnerModel hourModel = new SpinnerNumberModel(0, 0, 23, 1);
+        JSpinner hourTextField = new JSpinner(hourModel);
+        SpinnerModel minuteModel = new SpinnerNumberModel(0, 0, 59, 1);
+        JSpinner minuteTextField = new JSpinner(minuteModel);
+        timePanel.add(hourTextField);
+        timePanel.add(new JLabel(" : "));
+        timePanel.add(minuteTextField);
+
         JButton insertButton = new JButton("Add to Consumed Food List");
         insertButton.addActionListener(e -> {
             //validate the input for the "Number of Serving" field.
@@ -112,17 +122,19 @@ public class MealPanel extends JPanel{
 //            long foodQuantity = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getQuantity();
 //            long calPerQuantity = foodCalorie/foodQuantity;
 
-            int y, m, d;
+            int y, m, d, M, h;
             y = datetimeTextField.getModel().getYear();
             m = datetimeTextField.getModel().getMonth();
             d = datetimeTextField.getModel().getDay();
+            M = (int) minuteTextField.getValue();
+            h = (int) hourTextField.getValue();;
 
             Meal meal = new Meal(foodsCombox.getSelectedIndex(),
                     mealtypeCombobox.getSelectedIndex(),
                     locationComboBox.getSelectedIndex(),
                     Long.parseLong(amountTextField.getText()),
                     foodCalorie*Long.parseLong(amountTextField.getText()),
-                    LocalDateTime.of(y, m, d,0,0));
+                    LocalDateTime.of(y, m, d, h, M));
             ContextFactory._MealDao().insert(meal);
         });
 
@@ -146,6 +158,8 @@ public class MealPanel extends JPanel{
         dataEntryPanel.add(amountTextField);
         dataEntryPanel.add(dateLabel);
         dataEntryPanel.add(datetimeTextField);
+        dataEntryPanel.add(timeLabel);
+        dataEntryPanel.add(timePanel);
         dataEntryPanel.add(insertButton);
         add(dataEntryPanel, BorderLayout.NORTH);
 

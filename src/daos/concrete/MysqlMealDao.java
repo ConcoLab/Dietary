@@ -4,8 +4,6 @@ import daoFactories.Context;
 import daos.interfaces.MealDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import models.Food;
-import models.Location;
 import models.Meal;
 
 import java.text.SimpleDateFormat;
