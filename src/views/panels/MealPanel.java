@@ -124,6 +124,10 @@ public class MealPanel extends JPanel{
                     foodCalorie*Long.parseLong(amountTextField.getText()),
                     LocalDateTime.of(y, m, d,0,0));
             ContextFactory._MealDao().insert(meal);
+
+            //Clear contents in all fields
+            amountTextField.setText("");
+
         });
 
 
