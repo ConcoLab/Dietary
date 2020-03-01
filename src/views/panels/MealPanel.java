@@ -89,12 +89,18 @@ public class MealPanel extends JPanel{
             long foodCalorie = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getCalories();
 //            long foodQuantity = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getQuantity();
 //            long calPerQuantity = foodCalorie/foodQuantity;
+
+            int y, m, d;
+            y = datetimeTextField.getModel().getYear();
+            m = datetimeTextField.getModel().getMonth();
+            d = datetimeTextField.getModel().getDay();
+
             Meal meal = new Meal(foodsCombox.getSelectedIndex(),
                     mealtypeCombobox.getSelectedIndex(),
                     locationComboBox.getSelectedIndex(),
                     Long.parseLong(amountTextField.getText()),
                     foodCalorie*Long.parseLong(amountTextField.getText()),
-                    LocalDateTime.now());
+                    LocalDateTime.of(y, m, d,0,0));
             ContextFactory._MealDao().insert(meal);
         });
 
