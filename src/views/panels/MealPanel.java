@@ -86,6 +86,28 @@ public class MealPanel extends JPanel{
 
         JButton insertButton = new JButton("Add to Consumed Food List");
         insertButton.addActionListener(e -> {
+            //validate the input for the "Number of Serving" field.
+            String numOfServ=amountTextField.getText();
+            float numOfServing;
+            if(numOfServ.length()==0 || numOfServ.equals("0") || numOfServ.substring(0,1).equals("-")){
+                JOptionPane.showMessageDialog(this,"Please input a positive decimal fraction in the \"Number of Servings\" field!");
+                return;
+            }
+            try{
+                numOfServing=Float.parseFloat(numOfServ);
+            }
+            catch (NumberFormatException event){
+                System.out.println("Please input a positive decimal fraction in the \"Number of Servings\" field!");
+                return;
+            }
+
+            //validate the input for the "Date" field.
+            if(datetimeTextField.getFormattedTextField().getText().equals("")){
+                JOptionPane.showMessageDialog(this,"Please input the date in the \"Date\" field!");
+                return;
+            }
+
+
             long foodCalorie = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getCalories();
 //            long foodQuantity = ContextFactory._FoodDao().findById(foodsCombox.getSelectedIndex()).getQuantity();
 //            long calPerQuantity = foodCalorie/foodQuantity;
