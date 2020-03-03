@@ -1,15 +1,13 @@
 package models;
 
-public class Location {
+public class Group {
     private static long ITERATOR = 0;
     private long id;
     private String name;
-    private String address;
 
-    public Location(String name, String address) {
+    public Group(String name) {
         this.id = ITERATOR;
         this.name = name;
-        this.address = address;
         ITERATOR++;
     }
 
@@ -28,14 +26,5 @@ public class Location {
     public void setName(String name) {
         this.name = name;
     }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
 
 }

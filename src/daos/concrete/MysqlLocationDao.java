@@ -1,6 +1,8 @@
 package daos.concrete;
 
+import daoFactories.Context;
 import daos.interfaces.LocationDoa;
+import javafx.collections.ObservableList;
 import models.Location;
 
 import java.util.ArrayList;
@@ -8,22 +10,25 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MysqlLocationDao implements LocationDoa {
-    public static ArrayList<Location> locations = new ArrayList<Location>();
+    private Context _context;
 
-    public MysqlLocationDao() {
-        Location l1 = new Location(1, "Tim Hortons", "Snowdon");
+    public MysqlLocationDao(Context context) {
+        _context = context;
+        Location l0 = new Location("Home", "Mi Casa");
+        Location l1 = new Location("Tim Hortons", "Snowdon");
+        this.insert(l0);
         this.insert(l1);
     }
 
     @Override
     public Location insert(Location location) {
-        locations.add(location);
+        _context.locations.add(location);
         return null;
     }
 
     @Override
-    public ArrayList<Location> all() {
-        return locations;
+    public ObservableList<Location> all() {
+        return _context.locations;
     }
 
     @Override
@@ -34,22 +39,28 @@ public class MysqlLocationDao implements LocationDoa {
 
     @Override
     public int delete(Location location) {
-        locations.remove(location);
+        _context.locations.remove(location);
         return 0;
     }
 
     @Override
     public Location findById(long id) {
-        return locations.stream().filter(location -> location.getId()==id).findFirst().orElse(null);
+        return _context.locations.stream().filter(location -> location.getId()==id).findFirst().orElse(null);
     }
 
     @Override
     public Location findByName(String name) {
-        return locations.stream().filter(location -> location.getName().contains(name)).findFirst().orElse(null);
+        return _context.locations.stream()
+                .filter(location -> location.getName().contains(name))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public Location findByAddress(String address) {
-        return locations.stream().filter(location -> location.getAddress().contains(address)).findFirst().orElse(null);
+        return _context.locations.stream()
+                .filter(location -> location.getAddress().contains(address))
+                .findFirst()
+                .orElse(null);
     }
 }

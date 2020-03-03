@@ -1,0 +1,301 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\title{COMP5541 - Requirements Documentation}
+\author{\centerline{Amirali Ashraf, Bo Jin, Nicholas LaMothe, Kyle Taylor Lange, Pavlo Ruban}}
+\date{January 2020 - April 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Project Overview}
+
+The client, Dr. Nora Houri, has asked our team to construct a Dietary Manager Application. The requirements for the project are simple and fairly specific, although there are some ambiguities that will need to be addressed.
+\\\\
+We have been asked to build an application that will distinguish between meals that are eaten at home and meals that are eaten when not at home. These have been specified as \em Indining \em and \em Outdining \em, respectively. 
+\\\\
+For the Indining foods consumed, we have been asked to construct these modules in terms of Name, Time, Serving, and Type.
+\\\\
+For the Outdining foods consumer, we have been asked to construct these modules in terms of Retailer, Time, Meal, and Group.
+\\
+\section{Requirements: Increment I - Roles}
+The majority of the current functionality has been implemented by Parham (Amirali) and Paul, and this includes the majority of the work done for the view (GUI) portion of the application.
+\\\\
+Bo Jin has been involved in working on the graphical user interface, as well as some code editing, specifically regarding input validation. 
+\\\\
+Nicholas and Kyle have taken on the roles of producing documentation and testing the code, although it was Paul who produced the class diagram.
+\\
+\section{Requirements: Increment I - Basics}
+
+For the first increment, we have the task of adding some specific functionalities.
+\\\\
+The program must allow the user to view all of the consumed foods in the form of a list. The order here is to be arbitrary.
+\\\\
+It must allow the user to add or remove a particular food from the list. Here, she has used both the term 'foodstuff' and 'food serving', which, until further notice, we will consider as interchangeable.
+\\\\
+In order to facilitate the view, the application must use a Java Swing User Interface.
+\\\\
+Furthermore, we must plan for the future addition of food types, which I will take to mean 'general' classes of food (dairy, meat, vegetables, etc.). We must also plan for extending support into multiple user interfaces, as well as varied ways of presenting the dietary list (e.g. graphically as a pie chart)
+\\\\
+For the purposes of having more functionality in planning the diet, we have collectively decided to have \em all \em of the following properties be considered separately, and will all factor into what is added from the \textit{Diet Plan} (UI) to the \textit{List of Consumed Foods} (UI) - again, note that this is a high-level discussion of user functionality just to offer an overall view:
+
+\begin{itemize}
+    \item Food Name
+    \item Meal Type
+    \item Amount
+    \item Calories
+    \item Location
+    \item Food Group
+    \item Date (including Time)
+\end{itemize}
+\\\\
+The following section will begin with a brief explanation for the attribution of \textit{Location} to each food item that is to be incorporated into the diet plan.
+\\
+\section{Requirements: Increment I - Planned Functionality}
+
+A difficult decision for our team was how we were to approach the issue of the separation of the \em Indining \em and \em Outdining \em portions of the program in a reasonable fashion. The decision to include Location factors into this, and will ultimately allow for more flexibility with future increments.
+\\\\
+In particular, this decision will allow us to change the \textit{List of Consumed Foods} (called \textbf{EatenMealPanel}) into \textbf{two} separate user interfaces, one of which will be for \em Indining \em meals and the other of which will be for \em Outdining \em meals. The Foods will be added to either panel according to two simple conditions
+
+\begin{itemize}
+    \item \em If \em the Location is set to Home, \em then \em the Food will be transferred to the Indining Panel
+    \item \em If \em the Location is \textbf{not} set to Home (i.e. is anything else), \em then \em the Food will be transferred to the Outdining Panel\\
+\end{itemize}
+This above modification will take place within \textbf{Increment 2}. Additionally, we will add an option that allows to check any food as \textit{consumed} or \textit{unconsumed}, although this will require a re-structuring of the general display of these panels, as there is no purpose in referring to them as \textit{consumed food lists} if we're to provide the option to check them as \textit{consumed} or \textit{unconsumed}.
+\\\\
+It will also be necessary to provide the user the option to hide or un-hide the consumed diet. In brief, it will be an option that will allow the removal or re-addition of consumed foods within either \textit{Indining} or \textit{Outdining} panels.
+\\\\
+Finally, \textbf{Increment 3} will require that the team design an adequate database schema to map \textit{Indining} and \textit{Outdining} diets. \textbf{This will need to be documented with database schemata and class diagrams}. We will implement a class that permits the opening and closing of a database connection (some of which is perhaps already implemented), and we will have to design it such that, at program start-up, it will load diets that have been saved in the database. Furthermore, the user should have the option of being able to \textbf{save} his/her diet at any point while using the program.
+\\\\
+Although not required explicitly, we will eventually provide an additional panel that will provide basic instructions to the user.
+\\
+\section{Requirements: Increment I - Current State}
+\\\\
+As stated previously, Paul and Parham are credited with creating the majority of the functionality in the model, view, and database portions of the program. 
+\\\\
+There were some original hurdles regarding whether we were to add various intermediary classes that would create 'relations' between some of the main classes (e.g. Food.java and Group.java), but ultimately these were removed or otherwise consolidated.
+\\\\
+MODEL: The basic heart of the model of our program goes as follows. We take for granted that all of the classes contain the appropriate accessors and mutators:
+\\
+\begin{itemize}
+    \item A \textit{Food} class, for which there are the following attributes: 
+        \begin{itemize}
+        \item \textit{id, name, calories, unit\_id, quantity}
+        \end{itemize}
+    \item A \textit{FoodGroup} class, for which there are the following attributes: 
+        \begin{itemize}
+        \item \textit{foodId, groupId}
+        \end{itemize}
+    \item A \textit{Group} class, for which there are the following attributes: 
+        \begin{itemize}
+            \item \textit{id, name}
+        \end{itemize}
+    \item A \textit{Unit} class, for which there are the following attributes: 
+        \begin{itemize}
+            \item \textit{id, name}
+        \end{itemize}
+    \item A \textit{Meal} class, for which there are the following attributes: 
+        \begin{itemize}
+            \item \textit{id, foodId, mealTypeId, locationId, amount, calories, dateTime}
+        \end{itemize}
+    \item A \textit{Location} class, for which there are the following attributes: 
+        \begin{itemize}
+            \item \textit{id, name, address}\\
+        \end{itemize}
+\end{itemize}
+Below is a Class Diagram that details the functionality of our program:
+\\\\\\
+\hbox{\hspace{+2.5em} \includegraphics[scale = .50]{images/inc1_class_diag.jpeg}}
+\\\\
+VIEW: The program at this stage has a decent amount of functionality:
+\\
+\begin{itemize}
+  \item A \textbf{Food} panel (FoodPanel), where the attributes \textit{Food Name}, \textit{Quantity}. \textit{Unit}, and \textit{Calories} can be added. The user has the option of deciding which \textbf{Groups} may be added, and may include categories such as \textit{Dairy}, \textit{Vegetables}, etc.
+  \item A \textbf{Food Groups} panel (GroupPanel), where the user has the option of adding or removing categories of food. This can be useful for users whose diets are restricted to specific groups.
+  \item A \textbf{Locations} panel (LocationPanel), where the user has the option of adding or removing specific locations (\textit{i.e. !Home}) where food may be consumed.
+  \item A  \textbf{Units} panel (UnitPanel), where the user has the option of adding or removing specific units of measurement. This will unlikely be useful, but it can come in handy, depending on how much flexibility the client wishes to have.
+  \item A \textbf{Diet Plan} panel (MealPanel), where the user can add:
+    \begin{itemize}
+        \item \textit{Meal Type} (e.g. \textit{Breakfast}, \textit{Lunch}, \textit{Dinner})
+        \item \textit{Food Name} (which will automatically add foods that have been inserted in the \textbf{Food} panel)
+        \item \textit{Location} (which will automatically add locations that have been inserted in the \textbf{Locations} panel)
+        \item \textit{Number of Servings}, which will simply determine the number of servings of whatever given Food has been added
+        \item \textit{Date}, which will specify the date on which the food was consumed
+        \item \textit{Time}, which will specify the time at which the food was consumed
+        \item \textit{Add to Consumed Food List}, which will take the given item from the \textbf{Diet Plan} and add it to \textbf{List of Consumed Foods}(EatenMealPanel)
+    \end{itemize}
+  \item A \textbf{List of Consumed Foods} panel (EatenMealPanel), where the user can view the properties of the foods that have been consumed, and there is the option of removing a given food item
+  \item A \textbf{Report} panel (ReportPanel), where the use can view food groups that have been automatically added or removed, as is applicable given the actual foods that have been consumed\\\\
+  \textbf{NOTE: } EatenMealPanel \textit{should be re-named}\\
+\end{itemize}
+Again, there have been some minor deviations from the requirements as specified, but the team believes that they will increase both the functionality of the application and the user experience. Specifically, the required specifications of \em Indining \em and \em Outdining \em modules have instead been consolidated into the 'Location' functionality, which allows the user to specify any number of locations that can then be added to the \em Consumed Foods \em list, which is displayed in the top right hand portion of the user interface.
+\\\\
+As mentioned earlier in Section 3, this inclusion of Location in FoodPanel (and thus in the individual Foods taken and stored within EatenMealPanel) will still enable us to later have Foods placed into two separate panels for \em Indining \em and \em Outdining\em, respectively, so there should be no issue with that going forward.\\
+
+\section{Requirements: Increment I - Use Cases}
+\\\\
+\textbf{Title:} Insert new unit into the Units list.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Units} tab.
+    \item The user enters a string into the \textit{Units} box and clicks \textit{Insert}.
+    \item \em Failure: \em the \textit{Units} box has no input. The program displays an error message to the user.
+    \item \em Success: \em the unit is assigned a unique ID and added to the list of units displayed below the \textit{Insert} button.\\
+\end{itemize}
+\\
+\textbf{Title:} Insert new location into the Locations list.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Locations} tab.
+    \item The user enters a string into the \textit{Location Name} and \textit{Location Address} boxes and clicks \textit{Insert}.
+    \item \em Failure: \em any of the boxes has no input. The program displays an error message to the user.
+    \item \em Success: \em the location is assigned a unique ID and added to the list of locations displayed below the \textit{Insert} button.\\
+\end{itemize}
+\\
+\textbf{Title:} Insert new food group into the Food Groups list.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Food Groups} tab.
+    \item The user enters a string into the \textit{Enter New Food Group} box and clicks \textit{Insert}.
+    \item \em Failure: \em any of the boxes has no input. The program displays an error message to the user.
+    \item \em Success: \em the food group is assigned a unique ID and added to the list of food groups displayed below the \textit{Insert} button.\\
+\end{itemize}
+\\
+\textbf{Title:} Insert new food into the Foods list.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:} 
+\begin{itemize}
+    \item The user clicks on the \textit{Foods} tab.
+    \item The user enters a string into the \textit{Food Names} box, a number into the \textit{Quantity} box, selects an option from the \textit{Unit} box, and enters a number in the \textit{Calories} box.
+    \item The user checks the number of food groups that the item belongs to and clicks \textit{Insert}.
+    \item \em Failure: \em either the Quantity or Unit boxes contain non-number strings, or any box has no input. The program displays an error message to the user.
+    \item \em Success: \em the food is assigned a unique ID and added to the list of food items displayed below the \textit{Insert} button.\\
+\end{itemize}
+\\
+\textbf{Title:} Add food to the List of Consumed Food.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Diet Plan} tab.
+    \item The user selects an appropriate meal type from the \textit{Meal Type} drop-down box, a food name from the \textit{Food Name} drop-down box, and a location from the \textit{Location} drop-down box.
+    \item The user types a number into the \textit{Number of Servings} box, selects a date from the \textit{Date} box, enters a time in the \textit{Time} boxes, and clicks \textit{Add to Consumed Food List}.
+    \item \em Failure: \em a date was not selected or a number was not input into the Number of Servings or Time box. The program displays an error message to the user.
+    \item \em Success: \em the food item is added to the List of Consumed Food panel. The calories consumed are calculated and displayed next to the food.
+    \item The Report Panel updates to display the total number of calories consumed in the day, and the food groups eaten and not eaten are updated to reflect which (if any) food groups have been eaten.\\
+\end{itemize}
+\\
+\textbf{Title:} Delete unit from Units tab.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Units} tab.
+    \item The user selects the unit they wish to delete from the list.
+    \item The user clicks the \textit{Delete} button.
+    \item \em Success: \em the unit is deleted and the user is notified via popup message.\\
+\end{itemize}
+\\
+\textbf{Title:} Delete location from Locations tab.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Locations} tab.
+    \item The user selects the location they wish to delete from the list.
+    \item The user clicks the \textit{Delete} button.
+    \item \em Success: \em the location is deleted and the user is notified via popup message.\\
+\end{itemize}
+\\
+\textbf{Title:} Delete food group from Food Groups tab.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Food Groups} tab.
+    \item The user selects the food group they wish to delete from the list.
+    \item The user clicks the \textit{Delete} button.
+    \item \em Success: \em the food group is deleted and the user is notified via popup message.\\
+\end{itemize}
+\\
+\textbf{Title:} Delete food from Food tab.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the \textit{Foods} tab.
+    \item The user selects the food they wish to delete from the list.
+    \item The user clicks the \textit{Delete} button.
+    \item \em Success: \em the food is deleted and the user is notified via popup message.\\
+\end{itemize}
+\textbf{Title:} Delete a consumed food from the List of Consumed Food.
+\\
+\textbf{Primary Actor:} User.
+\\
+\textbf{Scope:} Dietary Manager Application.
+\\
+\textbf{Level:} !
+\\
+\textbf{Story:}
+\begin{itemize}
+    \item The user clicks on the consumed food entry they wish to delete.
+    \item The user clicks on the \textit{Remove from Consumed List} button at the bottom of the panel.
+    \item \em Success: \em the consumed food is deleted from the List of Consumed food. The calories update to reflect the removal of the food item, and any food groups under the eaten list will move to the not eaten list if the food item was the only remaining food item from that group.
+\end{itemize}
+\\\\
+\end{document}
