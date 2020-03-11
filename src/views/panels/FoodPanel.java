@@ -1,5 +1,6 @@
 package views.panels;
 
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -8,6 +9,7 @@ import models.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class FoodPanel extends JPanel{
@@ -44,7 +46,7 @@ public class FoodPanel extends JPanel{
     }
 
 
-    public FoodPanel(ObservableList<Food> foods, ObservableList<Unit> units, ObservableList<Group> groups){
+    public FoodPanel(ArrayList<Food> foods, ArrayList<Unit> units, ArrayList<Group> groups){
 
         // Creating a model for the table in this panel
         DefaultTableModel model = new DefaultTableModel(
@@ -54,7 +56,7 @@ public class FoodPanel extends JPanel{
                     food.getId(),
                     food.getName(),
                     food.getQuantity(),
-                    units.stream().filter(unit -> unit.getId() == food.getUnit_id()).findFirst().get().getName(),
+                    units.stream().filter(unit -> unit.getId() == food.getUnitId()).findFirst().get().getName(),
                     food.getCalories()});
 
         Vector unitVector = new Vector();
@@ -123,7 +125,8 @@ public class FoodPanel extends JPanel{
                 return;
             }
 
-            Food newFood = new Food(foodName
+            Food newFood = new Food(null,
+                    foodName
                     , calories
                     , unitsComboBox.getSelectedIndex()
                     , quantity);
@@ -210,7 +213,7 @@ public class FoodPanel extends JPanel{
 
 
         // Refreshing the components' models according to any changes in the model
-        foods.addListener((ListChangeListener.Change<? extends Food> f) -> {
+        Context.foods.addListener((ListChangeListener.Change<? extends Food> f) -> {
             while(model.getRowCount() != 0){
                 model.removeRow(0);
             }
@@ -219,20 +222,20 @@ public class FoodPanel extends JPanel{
                         food.getId(),
                         food.getName(),
                         food.getQuantity(),
-                        units.stream().filter(unit -> unit.getId() == food.getUnit_id()).findFirst().get().getName(),
+                        units.stream().filter(unit -> unit.getId() == food.getUnitId()).findFirst().get().getName(),
                         food.getCalories(),
                         food.getName()});
         });
 
-        units.addListener((ListChangeListener.Change<? extends Unit> u) -> {
-            unitVector.clear();
-            for (Unit unit:units){
-                unitVector.addElement(new Item(unit.getId(), unit.getName()));
-            }
-            unitsComboBox.updateUI();
-        });
+//        units.addListener((ListChangeListener.Change<? extends Unit> u) -> {
+//            unitVector.clear();
+//            for (Unit unit:units){
+//                unitVector.addElement(new Item(unit.getId(), unit.getName()));
+//            }
+//            unitsComboBox.updateUI();
+//        });
 
-        groups.addListener((ListChangeListener.Change<? extends Group> g) -> {
+        Context.groups.addListener((ListChangeListener.Change<? extends Group> g) -> {
             foodGroupPanel.removeAll();
             checkBoxes = new JCheckBox[groups.size()];
             int j = 0;

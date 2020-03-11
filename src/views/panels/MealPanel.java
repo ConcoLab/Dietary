@@ -1,5 +1,6 @@
 package views.panels;
 
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import org.jdatepicker.JDatePicker;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class MealPanel extends JPanel{
@@ -45,7 +47,7 @@ public class MealPanel extends JPanel{
     }
 
 
-    public MealPanel(ObservableList<Food> foods, ObservableList<Unit> units, ObservableList<Group> groups, ObservableList<Location> locations, String[] mealTypes){
+    public MealPanel(ArrayList<Food> foods, ArrayList<Unit> units, ArrayList<Group> groups, ArrayList<Location> locations, String[] mealTypes){
 
         // Initialize needed data to fill the tables and other fields
         Vector mealTypeVector = new Vector();
@@ -55,7 +57,7 @@ public class MealPanel extends JPanel{
 
         Vector foodVector = new Vector();
         for (Food food:foods){
-            foodVector.addElement(new Item(food.getId(), food.getName() + " (" + food.getQuantity() + " " + units.stream().filter(u->u.getId() == food.getUnit_id()).findFirst().get().getName() + ")"));
+            foodVector.addElement(new Item(food.getId(), food.getName() + " (" + food.getQuantity() + " " + units.stream().filter(u->u.getId() == food.getUnitId()).findFirst().get().getName() + ")"));
         }
 
         Vector locationVector = new Vector();
@@ -128,7 +130,7 @@ public class MealPanel extends JPanel{
             M = (int) minuteTextField.getValue();
             h = (int) hourTextField.getValue();;
 
-            Meal meal = new Meal(foodsCombox.getSelectedIndex(),
+            Meal meal = new Meal(null, foodsCombox.getSelectedIndex(),
                     mealtypeCombobox.getSelectedIndex(),
                     locationComboBox.getSelectedIndex(),
                     Long.parseLong(amountTextField.getText()),
@@ -167,16 +169,16 @@ public class MealPanel extends JPanel{
         add(dataEntryPanel, BorderLayout.NORTH);
 
         // Listeners
-        foods.addListener((ListChangeListener.Change<? extends Food> f) -> {
+        Context.foods.addListener((ListChangeListener.Change<? extends Food> f) -> {
             JOptionPane.showMessageDialog(this, "Food Updated");
             foodVector.clear();
             for (Food food:foods){
-                foodVector.addElement(new Item(food.getId(), food.getName() + " (" + food.getQuantity() + " " + units.stream().filter(u->u.getId() == food.getUnit_id()).findFirst().get().getName() + ")"));
+                foodVector.addElement(new Item(food.getId(), food.getName() + " (" + food.getQuantity() + " " + units.stream().filter(u->u.getId() == food.getUnitId()).findFirst().get().getName() + ")"));
             }
             foodsCombox.updateUI();
         });
 
-        locations.addListener((ListChangeListener.Change<? extends Location> l) -> {
+        Context.locations.addListener((ListChangeListener.Change<? extends Location> l) -> {
             locationVector.clear();
             for (Location location:locations) {
                 locationVector.addElement(new Item(location.getId(), location.getName()));

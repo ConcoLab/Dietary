@@ -1,5 +1,7 @@
 package views.panels;
 
+import controllers.UnitController;
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -8,10 +10,12 @@ import models.Unit;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UnitPanel extends TemplatePanel {
 
-    public UnitPanel(ObservableList<Unit> units){
+    public UnitPanel(ArrayList<Unit> units){
         setLayout(new BorderLayout(3,1));
         // Creating a model for the table in this panel
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
@@ -19,13 +23,17 @@ public class UnitPanel extends TemplatePanel {
             model.addRow(new Object[]{unit.getId(), unit.getName()});
 
         // Refreshing the components' models according to any changes in the model
-        units.addListener((ListChangeListener.Change<? extends Unit> u) -> {
+        Context.units.addListener((ListChangeListener.Change<? extends Unit> u) -> {
             JOptionPane.showMessageDialog(this,"Change is applied successfully.");
             while(model.getRowCount() != 0){
                 model.removeRow(0);
             }
-            for (Unit unit : units)
-                model.addRow(new Object[]{unit.getId(), unit.getName()});
+            try {
+                for (Unit unit : UnitController.getAllUnits())
+                    model.addRow(new Object[]{unit.getId(), unit.getName()});
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         });
 
         //Components
@@ -42,8 +50,9 @@ public class UnitPanel extends TemplatePanel {
                 return;
             }
 
-            Unit newUnit = new Unit(name);
-            ContextFactory._UnitDao().insert(newUnit);
+            // Here creates new unit item using the Create Controller.
+            UnitController.create(new Unit(0, name));
+
             unitName.setText("");
         });
 

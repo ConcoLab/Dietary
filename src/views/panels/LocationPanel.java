@@ -1,5 +1,6 @@
 package views.panels;
 
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -8,10 +9,11 @@ import models.Location;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class LocationPanel extends TemplatePanel {
 
-    public LocationPanel(ObservableList<Location> locations){
+    public LocationPanel(ArrayList<Location> locations){
         // Creating a model for the table in this panel
         DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME", "ADDRESS"});
         for (Location location : locations)
@@ -19,7 +21,7 @@ public class LocationPanel extends TemplatePanel {
 
         // Refreshing the components' models according to any changes in the model
 
-        locations.addListener((ListChangeListener.Change<? extends Location> l) -> {
+        Context.locations.addListener((ListChangeListener.Change<? extends Location> l) -> {
             JOptionPane.showMessageDialog(this,"Change is applied successfully.");
             while(model.getRowCount() != 0){
                 model.removeRow(0);
@@ -50,7 +52,7 @@ public class LocationPanel extends TemplatePanel {
                 JOptionPane.showMessageDialog(this, "Please input the location address in the \"Location Address\" field!");
                 return;
             }
-            Location newLocation = new Location(name, address);
+            Location newLocation = new Location(null, name, address);
             ContextFactory._LocationDao().insert(newLocation);
             locationName.setText("");
             locationAddress.setText("");

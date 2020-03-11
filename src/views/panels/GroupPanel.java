@@ -1,5 +1,6 @@
 package views.panels;
 
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -8,17 +9,18 @@ import models.Group;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GroupPanel extends TemplatePanel {
 
-    public GroupPanel(ObservableList<Group> groups){
+    public GroupPanel(ArrayList<Group> groups){
         // Creating a model for the table in this panel
         model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
         for (Group group : groups)
             model.addRow(new Object[]{group.getId(), group.getName()});
 
         // Refreshing the components' models according to any changes in the model
-        groups.addListener((ListChangeListener.Change<? extends Group> g) -> {
+        Context.groups.addListener((ListChangeListener.Change<? extends Group> g) -> {
             JOptionPane.showMessageDialog(this,"Change is applied successfully.");
             while(model.getRowCount() != 0){
                 model.removeRow(0);
@@ -43,7 +45,7 @@ public class GroupPanel extends TemplatePanel {
                 return;
             }
 
-            Group newGroup = new Group(name);
+            Group newGroup = new Group(null, name);
             ContextFactory._GroupDao().insert(newGroup);
             groupName.setText("");
         });

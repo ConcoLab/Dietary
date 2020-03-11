@@ -1,5 +1,6 @@
 package views.panels;
 
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -11,7 +12,9 @@ import models.Meal;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class EatenMealPanel extends JPanel {
@@ -19,7 +22,7 @@ public class EatenMealPanel extends JPanel {
     public JButton deleteButton;
     public JTable table;
 
-    public EatenMealPanel(ObservableList<Meal> meals, ObservableList<Food> foods, String[] mealTypes, ObservableList<Location> locations, ObservableList<Group> groups){
+    public EatenMealPanel(ArrayList<Meal> meals, ArrayList<Food> foods, String[] mealTypes, ArrayList<Location> locations, ArrayList<Group> groups) throws SQLException {
         setLayout(new BorderLayout());
 
         //Table Model
@@ -74,21 +77,26 @@ public class EatenMealPanel extends JPanel {
 
 
         // Listeners
-        meals.addListener((ListChangeListener.Change<? extends Meal> m) -> {
+        Context.meals.addListener((ListChangeListener.Change<? extends Meal> m) -> {
             JOptionPane.showMessageDialog(this, "Meals Updated");
             while(model.getRowCount() != 0){
                 model.removeRow(0);
             }
-            for (Meal meal : meals)
-                model.addRow(new Object[]{
-//                        meal.getId(),
-                        foods.stream().filter(food -> food.getId() == meal.getFoodId()).findFirst().get().getName(),
-                        mealTypes[(int) meal.getMealTypeId()],
-                        meal.getAmount(),
-                        meal.getCalories(),
-                        locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
-                        String.join(",", ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId()).stream().map(group -> group.getName()).collect(Collectors.toList())),
-                        meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"))});
+            for (Meal meal : meals) {
+                try {
+                    model.addRow(new Object[]{
+    //                        meal.getId(),
+                            foods.stream().filter(food -> food.getId() == meal.getFoodId()).findFirst().get().getName(),
+                            mealTypes[(int) meal.getMealTypeId()],
+                            meal.getAmount(),
+                            meal.getCalories(),
+                            locations.stream().filter(location -> location.getId() == meal.getLocationId()).findFirst().get().getName(),
+                            String.join(",", ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId()).stream().map(group -> group.getName()).collect(Collectors.toList())),
+                            meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"))});
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         });
 
 

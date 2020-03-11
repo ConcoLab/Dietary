@@ -1,5 +1,6 @@
 package views.panels;
 
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -9,6 +10,7 @@ import models.Meal;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,14 +18,14 @@ import java.util.stream.Collectors;
 public class ReportPanel extends JPanel {
     private JLabel caloriesLable;
 
-    public ReportPanel(ObservableList<Meal> meals, ObservableList<Group> groups) {
+    public ReportPanel(ArrayList<Meal> meals, ArrayList<Group> groups) throws SQLException {
         // Calculations for eaten and notEaten groups
         String calories = String.valueOf(meals.stream().mapToDouble(meal -> meal.getCalories()).sum());
 
         ArrayList<String> eatens = new ArrayList<String>();
 
         for (Meal meal: meals){
-            ObservableList<Group> groupsInMeals = ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId());
+            ArrayList<Group> groupsInMeals = ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId());
             for(Group group:groupsInMeals){
                 if(!eatens.contains(group.getName()))
                     eatens.add(group.getName());
@@ -106,14 +108,19 @@ public class ReportPanel extends JPanel {
 
         // Listeners
 
-        meals.addListener((ListChangeListener.Change<? extends Meal> m) -> {
+        Context.meals.addListener((ListChangeListener.Change<? extends Meal> m) -> {
             caloriesValueLabel.setText(String.valueOf(meals.stream().mapToDouble(meal -> meal.getCalories()).sum()));
 
 
             eatens.clear();
 
             for (Meal meal: meals){
-                ObservableList<Group> groupsInMeals = ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId());
+                ArrayList<Group> groupsInMeals = null;
+                try {
+                    groupsInMeals = ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
                 for(Group group:groupsInMeals){
                     if(!eatens.contains(group.getName()))
                         eatens.add(group.getName());
