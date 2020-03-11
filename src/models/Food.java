@@ -11,17 +11,15 @@ public class Food {
     private long id;
     private String name;
     private long calories;
-    private long unit_id;
+    private long unitId;
     private long quantity;
 
-    public Food(String name, long calories, long unit_id, long quantity) {
-        this.id = ITERATOR;
+    public Food(Long id, String name, long calories, long unitId, long quantity) {
+        this.id = id;
         this.name = name;
         this.calories = calories;
-        this.unit_id = unit_id;
+        this.unitId = unitId;
         this.quantity = quantity;
-
-        ITERATOR++;
     }
 
     public long getId() {
@@ -48,12 +46,12 @@ public class Food {
         this.calories = calories;
     }
 
-    public long getUnit_id() {
-        return unit_id;
+    public long getUnitId() {
+        return unitId;
     }
 
-    public void setUnit_id(long unit_id) {
-        this.unit_id = unit_id;
+    public void setUnitId(long unitId) {
+        this.unitId = unitId;
     }
 
     public long getQuantity() {

@@ -5,10 +5,9 @@ public class Group {
     private long id;
     private String name;
 
-    public Group(String name) {
-        this.id = ITERATOR;
+    public Group(Long id, String name) {
+        this.id = id;
         this.name = name;
-        ITERATOR++;
     }
 
     public long getId() {

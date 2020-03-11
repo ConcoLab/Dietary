@@ -3,7 +3,6 @@ package models;
 import java.time.LocalDateTime;
 
 public class Meal {
-    private static long ITERATOR = 0;
     private long id;
     private long foodId;
     private long mealTypeId;
@@ -12,15 +11,14 @@ public class Meal {
     private long calories;
     private LocalDateTime dateTime;
 
-    public Meal(long foodId, long mealTypeId, long locationId, long amount, long calories, LocalDateTime dateTime){
-        this.id = ITERATOR;
+    public Meal(Long id, long foodId, long mealTypeId, long locationId, long amount, long calories, LocalDateTime dateTime){
+        this.id = id;
         this.foodId = foodId;
         this.mealTypeId = mealTypeId;
         this.locationId = locationId;
         this.amount = amount;
         this.dateTime = dateTime;
         this.calories = calories;
-        ITERATOR++;
     }
 
     public long getId(){

@@ -1,14 +1,12 @@
 package models;
 
 public class Unit {
-    private static long ITERATOR = 0;
     private long id;
     private String name;
 
-    public Unit(String name){
-        this.id = ITERATOR;
+    public Unit(long id, String name){
+        this.id = id;
         this.name = name;
-        ITERATOR++;
     }
 
     public long getId(){
