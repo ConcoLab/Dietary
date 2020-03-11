@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MysqlGroupDaoTest {
+class GroupDaoTest {
 
     @Test
     void insert() {

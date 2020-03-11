@@ -2,7 +2,7 @@ package unitTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MysqlFoodDaoTest {
+class FoodDaoInterfaceTest {
 
     @org.junit.jupiter.api.Test
     void insert() {
