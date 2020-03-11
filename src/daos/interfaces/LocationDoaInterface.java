@@ -2,13 +2,15 @@ package daos.interfaces;
 
 import javafx.collections.ObservableList;
 import models.Location;
+import models.Unit;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface LocationDoa {
+public interface LocationDoaInterface {
     Location insert(Location location);
-    ObservableList<Location> all();
+    ArrayList<Location> all() throws SQLException;
     int deleteAll();
     int delete(Location location);
     Location findById(long id);
