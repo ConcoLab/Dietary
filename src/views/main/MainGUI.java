@@ -1,5 +1,6 @@
 package views.main;
 
+import controllers.UnitController;
 import daoFactories.ContextFactory;
 import javafx.collections.ObservableList;
 import models.*;
@@ -7,7 +8,9 @@ import views.panels.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MainGUI extends JFrame{
@@ -22,13 +25,13 @@ public class MainGUI extends JFrame{
     private JTabbedPane tabbedPane;
 
 
-    public MainGUI(){
+    public MainGUI() throws SQLException {
         // DATA
-        ObservableList<Food> foods = ContextFactory._FoodDao().all();
-        ObservableList<Unit> units = ContextFactory._UnitDao().all();
-        ObservableList<Group> groups = ContextFactory._GroupDao().all();
-        ObservableList<Location> locations = ContextFactory._LocationDao().all();
-        ObservableList<Meal> meals = ContextFactory._MealDao().all();
+        ArrayList<Food> foods = ContextFactory._FoodDao().all();
+        ArrayList<Unit> units = UnitController.getAllUnits();
+        ArrayList<Group> groups = ContextFactory._GroupDao().all();
+        ArrayList<Location> locations = ContextFactory._LocationDao().all();
+        ArrayList<Meal> meals = ContextFactory._MealDao().all();
         String[] mealTypes = {"Breakfast", "Lunch", "Dinner", "Brunch", "Coffee"};
 
         // Init panels
