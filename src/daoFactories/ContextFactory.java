@@ -1,6 +1,10 @@
 package daoFactories;
 
 import daos.concrete.*;
+import observers.FoodGroupObserver;
+import observers.FoodObserver;
+import observers.GroupObserver;
+import observers.UnitObserver;
 
 import java.sql.*;
 
@@ -21,9 +25,9 @@ public class ContextFactory {
 
     private static FoodDao _FoodDao;
     private static FoodGroupDao _FoodGroupDao;
-    private static GroupDao _mysqlGroupDao;
-    private static UnitDao _mysqlUnitDao;
-    private static MealDao _mysqlMealDao;
+    private static GroupDao _GroupDao;
+    private static UnitDao _UnitDao;
+    private static MealDao _MealDao;
 //    private static MysqlMealTypeDao _mysqlMealTypeDao;
     private static LocationDao _LocationDao;
     private Context _context;
@@ -32,18 +36,16 @@ public class ContextFactory {
         _context = new Context();
         _FoodDao = new FoodDao(_context);
         _FoodGroupDao = new FoodGroupDao(_context);
-        _mysqlGroupDao = new GroupDao(_context);
-        _mysqlUnitDao = new UnitDao(_context);
-        _mysqlMealDao = new MealDao(_context);
+        _GroupDao = new GroupDao(_context);
+        _UnitDao = new UnitDao(_context);
+        _MealDao = new MealDao(_context);
 //        _mysqlMealTypeDao = new MysqlMealTypeDao(_context);
         _LocationDao = new LocationDao(_context);
-
-
 
     }
 
     public static GroupDao _GroupDao() {
-        return _mysqlGroupDao;
+        return _GroupDao;
     }
     public static FoodGroupDao _FoodGroupDao() {
         return _FoodGroupDao;
@@ -52,12 +54,12 @@ public class ContextFactory {
         return _FoodDao;
     }
     public static MealDao _MealDao() {
-        return _mysqlMealDao;
+        return _MealDao;
     }
     public static LocationDao _LocationDao() {
         return _LocationDao;
     }
-    public static UnitDao _UnitDao(){return _mysqlUnitDao;};
+    public static UnitDao _UnitDao(){return _UnitDao;};
 //    public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
     public Context getContext(){return _context;}
 
