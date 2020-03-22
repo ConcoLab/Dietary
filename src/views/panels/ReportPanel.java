@@ -1,6 +1,9 @@
 package views.panels;
 
-import com.sun.rowset.internal.Row;
+// import com.sun.rowset.internal.Row;
+// com.sun.rowset.internal is not supported in Java 11; so I imported this instead
+import javax.sql.rowset.*;
+
 import controllers.GroupController;
 import controllers.MealController;
 import daoFactories.Context;

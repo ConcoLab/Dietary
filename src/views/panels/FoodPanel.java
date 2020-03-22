@@ -11,6 +11,7 @@ import models.*;
 import util.Item;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
@@ -53,7 +54,7 @@ public class FoodPanel extends JPanel{
             unitVector.addElement(new Item(unit.getId(), unit.getName()));
         }
 
-        //Components
+        // Components
         table = new JTable(model);
         updateFoodsTable();
 
@@ -66,7 +67,6 @@ public class FoodPanel extends JPanel{
         JLabel unitLabel = new JLabel("Unit:");
 
         unitsComboBox = new JComboBox(unitVector);
-
 
         caloriesLabel = new JLabel("Calories:");
         caloriesTextField = new JTextField();
@@ -85,9 +85,17 @@ public class FoodPanel extends JPanel{
 
         groupLabel = new JLabel("Groups:");
 
+        // UPDATE: moved from
+        foodGroupPanel = new JPanel();
+        foodGroupPanel.setLayout(new FlowLayout());
+        checkBoxes = new JCheckBox[groups.size()];
+        int i = 0;
 
         insertButton = new JButton("Insert");
+
+        // functionality for insert button
         insertButton.addActionListener(e -> {
+
             // validate the input for "Food Name", "Quantity", and "Calories" fields.
             String foodName=foodNameTextField.getText();
             Long quantity;
@@ -119,6 +127,7 @@ public class FoodPanel extends JPanel{
                 return;
             }
             int a = unitsComboBox.getSelectedIndex();
+
             // validate the input for "Food Group" checkboxes.
             int count=0;
             for(JCheckBox checkBox:checkBoxes){
@@ -155,20 +164,21 @@ public class FoodPanel extends JPanel{
             }
 //            ContextFactory._FoodDao().insert(newFood);
             FoodController.create(newFood);
-            //clear the contents in the text fileds.
+
+            //clear the contents in the text fields
             foodNameTextField.setText("");
             quantityTextField.setText("");
             caloriesTextField.setText("");
         });
 
-        deleteButton = new JButton("DELETE");
-        deleteButton.addActionListener(e -> {
-            int row = table.getSelectedRow();
-            Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
-            FoodController.delete(id);
-        });
+        //  Do we need this delete button? See also: lines 213 - 223.
 
-
+        //        deleteButton = new JButton("DELETE");
+        //        deleteButton.addActionListener(e -> {
+        //            int row = table.getSelectedRow();
+        //            Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+        //            FoodController.delete(id);
+        //        });
 
 
         // Adding Components to the Panel And Design
@@ -191,31 +201,31 @@ public class FoodPanel extends JPanel{
         dataEntryPanel.add(saltTextField);
         dataEntryPanel.add(proteinLabel);
         dataEntryPanel.add(proteinTextField);
-
-        foodGroupPanel = new JPanel();
-        foodGroupPanel.setLayout(new FlowLayout());
-        checkBoxes = new JCheckBox[groups.size()];
-        int i = 0;
-
         dataEntryPanel.add(groupLabel);
         dataEntryPanel.add(foodGroupPanel);
         dataEntryPanel.add(insertButton);
-        add(dataEntryPanel, BorderLayout.NORTH);
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.setFillsViewportHeight(true);
-        add(scrollPane, BorderLayout.CENTER);
+        // UPDATE: BorderLayout changed from NORTH to CENTER
+        add(dataEntryPanel, BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridLayout(1,5));
+        // changed size of whole panel; many things were not visible
+        dataEntryPanel.setPreferredSize(new Dimension(400, 490));
 
-        deleteButton.setBackground(Color.RED);
-        deleteButton.setForeground(Color.WHITE);
-        bottomPanel.add(deleteButton);
-        add(bottomPanel, BorderLayout.SOUTH);
+        // Is there any need for a bottomPanel and a deleteButton? Foods would be deleted from consumed foods, no?
+        // I think that this code below is redundant at this stage.
+
+        //        JPanel bottomPanel = new JPanel();
+        //
+        //        bottomPanel.setLayout(new GridLayout(1,5));
+        //
+        //        deleteButton.setBackground(Color.RED);
+        //        deleteButton.setForeground(Color.WHITE);
+        //        bottomPanel.add(deleteButton);
+        //        add(bottomPanel, BorderLayout.SOUTH);
 
         updateFoodGroupCheckboxes();
     }
+
 
     public static void updateUnitsCombobox() throws SQLException {
         unitVector.clear();
@@ -224,6 +234,7 @@ public class FoodPanel extends JPanel{
         }
         unitsComboBox.updateUI();
     }
+
 
     public static void updateFoodsTable() throws SQLException {
         while(model.getRowCount() != 0){
@@ -243,6 +254,7 @@ public class FoodPanel extends JPanel{
                     food.getProtein(),
                     GroupController.getGroupNames(food.getGroups())});
     }
+
 
     public static void updateFoodGroupCheckboxes() throws SQLException {
         foodGroupPanel.removeAll();
