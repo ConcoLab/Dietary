@@ -11,7 +11,7 @@ public interface FoodDaoInterface {
     Food insert(Food food);
     ArrayList<Food> all() throws SQLException;
     int deleteAll();
-    int delete(Food food);
-    Food findById(long id);
+    int delete(long id);
+    Food findById(long id) throws SQLException;
     Food findByName(String name);
 }

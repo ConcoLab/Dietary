@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 public interface MealDaoInterface {
     Meal insert(Meal meal);
-    ArrayList<Meal> all() throws SQLException;
+    ArrayList<Meal> all(LocalDateTime startDate, LocalDateTime endDate) throws SQLException;
     int deleteAll();
-    int delete(Meal meal);
+    int delete(long id);
     Meal findById(long id);
     ArrayList<Meal> findMealsByDate(LocalDateTime date);
 //    Food getFood(Meal meal);

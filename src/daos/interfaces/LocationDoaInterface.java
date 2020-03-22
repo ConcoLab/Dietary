@@ -12,8 +12,8 @@ public interface LocationDoaInterface {
     Location insert(Location location);
     ArrayList<Location> all() throws SQLException;
     int deleteAll();
-    int delete(Location location);
-    Location findById(long id);
+    int delete(long id);
+    Location findById(long id) throws SQLException;
     Location findByName(String name);
     Location findByAddress(String address);
 }

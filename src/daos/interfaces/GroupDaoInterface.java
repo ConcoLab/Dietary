@@ -11,7 +11,7 @@ public interface GroupDaoInterface {
     Group insert(Group group);
     ArrayList<Group> all() throws SQLException;
     int deleteAll();
-    int delete(Group group);
+    int delete(long id);
     Group findById(long id);
     Group findByName(String name);
 }
