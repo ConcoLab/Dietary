@@ -9,9 +9,13 @@ public class Meal {
     private long locationId;
     private long amount;
     private long calories;
+    private long fat;
+    private long carbohydrate;
+    private long salt;
+    private long protein;
     private LocalDateTime dateTime;
 
-    public Meal(Long id, long foodId, long mealTypeId, long locationId, long amount, long calories, LocalDateTime dateTime){
+    public Meal(long id, long foodId, long mealTypeId, long locationId, long amount, long calories, long fat, long carbohydrate, long salt, long protein, LocalDateTime dateTime){
         this.id = id;
         this.foodId = foodId;
         this.mealTypeId = mealTypeId;
@@ -19,6 +23,10 @@ public class Meal {
         this.amount = amount;
         this.dateTime = dateTime;
         this.calories = calories;
+        this.fat = fat;
+        this.carbohydrate = carbohydrate;
+        this.salt = salt;
+        this.protein = protein;
     }
 
     public long getId(){
@@ -60,5 +68,36 @@ public class Meal {
     public LocalDateTime getDateTime() { return dateTime; }
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+    public long getFat() {
+        return fat;
+    }
+
+    public void setFat(long fat) {
+        this.fat = fat;
+    }
+
+    public long getCarbohydrate() {
+        return carbohydrate;
+    }
+
+    public void setCarbohydrate(long carbohydrate) {
+        this.carbohydrate = carbohydrate;
+    }
+
+    public long getSalt() {
+        return salt;
+    }
+
+    public void setSalt(long salt) {
+        this.salt = salt;
+    }
+
+    public long getProtein() {
+        return protein;
+    }
+
+    public void setProtein(long protein) {
+        this.protein = protein;
     }
 }
