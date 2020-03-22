@@ -1,18 +1,22 @@
 package daos.concrete;
 
 import daoFactories.Context;
+import daoFactories.ContextFactory;
 import daos.interfaces.GroupDaoInterface;
+import models.Food;
 import models.Group;
+import observers.GroupObserver;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * This class allows us to access to the sql database and the in memory list we are created as an ObservableList
  * This class should be called only from controllers not from the views.
  */
-public class GroupDao implements GroupDaoInterface {
+public class GroupDao extends Observable implements GroupDaoInterface {
     private Context _context;
 
 
@@ -23,10 +27,15 @@ public class GroupDao implements GroupDaoInterface {
      */
     public GroupDao(Context context) throws SQLException {
         _context = context;
+
+        GroupObserver groupObserver = new GroupObserver();
+        this.addObserver(groupObserver);
+
+
         String sql = "SELECT * FROM groups";
-        ResultSet rs = _context.dbCall(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
-            _context.groups.add(new Group(rs.getLong("id"), rs.getString("name")));
+            _context.groups.add(new Group(rs.getLong("id"), rs.getString("name"), getFoodsInGroup(rs.getLong("id"))));
         }
     }
 
@@ -39,8 +48,12 @@ public class GroupDao implements GroupDaoInterface {
     public Group insert(Group group) {
         String sql = "INSERT INTO groups (name)\n" +
                 "VALUES ('"+ group.getName() +"')";
-        ResultSet rs = _context.dbCall(sql);
-        _context.groups.add(group);
+        long newId = _context.insertCall(sql);
+        if(newId != 0){
+            group.setId(newId);
+            _context.groups.add(group);
+            setChanged();
+        }
         return null;
     }
 
@@ -51,12 +64,34 @@ public class GroupDao implements GroupDaoInterface {
      */
     @Override
     public ArrayList<Group> all() throws SQLException {
-        ArrayList<Group> foods = new ArrayList<Group>();
+        ArrayList<Group> groups = new ArrayList<Group>();
         String sql = "SELECT * FROM groups";
-        ResultSet rs = _context.dbCall(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
-            foods.add(new Group(rs.getLong("id"), rs.getString("name")));
+            groups.add(new Group(rs.getLong("id"), rs.getString("name"), getFoodsInGroup(rs.getLong("id"))));
         }
+        return groups;
+    }
+
+    public ArrayList<Food> getFoodsInGroup(long groupId) throws SQLException {
+
+        ArrayList<Food> foods = new ArrayList<Food>();
+        String sql = "SELECT * FROM foods " +
+                "WHERE id = '"+ groupId +"' \n";
+        ResultSet rs = _context.getCall(sql);
+        while (rs.next()) {
+            foods.add(new Food(rs.getLong("id")
+                    , rs.getString("name")
+                    , rs.getLong("calories")
+                    , rs.getLong("fat")
+                    , rs.getLong("carbohydrate")
+                    , rs.getLong("salt")
+                    , rs.getLong("protein")
+                    , rs.getLong("unitId")
+                    , rs.getLong("quantity")
+                    , ContextFactory._FoodGroupDao().getGroupsOfOneFood(rs.getLong("id"))));
+        }
+
         return foods;
     }
 
@@ -69,14 +104,16 @@ public class GroupDao implements GroupDaoInterface {
 
     /**
      * We can remove a group from the database using this code
-     * @param group
+     * @param id
      * @return
      */
     @Override
-    public int delete(Group group) {
-        String sql = "DELETE FROM groups WHERE groups.id = "+group.getId()+";";
-        ResultSet rs = _context.dbCall(sql);
-        _context.groups.remove(group);
+    public int delete(long id) {
+        int rs = _context.deleteCall(id, "groups");
+        if(rs == 1){
+            setChanged();
+        }
+//        _context.groups.remove(group);
         return 0;
     }
 

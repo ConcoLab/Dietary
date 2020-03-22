@@ -5,23 +5,31 @@ import daos.interfaces.MealDaoInterface;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Meal;
+import observers.MealObserver;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * This class should be used in the controller. And moreover we need to call it when we need to CRUD data from the
  * database
  */
-public class MealDao implements MealDaoInterface {
+public class MealDao extends Observable implements MealDaoInterface {
     private Context _context;
 
     public MealDao(Context context) throws SQLException {
         _context = context;
+
+        MealObserver mealObserver = new MealObserver();
+        this.addObserver(mealObserver);
+
+
         String sql = "SELECT * FROM meals";
-        ResultSet rs = _context.dbCall(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
             LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
             System.out.println(date);
@@ -31,6 +39,10 @@ public class MealDao implements MealDaoInterface {
                     , rs.getLong("locationId")
                     , rs.getLong("amount")
                     , rs.getLong("calories")
+                    , rs.getLong("fat")
+                    , rs.getLong("carbohydrate")
+                    , rs.getLong("salt")
+                    , rs.getLong("protein")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -43,15 +55,25 @@ public class MealDao implements MealDaoInterface {
      */
     @Override
     public Meal insert(Meal meal) {
-        String sql = "INSERT INTO meals (foodId, mealTypeId, locationId, amount, dateTime, calories)\n" +
+        String sql = "INSERT INTO meals (foodId, mealTypeId, locationId, amount, dateTime, calories, fat, carbohydrate, salt, protein)\n" +
                 "VALUES ('"+ meal.getFoodId() +"', " +
                 "'"+ meal.getMealTypeId() +"', " +
                 "'"+ meal.getLocationId() + "', " +
                 "'"+ meal.getAmount() + "', " +
-                "'"+ meal.getDateTime() + "', " +
-                "'"+ meal.getCalories()  +"');";
-        ResultSet rs = _context.dbCall(sql);
-        _context.meals.add(meal);
+                "'"+ meal.getDateTime().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "', " +
+                "'"+ meal.getCalories() +"', " +
+                "'"+ meal.getFat() +"', " +
+                "'"+ meal.getCarbohydrate() +"', " +
+                "'"+ meal.getSalt() +"', " +
+                "'"+ meal.getProtein() +"');";
+        System.out.println("-- DEBUG: " + sql);
+        long rs = _context.insertCall(sql);
+        if(rs != 0){
+            meal.setId(rs);
+//            _context.meals.add(meal);
+            setChanged();
+            return meal;
+        }
         return null;
     }
 
@@ -61,10 +83,13 @@ public class MealDao implements MealDaoInterface {
      * @throws SQLException
      */
     @Override
-    public ArrayList<Meal> all() throws SQLException {
+    public ArrayList<Meal> all(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
         ArrayList<Meal> meals = new ArrayList<Meal>();
-        String sql = "SELECT * FROM meals";
-        ResultSet rs = _context.dbCall(sql);
+        String sql = "SELECT * FROM meals WHERE dateTime >= '"
+                + startDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) +
+                "' AND dateTime <= '" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "';";
+        System.out.println(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
             LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
             System.out.println(date);
@@ -74,9 +99,70 @@ public class MealDao implements MealDaoInterface {
                     , rs.getLong("locationId")
                     , rs.getLong("amount")
                     , rs.getLong("calories")
+                    , rs.getLong("fat")
+                    , rs.getLong("carbohydrate")
+                    , rs.getLong("salt")
+                    , rs.getLong("protein")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
+        setChanged();
+        return meals;
+    }
+
+    public ArrayList<Meal> allInDinings(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+        ArrayList<Meal> meals = new ArrayList<Meal>();
+        String sql = "SELECT * FROM meals WHERE dateTime >= '"
+                + startDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) +
+                "' AND dateTime <= '" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "' "+
+                "AND locationId = 0;";
+        System.out.println(sql);
+        ResultSet rs = _context.getCall(sql);
+        while (rs.next()) {
+            LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
+            System.out.println(date);
+            meals.add(new Meal(rs.getLong("id")
+                    , rs.getInt("foodId")
+                    , rs.getInt("mealTypeId")
+                    , rs.getLong("locationId")
+                    , rs.getLong("amount")
+                    , rs.getLong("calories")
+                    , rs.getLong("fat")
+                    , rs.getLong("carbohydrate")
+                    , rs.getLong("salt")
+                    , rs.getLong("protein")
+                    , LocalDateTime.parse(rs.getString("dateTime"))
+            ));
+        }
+        setChanged();
+        return meals;
+    }
+
+    public ArrayList<Meal> allOutDinings(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
+        ArrayList<Meal> meals = new ArrayList<Meal>();
+        String sql = "SELECT * FROM meals WHERE dateTime >= '"
+                + startDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) +
+                "' AND dateTime <= '" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "' " +
+                "AND locationId != 0;";
+        System.out.println(sql);
+        ResultSet rs = _context.getCall(sql);
+        while (rs.next()) {
+            LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
+            System.out.println(date);
+            meals.add(new Meal(rs.getLong("id")
+                    , rs.getInt("foodId")
+                    , rs.getInt("mealTypeId")
+                    , rs.getLong("locationId")
+                    , rs.getLong("amount")
+                    , rs.getLong("calories")
+                    , rs.getLong("fat")
+                    , rs.getLong("carbohydrate")
+                    , rs.getLong("salt")
+                    , rs.getLong("protein")
+                    , LocalDateTime.parse(rs.getString("dateTime"))
+            ));
+        }
+        setChanged();
         return meals;
     }
 
@@ -88,12 +174,12 @@ public class MealDao implements MealDaoInterface {
 
     /**
      * deletes a meal from the database.
-     * @param meal
+     * @param id
      * @return
      */
     @Override
-    public int delete(Meal meal) {
-        _context.meals.remove(meal);
+    public int delete(long id) {
+//        _context.meals.remove(meal);
         return 0;
     }
 

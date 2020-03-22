@@ -3,16 +3,19 @@ package daos.concrete;
 import daoFactories.Context;
 import daos.interfaces.UnitDaoInterface;
 import models.Unit;
+import observers.UnitObserver;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * This Data Access Object is used to get access to the data which we have on database and also on our observables
  */
-public class UnitDao implements UnitDaoInterface {
-    private Context _context;
+public class UnitDao extends Observable implements UnitDaoInterface {
+    public Context _context;
+
 
     /**
      * This is the constructor which initialized the list of units from the database
@@ -23,8 +26,13 @@ public class UnitDao implements UnitDaoInterface {
      */
     public UnitDao(Context context) throws SQLException {
         _context = context;
+
+        UnitObserver unitObserver = new UnitObserver();
+        this.addObserver(unitObserver);
+
+
         String sql = "SELECT * FROM units";
-        ResultSet rs = _context.dbCall(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
             _context.units.add(new Unit(rs.getLong("id"), rs.getString("name")));
         }
@@ -36,11 +44,16 @@ public class UnitDao implements UnitDaoInterface {
      * @return
      */
     @Override
-    public Unit insert(Unit unit) {
+    public Unit insert(Unit unit) throws SQLException {
         String sql = "INSERT INTO units (name)\n" +
                 "VALUES ('"+ unit.getName() +"');";
-        ResultSet rs = _context.dbCall(sql);
-        _context.units.add(unit);
+        long rs = _context.insertCall(sql);
+        if(rs != 0){
+            unit.setId(rs);
+            _context.units.add(unit);
+            setChanged();
+        }
+
         return null;
     }
 
@@ -53,7 +66,7 @@ public class UnitDao implements UnitDaoInterface {
     public ArrayList<Unit> all() throws SQLException {
         ArrayList<Unit> units = new ArrayList<Unit>();
         String sql = "SELECT * FROM units";
-        ResultSet rs = _context.dbCall(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
             units.add(new Unit(rs.getLong("id"), rs.getString("name")));
         }
@@ -68,14 +81,16 @@ public class UnitDao implements UnitDaoInterface {
 
     /**
      * This method gets a unit and delete it from the database and in memory observable
-     * @param unit
+     * @param id
      * @return
      */
     @Override
-    public int delete(Unit unit) {
-        String sql = "DELETE FROM units WHERE units.id = "+unit.getId()+";";
-        ResultSet rs = _context.dbCall(sql);
-        _context.units.remove(unit);
+    public int delete(long id) {
+        int rs = _context.deleteCall(id, "units");
+        if(rs != 0){
+//            boolean result = _context.units.remove(unit.getId());
+            setChanged();
+        }
         return 0;
     }
 
@@ -86,12 +101,17 @@ public class UnitDao implements UnitDaoInterface {
      * @return
      */
     @Override
-    public Unit findById(long id) {
+    public Unit findById(long id) throws SQLException {
+        String sql = "SELECT * FROM units WHERE units.id = " + id + " LIMIT 1;";
+        ResultSet rs = _context.getCall(sql);
+        Unit unit = new Unit(0, "");
+        if(rs.next()){
+            unit.setId(rs.getLong("id"));
+            unit.setName(rs.getString("name"));
+        }
         // this method should also be implemented using sql
-        return _context.units.stream()
-                .filter(unit -> unit.getId() == id)
-                .findFirst()
-                .orElse(null);
+
+        return unit;
     }
 
     /**

@@ -3,16 +3,18 @@ package daos.concrete;
 import daoFactories.Context;
 import daos.interfaces.LocationDoaInterface;
 import models.Location;
+import observers.LocationObserver;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Observable;
 
 /**
  * This class allows us to CRUD the data in the locations table in the sql
  *
  */
-public class LocationDao implements LocationDoaInterface {
+public class LocationDao extends Observable implements LocationDoaInterface {
     private Context _context;
 
     /**
@@ -23,12 +25,17 @@ public class LocationDao implements LocationDoaInterface {
     public LocationDao(Context context) throws SQLException {
 
         _context = context;
+
+        LocationObserver locationObserver = new LocationObserver();
+        this.addObserver(locationObserver);
+
+
 //        Location l0 = new Location("Home", "Mi Casa");
 //        Location l1 = new Location("Tim Hortons", "Snowdon");
 //        _context.locations.add(l0);
 //        _context.locations.add(l1);
         String sql = "SELECT * FROM locations";
-        ResultSet rs = _context.dbCall(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
             _context.locations.add(new Location(rs.getLong("id"), rs.getString("name"), rs.getString("address")));
         }
@@ -44,8 +51,12 @@ public class LocationDao implements LocationDoaInterface {
     public Location insert(Location location) {
         String sql = "INSERT INTO locations (name, address)\n" +
                     "VALUES ('"+ location.getName() +"', '"+ location.getAddress() +"');";
-        ResultSet rs = _context.dbCall(sql);
-        _context.locations.add(location);
+        long newId = _context.insertCall(sql);
+        if(newId != 0){
+            location.setId(newId);
+            _context.locations.add(location);
+            setChanged();
+        }
         return null;
     }
 
@@ -58,7 +69,7 @@ public class LocationDao implements LocationDoaInterface {
     public ArrayList<Location> all() throws SQLException {
         ArrayList<Location> locations = new ArrayList<Location>();
         String sql = "SELECT * FROM locations";
-        ResultSet rs = _context.dbCall(sql);
+        ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
             locations.add(new Location(rs.getLong("id"), rs.getString("name"), rs.getString("address")));
         }
@@ -74,14 +85,15 @@ public class LocationDao implements LocationDoaInterface {
 
     /**
      * Deletes a location from the database and the list in the memory.
-     * @param location
+     * @param id
      * @return
      */
     @Override
-    public int delete(Location location) {
-        String sql = "DELETE FROM locations WHERE locations.id = "+location.getId()+";";
-        ResultSet rs = _context.dbCall(sql);
-        _context.locations.remove(location);
+    public int delete(long id) {
+        int rs = _context.deleteCall(id, "units");
+        if(rs == 1){
+            setChanged();
+        }
         return 0;
     }
 
@@ -91,9 +103,14 @@ public class LocationDao implements LocationDoaInterface {
      * @return
      */
     @Override
-    public Location findById(long id) {
+    public Location findById(long id) throws SQLException {
+        ResultSet rs = _context.findByIdCall(id, "locations");
+        if(rs.next()){
+            return new Location(rs.getLong("id"),rs.getString("name"), rs.getString("address"));
+        }
+        return null;
         // Database should be implemented
-        return _context.locations.stream().filter(location -> location.getId()==id).findFirst().orElse(null);
+//        return _context.locations.stream().filter(location -> location.getId()==id).findFirst().orElse(null);
     }
 
     /**
