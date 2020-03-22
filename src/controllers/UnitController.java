@@ -14,8 +14,9 @@ public class UnitController {
      * @param unit
      * @return
      */
-    public static boolean create(Unit unit){
+    public static boolean create(Unit unit) throws SQLException {
         ContextFactory._UnitDao().insert(unit);
+        ContextFactory._UnitDao().notifyObservers();
         return true;
     }
 
@@ -28,4 +29,17 @@ public class UnitController {
     public static ArrayList<Unit> getAllUnits() throws SQLException {
         return ContextFactory._UnitDao().all();
     }
+
+    public static boolean delete(long id){
+        ContextFactory._UnitDao().delete(id);
+        ContextFactory._UnitDao().notifyObservers();
+        return true;
+    }
+
+    public static Unit getById(long id) throws SQLException {
+        Unit unit = ContextFactory._UnitDao().findById(id);
+        return unit;
+    }
+
+
 }
