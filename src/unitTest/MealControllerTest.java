@@ -6,11 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FoodControllerTest {
-
-    @Test
-    void create() {
-    }
+class MealControllerTest {
 
     @BeforeEach
     void setUp() {
@@ -21,18 +17,18 @@ class FoodControllerTest {
     }
 
     @Test
-    void testCreate() {
+    void create() {
     }
 
     @Test
-    void getAll() {
+    void getAllMeals() {
     }
 
     @Test
-    void delete() {
+    void getInDiningAllMeals() {
     }
 
     @Test
-    void getFoodById() {
+    void getOutDinigAllMeals() {
     }
 }

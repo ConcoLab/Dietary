@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MysqlMealDaoTest {
+class UnitDaoTest {
 
     @Test
     void insert() {
@@ -27,10 +27,6 @@ class MysqlMealDaoTest {
     }
 
     @Test
-    void findMealsByDate() {
-    }
-
-    @Test
-    void findInRange() {
+    void findByName() {
     }
 }
