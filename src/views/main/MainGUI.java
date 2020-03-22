@@ -60,23 +60,13 @@ public class MainGUI extends JFrame {
         mainMenuBar.add(helpMenu);
 
         JMenuItem foodGroupMenu = new JMenuItem("Food Groups");
-
-
-
         JMenuItem unitMenu = new JMenuItem("Units");
-
-
-
         JMenuItem foodMenu = new JMenuItem("Foods");
-
-
-
         JMenuItem mealMenu = new JMenuItem("Meals");
         JMenuItem mealTypeMenu = new JMenuItem("Meal Types");
         JMenuItem locationMenu = new JMenuItem("Locations");
-
-
         JMenuItem exitMenu = new JMenuItem("Exit");
+
         exitMenu.addActionListener((e)->System.exit(0));
 
         fileMenu.add(exitMenu);
@@ -105,6 +95,7 @@ public class MainGUI extends JFrame {
 
 //
         tabbedPane = new JTabbedPane();
+
 //        rightPanel.add(tabbedPane);
 //        JPanel pnlTab = new JPanel(new FlowLayout());
 //        pnlTab.setOpaque(false);
@@ -117,6 +108,7 @@ public class MainGUI extends JFrame {
 //        tabbedPane.addTab("Tab 1",null, new JPanel());
 //        int index = tabbedPane.indexOfTab("Tab 1");
 //        tabbedPane.setTabComponentAt(index, pnlTab);
+
         southPanel = new JPanel();
         mainPanel.add(southPanel,BorderLayout.SOUTH);
 

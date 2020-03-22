@@ -85,7 +85,7 @@ public class FoodPanel extends JPanel{
 
         groupLabel = new JLabel("Groups:");
 
-        // UPDATE: moved from
+        // UPDATE: moved from where it was previously, dataEntryPanel.add() methods section
         foodGroupPanel = new JPanel();
         foodGroupPanel.setLayout(new FlowLayout());
         checkBoxes = new JCheckBox[groups.size()];
