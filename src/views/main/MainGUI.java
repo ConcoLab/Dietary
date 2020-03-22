@@ -7,13 +7,14 @@ import models.*;
 import views.panels.*;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MainGUI extends JFrame{
+public class MainGUI extends JFrame {
     private JPanel mainPanel;
     private JPanel northPanel;
     private JPanel southPanel;
@@ -31,7 +32,7 @@ public class MainGUI extends JFrame{
         ArrayList<Unit> units = UnitController.getAllUnits();
         ArrayList<Group> groups = ContextFactory._GroupDao().all();
         ArrayList<Location> locations = ContextFactory._LocationDao().all();
-        ArrayList<Meal> meals = ContextFactory._MealDao().all();
+//        ArrayList<Meal> meals = ContextFactory._MealDao().all();
         String[] mealTypes = {"Breakfast", "Lunch", "Dinner", "Brunch", "Coffee"};
 
         // Init panels
@@ -81,11 +82,15 @@ public class MainGUI extends JFrame{
         fileMenu.add(exitMenu);
 
         leftPanel = new JPanel();
+        TitledBorder panelBorder = BorderFactory.createTitledBorder("USER STUFF");
+        panelBorder.setTitleFont(new Font("Arial", Font.PLAIN, 20));
+        leftPanel.setBorder(panelBorder);
+
         mainPanel.add(leftPanel,BorderLayout.LINE_START);
         leftPanel.setLayout(new GridLayout());
         tabbedPane = new JTabbedPane();
         leftPanel.add(tabbedPane);
-        tabbedPane.addTab("Diet Plan", null, new MealPanel(foods, units, groups, locations, mealTypes));
+        tabbedPane.addTab("Diet Plan", null, new MealPanel(foods, locations, mealTypes));
         tabbedPane.addTab("Foods", null, new FoodPanel(foods, units, groups));
         tabbedPane.addTab("Food Groups", null, new GroupPanel(groups));
         tabbedPane.addTab("Locations", null, new LocationPanel(locations));
@@ -94,8 +99,8 @@ public class MainGUI extends JFrame{
         rightPanel = new JPanel();
         mainPanel.add(rightPanel,BorderLayout.CENTER);
         rightPanel.setLayout(new GridLayout(0,1));
-        rightPanel.add(new EatenMealPanel(meals, foods, mealTypes, locations, groups));
-        rightPanel.add(new ReportPanel(meals, groups));
+        rightPanel.add(new EatenMealPanel(foods, mealTypes, locations, groups));
+        rightPanel.add(new ReportPanel());
 
 
 //
