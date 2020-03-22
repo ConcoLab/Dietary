@@ -7,16 +7,7 @@
     </content>
     <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/src/views/utils/jdatepicker-2.0.3.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="library" name="jdatepicker-2.0.3" level="application" />
+    <orderEntry type="library" name="jdatepicker-2.0.3" level="project" />
     <orderEntry type="library" name="lib" level="application" />
     <orderEntry type="module-library">
       <library name="JUnit4">
