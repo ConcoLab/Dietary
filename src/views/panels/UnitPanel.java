@@ -1,39 +1,38 @@
 package views.panels;
 
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import controllers.UnitController;
 import models.Unit;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UnitPanel extends TemplatePanel {
+    private static DefaultTableModel model;
+    private static JTable table;
+    private static JLabel unitNameLabel;
+    private static JTextField unitName;
+    private static JButton insertButton;
+    private static JButton deleteButton;
 
-    public UnitPanel(ObservableList<Unit> units){
+
+
+    public UnitPanel(ArrayList<Unit> units){
         setLayout(new BorderLayout(3,1));
         // Creating a model for the table in this panel
-        DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
+        model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
         for (Unit unit : units)
             model.addRow(new Object[]{unit.getId(), unit.getName()});
 
-        // Refreshing the components' models according to any changes in the model
-        units.addListener((ListChangeListener.Change<? extends Unit> u) -> {
-            JOptionPane.showMessageDialog(this,"Change is applied successfully.");
-            while(model.getRowCount() != 0){
-                model.removeRow(0);
-            }
-            for (Unit unit : units)
-                model.addRow(new Object[]{unit.getId(), unit.getName()});
-        });
 
         //Components
-        JTable table = new JTable(model);
-        JLabel unitNameLabel = new JLabel("Unit Name: ");
-        JTextField unitName = new JTextField();
 
-        JButton insertButton = new JButton("Insert");
+        table = new JTable(model);
+        unitNameLabel = new JLabel("Unit Name: ");
+        unitName = new JTextField();
+        insertButton = new JButton("Insert");
         insertButton.addActionListener(e -> {
             //Validate the input for the "Unit Name" field.
             String name = unitName.getText();
@@ -42,18 +41,19 @@ public class UnitPanel extends TemplatePanel {
                 return;
             }
 
-            Unit newUnit = new Unit(name);
-            ContextFactory._UnitDao().insert(newUnit);
+            // Here creates new unit item using the Create Controller.
+            try {
+                UnitController.create(new Unit(0, name));
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
             unitName.setText("");
         });
 
-        JButton deleteButton = new JButton("DELETE");
+
+        deleteButton = new JButton("DELETE");
         deleteButton.addActionListener(e -> {
-            int row = table.getSelectedRow();
-            if (row == -1)
-                return;
-            System.out.println("DEBUG: DELETING - " + units.get(row).getId() + "  " + units.get(row).getName());
-            ContextFactory._UnitDao().delete(units.get(row));
+            deleteUnit();
         });
 
         // Adding Components to the Panel And Design
@@ -79,5 +79,29 @@ public class UnitPanel extends TemplatePanel {
         bottomPanel.add(deleteButton);
         add(bottomPanel, BorderLayout.SOUTH);
     }
+
+    public static void updateModel(){
+//        JOptionPane.showMessageDialog(this,"Change is applied successfully.");
+        try {
+            while(model.getRowCount() != 0){
+                model.removeRow(0);
+            }
+
+            for (Unit unit : UnitController.getAllUnits())
+                model.addRow(new Object[]{unit.getId(), unit.getName()});
+            table.updateUI();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void deleteUnit(){
+        int row = table.getSelectedRow();
+        Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+        System.out.println("DEBUG: DELETING - id = " + id);
+        UnitController.delete(id);
+        table.updateUI();
+    }
+
 
 }

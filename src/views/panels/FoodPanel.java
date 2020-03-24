@@ -1,85 +1,92 @@
 package views.panels;
 
+import controllers.FoodController;
+import controllers.GroupController;
+import controllers.UnitController;
+import daoFactories.Context;
 import daoFactories.ContextFactory;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import models.*;
+import util.Item;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class FoodPanel extends JPanel{
-    private JButton addButton;
-    private JButton deleteButton;
-    private JTable table;
-    private JCheckBox checkBoxes[];
+    private static JButton addButton;
+    private static JButton deleteButton;
+    private static JTable table;
+    private static JCheckBox checkBoxes[];
+    private static JComboBox unitsComboBox;
+    private static Vector unitVector;
+    private static JLabel foodNameLabel;
+    private static JLabel caloriesLabel;
+    private static JLabel fatLabel;
+    private static JLabel carbohydrateLabel;
+    private static JLabel saltLabel;
+    private static JLabel proteinLabel;
+    private static JLabel groupLabel;
+    private static JTextField foodNameTextField;
+    private static JTextField caloriesTextField;
+    private static JTextField fatTextField;
+    private static JTextField carbohydrateTextField;
+    private static JTextField saltTextField;
+    private static JTextField proteinTextField;
+    private static JButton insertButton;
+    private static DefaultTableModel model;
+    private static JPanel foodGroupPanel;
 
-    class Item
-    {
-        private long id;
-        private String description;
-
-        public Item(long id, String description)
-        {
-            this.id = id;
-            this.description = description;
-        }
-
-        public long getId()
-        {
-            return id;
-        }
-
-        public String getDescription()
-        {
-            return description;
-        }
-
-        public String toString()
-        {
-            return description;
-        }
-    }
-
-
-    public FoodPanel(ObservableList<Food> foods, ObservableList<Unit> units, ObservableList<Group> groups){
+    public FoodPanel(ArrayList<Food> foods, ArrayList<Unit> units, ArrayList<Group> groups) throws SQLException {
 
         // Creating a model for the table in this panel
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[][]{}, new Object[]{"ID", "NAME", "QUANTITY", "UNITS", "CALORIES", "GROUPS"});
-        for (Food food: foods)
-            model.addRow(new Object[]{
-                    food.getId(),
-                    food.getName(),
-                    food.getQuantity(),
-                    units.stream().filter(unit -> unit.getId() == food.getUnit_id()).findFirst().get().getName(),
-                    food.getCalories()});
+        model = new DefaultTableModel(
+                new Object[][]{}, new Object[]{"ID", "NAME", "QUANTITY", "UNITS", "CALORIES", "FAT", "CARB", "SALT", "PROTEIN", "GROUPS"});
 
-        Vector unitVector = new Vector();
+
+        unitVector = new Vector();
         for (Unit unit:units){
             unitVector.addElement(new Item(unit.getId(), unit.getName()));
         }
 
         //Components
-        JTable table = new JTable(model);
+        table = new JTable(model);
+        updateFoodsTable();
 
-        JLabel foodNameLabel = new JLabel("Food Name:");
-        JTextField foodNameTextField = new JTextField();
+        foodNameLabel = new JLabel("Food Name:");
+        foodNameTextField = new JTextField();
 
         JLabel quantityLabel = new JLabel("Quantity:");
         JTextField quantityTextField = new JTextField();
 
         JLabel unitLabel = new JLabel("Unit:");
 
-        JComboBox unitsComboBox = new JComboBox(unitVector);
+        unitsComboBox = new JComboBox(unitVector);
 
 
-        JLabel caloriesLabel = new JLabel("Calories:");
-        JTextField caloriesTextField = new JTextField();
+        caloriesLabel = new JLabel("Calories:");
+        caloriesTextField = new JTextField();
 
-        JButton insertButton = new JButton("Insert");
+        fatLabel = new JLabel("Fat (g):");
+        fatTextField = new JTextField();
+
+        carbohydrateLabel = new JLabel("Carbohydrate (g):");
+        carbohydrateTextField = new JTextField();
+
+        saltLabel = new JLabel("Salt (g):");
+        saltTextField = new JTextField();
+
+        proteinLabel = new JLabel("Protein (g):");
+        proteinTextField = new JTextField();
+
+        groupLabel = new JLabel("Groups:");
+
+
+        insertButton = new JButton("Insert");
         insertButton.addActionListener(e -> {
             // validate the input for "Food Name", "Quantity", and "Calories" fields.
             String foodName=foodNameTextField.getText();
@@ -123,45 +130,42 @@ public class FoodPanel extends JPanel{
                 return;
             }
 
-            Food newFood = new Food(foodName
+            MealPanel.Item unitItem = (MealPanel.Item) unitsComboBox.getSelectedItem();
+            Food newFood = new Food(0,
+                    foodName
                     , calories
-                    , unitsComboBox.getSelectedIndex()
-                    , quantity);
-            ContextFactory._FoodDao().insert(newFood);
+                    , Long.parseLong(fatTextField.getText())
+                    , Long.parseLong(carbohydrateTextField.getText())
+                    , Long.parseLong(saltTextField.getText())
+                    , Long.parseLong(proteinTextField.getText())
+                    , unitItem.getId()
+                    , quantity
+                    , new ArrayList<Group>());
+            System.out.println("DEBUG:---");
+
 
 
             for(JCheckBox checkBox:checkBoxes){
-
                 if(checkBox.isSelected()){
-                    ContextFactory._FoodGroupDao().insert(new FoodGroup(newFood.getId(), Long.parseLong(checkBox.getActionCommand())));
+//                    newFood.setGroups(newFood.getGroups().add(new Group(newFood.getId(), Long.parseLong(checkBox.getActionCommand())));
+                    ArrayList<Group> listOfGroups = newFood.getGroups();
+                    listOfGroups.add(new Group(Long.parseLong(checkBox.getActionCommand()), "", new ArrayList<Food>()));
+                    newFood.setGroups(listOfGroups);
                 }
             }
-
+//            ContextFactory._FoodDao().insert(newFood);
+            FoodController.create(newFood);
             //clear the contents in the text fileds.
             foodNameTextField.setText("");
             quantityTextField.setText("");
             caloriesTextField.setText("");
-            //Error: foodGroupPanel can't be resolved, need to correct
-//            foodGroupPanel.removeAll();
-//            checkBoxes = new JCheckBox[groups.size()];
-//            int j = 0;
-//            for(Group group:groups){
-//                checkBoxes[j] = new JCheckBox(group.getName());
-//                Long groupId = group.getId();
-//                checkBoxes[j].setActionCommand(groupId.toString());
-//                foodGroupPanel.add(checkBoxes[j]);
-//                j++;
-//            }
-
         });
 
         deleteButton = new JButton("DELETE");
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
-            if (row == -1)
-                return;
-            System.out.println("DEBUG: DELETING - " + foods.get(row).getId() + "  " + foods.get(row).getName());
-            ContextFactory._FoodDao().delete(foods.get(row));
+            Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+            FoodController.delete(id);
         });
 
 
@@ -179,19 +183,21 @@ public class FoodPanel extends JPanel{
         dataEntryPanel.add(unitsComboBox);
         dataEntryPanel.add(caloriesLabel);
         dataEntryPanel.add(caloriesTextField);
+        dataEntryPanel.add(fatLabel);
+        dataEntryPanel.add(fatTextField);
+        dataEntryPanel.add(carbohydrateLabel);
+        dataEntryPanel.add(carbohydrateTextField);
+        dataEntryPanel.add(saltLabel);
+        dataEntryPanel.add(saltTextField);
+        dataEntryPanel.add(proteinLabel);
+        dataEntryPanel.add(proteinTextField);
 
-        JPanel foodGroupPanel = new JPanel();
+        foodGroupPanel = new JPanel();
         foodGroupPanel.setLayout(new FlowLayout());
         checkBoxes = new JCheckBox[groups.size()];
         int i = 0;
-        for(Group group:groups){
-            checkBoxes[i] = new JCheckBox(group.getName());
-            Long groupId = group.getId();
-            checkBoxes[i].setActionCommand(groupId.toString());
-            foodGroupPanel.add(checkBoxes[i]);
-            i++;
-        }
 
+        dataEntryPanel.add(groupLabel);
         dataEntryPanel.add(foodGroupPanel);
         dataEntryPanel.add(insertButton);
         add(dataEntryPanel, BorderLayout.NORTH);
@@ -208,43 +214,48 @@ public class FoodPanel extends JPanel{
         bottomPanel.add(deleteButton);
         add(bottomPanel, BorderLayout.SOUTH);
 
+        updateFoodGroupCheckboxes();
+    }
 
-        // Refreshing the components' models according to any changes in the model
-        foods.addListener((ListChangeListener.Change<? extends Food> f) -> {
-            while(model.getRowCount() != 0){
-                model.removeRow(0);
-            }
-            for (Food food : foods)
-                model.addRow(new Object[]{
-                        food.getId(),
-                        food.getName(),
-                        food.getQuantity(),
-                        units.stream().filter(unit -> unit.getId() == food.getUnit_id()).findFirst().get().getName(),
-                        food.getCalories(),
-                        food.getName()});
-        });
+    public static void updateUnitsCombobox() throws SQLException {
+        unitVector.clear();
+        for (Unit unit: UnitController.getAllUnits()){
+            unitVector.addElement(new Item(unit.getId(), unit.getName()));
+        }
+        unitsComboBox.updateUI();
+    }
 
-        units.addListener((ListChangeListener.Change<? extends Unit> u) -> {
-            unitVector.clear();
-            for (Unit unit:units){
-                unitVector.addElement(new Item(unit.getId(), unit.getName()));
-            }
-            unitsComboBox.updateUI();
-        });
+    public static void updateFoodsTable() throws SQLException {
+        while(model.getRowCount() != 0){
+            model.removeRow(0);
+        }
+        //TODO: Implement the get food in controller
+        for (Food food : ContextFactory._FoodDao().all())
+            model.addRow(new Object[]{
+                    food.getId(),
+                    food.getName(),
+                    food.getQuantity(),
+                    UnitController.getById(food.getUnitId()).getName(),
+                    food.getCalories(),
+                    food.getFat(),
+                    food.getCarbohydrate(),
+                    food.getSalt(),
+                    food.getProtein(),
+                    GroupController.getGroupNames(food.getGroups())});
+    }
 
-        groups.addListener((ListChangeListener.Change<? extends Group> g) -> {
-            foodGroupPanel.removeAll();
-            checkBoxes = new JCheckBox[groups.size()];
-            int j = 0;
-            for(Group group:groups){
-                checkBoxes[j] = new JCheckBox(group.getName());
-                Long groupId = group.getId();
-                checkBoxes[j].setActionCommand(groupId.toString());
-                foodGroupPanel.add(checkBoxes[j]);
-                j++;
-            }
-
-        });
+    public static void updateFoodGroupCheckboxes() throws SQLException {
+        foodGroupPanel.removeAll();
+        ArrayList<Group> groups = GroupController.getAll();
+        checkBoxes = new JCheckBox[groups.size()];
+        int j = 0;
+        for(Group group: groups){
+            checkBoxes[j] = new JCheckBox(group.getName());
+            Long groupId = group.getId();
+            checkBoxes[j].setActionCommand(groupId.toString());
+            foodGroupPanel.add(checkBoxes[j]);
+            j++;
+        }
     }
 
 }
