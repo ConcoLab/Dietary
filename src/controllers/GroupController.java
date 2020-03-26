@@ -34,4 +34,8 @@ public class GroupController {
 
         return listOfNames;
     }
+
+    public static ArrayList<Group> getGroupsOfOneFood(long foodId) throws SQLException {
+        return ContextFactory._FoodGroupDao().getGroupsOfOneFood(foodId);
+    }
 }
