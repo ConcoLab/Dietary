@@ -14,18 +14,25 @@ public class MealController {
         return newMeal;
     }
 
-    public static ArrayList<Meal> getAllMeals(LocalDateTime startDate,LocalDateTime endDate) throws SQLException {
-        ArrayList<Meal>  meals =  ContextFactory._MealDao().all(startDate, endDate);
+    public static ArrayList<Meal> getAllMeals(LocalDateTime startDate,LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
+        ArrayList<Meal>  meals =  ContextFactory._MealDao().all(startDate, endDate, hideConsumedFoods);
         return meals;
     }
 
-    public static ArrayList<Meal> getInDiningAllMeals(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
-        ArrayList<Meal>  meals =  ContextFactory._MealDao().allInDinings(startDate, endDate);
+    public static ArrayList<Meal> getInDiningAllMeals(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
+        ArrayList<Meal>  meals =  ContextFactory._MealDao().allInDinings(startDate, endDate, hideConsumedFoods);
         return meals;
     }
 
-    public static ArrayList<Meal> getOutDinigAllMeals(LocalDateTime startDate, LocalDateTime endDate) throws SQLException {
-        ArrayList<Meal>  meals =  ContextFactory._MealDao().allOutDinings(startDate, endDate);
+    public static ArrayList<Meal> getOutDinigAllMeals(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
+        ArrayList<Meal>  meals =  ContextFactory._MealDao().allOutDinings(startDate, endDate, hideConsumedFoods);
         return meals;
     }
+
+    public static boolean makeFoodIsConsumed(Long id) {
+        ContextFactory._MealDao().makeFoodIsConsumed(id);
+        ContextFactory._MealDao().notifyObservers();
+        return true;
+    }
+
 }
