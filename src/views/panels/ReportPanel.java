@@ -1,12 +1,7 @@
 package views.panels;
 
-import com.sun.rowset.internal.Row;
 import controllers.GroupController;
-import controllers.MealController;
-import daoFactories.Context;
 import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import models.Group;
 import models.Meal;
 
@@ -16,8 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class ReportPanel extends JPanel {
     private JTable  foodContentTable;
@@ -30,7 +23,7 @@ public class ReportPanel extends JPanel {
     private static DefaultTableModel notEatenModel = new DefaultTableModel(
             new Object[][]{}, new Object[]{"Group Name"}
     );
-    private static DefaultTableModel stuffModel = new DefaultTableModel(
+    private static DefaultTableModel nutrientsModel = new DefaultTableModel(
             new Object[][]{}, new Object[]{"Food Properties", "Total Intake Amount"}
     );
 
@@ -40,7 +33,7 @@ public class ReportPanel extends JPanel {
 
 
         // Components
-        foodContentTable = new JTable(stuffModel);
+        foodContentTable = new JTable(nutrientsModel);
 
         eatenTable = new JTable(eatenModel);
 
@@ -96,20 +89,22 @@ public class ReportPanel extends JPanel {
         double salt = meals.stream().mapToDouble(meal -> meal.getSalt()).sum();
         double protein = meals.stream().mapToDouble(meal -> meal.getProtein()).sum();
         double carbohydrate = meals.stream().mapToDouble(meal -> meal.getCarbohydrate()).sum();
-        while(stuffModel.getRowCount() != 0){
-            stuffModel.removeRow(0);
+        while(nutrientsModel.getRowCount() != 0){
+            nutrientsModel.removeRow(0);
         }
-        stuffModel.addRow(new Object[]{"Calories", calories});
-        stuffModel.addRow(new Object[]{"Fat", fat});
-        stuffModel.addRow(new Object[]{"Salt", salt});
-        stuffModel.addRow(new Object[]{"Protein", protein});
-        stuffModel.addRow(new Object[]{"Carbohydrate", carbohydrate});
+        nutrientsModel.addRow(new Object[]{"Calories", calories});
+        nutrientsModel.addRow(new Object[]{"Fat", fat});
+        nutrientsModel.addRow(new Object[]{"Salt", salt});
+        nutrientsModel.addRow(new Object[]{"Protein", protein});
+        nutrientsModel.addRow(new Object[]{"Carbohydrate", carbohydrate});
+
 
 
         for (Meal meal: meals){
-            ArrayList<Group> groupsInMeals = null;
+            ArrayList<Group> groupsInMeals = new ArrayList<>();
             try {
-                groupsInMeals = ContextFactory._FoodGroupDao().getGroupsOfOneFood(meal.getFoodId());
+                System.out.println("--DEBUG: Groups of one food size: " + GroupController.getGroupsOfOneFood(meal.getFoodId()).size());
+                groupsInMeals.addAll(GroupController.getGroupsOfOneFood(meal.getFoodId()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
