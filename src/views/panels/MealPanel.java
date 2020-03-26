@@ -159,6 +159,7 @@ public class MealPanel extends JPanel{
                     foodCarbohydrate*Long.parseLong(amountTextField.getText()),
                     foodSalt*Long.parseLong(amountTextField.getText()),
                     foodProtein*Long.parseLong(amountTextField.getText()),
+                    0,
                     LocalDateTime.of(y, m, d, h, M));
 
             MealController.create(meal);
