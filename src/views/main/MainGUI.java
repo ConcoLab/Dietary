@@ -82,7 +82,7 @@ public class MainGUI extends JFrame {
         fileMenu.add(exitMenu);
 
         leftPanel = new JPanel();
-        TitledBorder panelBorder = BorderFactory.createTitledBorder("USER STUFF");
+        TitledBorder panelBorder = BorderFactory.createTitledBorder("USER PANEL");
         panelBorder.setTitleFont(new Font("Arial", Font.PLAIN, 20));
         leftPanel.setBorder(panelBorder);
 
