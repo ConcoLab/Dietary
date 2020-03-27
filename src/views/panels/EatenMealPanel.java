@@ -143,9 +143,11 @@ public class EatenMealPanel extends JPanel {
 
         filterButton.addActionListener(e -> {
             try {
-                updateMealsTable();
                 showConsumedFoods = true;
                 showNotConsumedFoods = true;
+                ConsumedFoodsButton.setText("HIDE CONSUMED");
+                NotConsumedFoodsButton.setText("HIDE NOT CONSUMED");
+                updateMealsTable();
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
