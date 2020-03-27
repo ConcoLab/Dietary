@@ -29,10 +29,14 @@ public class MealController {
         return meals;
     }
 
-    public static boolean makeFoodIsConsumed(Long id) {
-        ContextFactory._MealDao().makeFoodIsConsumed(id);
+    public static boolean makeFoodIsConsumed(Long id, Boolean isConsumed) {
+        ContextFactory._MealDao().makeFoodIsConsumed(id, isConsumed);
         ContextFactory._MealDao().notifyObservers();
         return true;
+    }
+
+    public static Meal findById(Long id) throws SQLException {
+        return ContextFactory._MealDao().findById(id);
     }
 
 }

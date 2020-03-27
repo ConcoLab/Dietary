@@ -4,11 +4,9 @@ import controllers.FoodController;
 import controllers.LocationController;
 import controllers.MealController;
 import controllers.UnitController;
-import daoFactories.Context;
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import models.*;
+import models.Food;
+import models.Location;
+import models.Meal;
 import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
@@ -159,7 +157,7 @@ public class MealPanel extends JPanel{
                     foodCarbohydrate*Long.parseLong(amountTextField.getText()),
                     foodSalt*Long.parseLong(amountTextField.getText()),
                     foodProtein*Long.parseLong(amountTextField.getText()),
-                    0,
+                    false,
                     LocalDateTime.of(y, m, d, h, M));
 
             MealController.create(meal);

@@ -14,6 +14,8 @@ import org.jdatepicker.UtilDateModel;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 
 public class EatenMealPanel extends JPanel {
 //    public JButton addButton;
-    private static boolean unhideConsumedFoods = true;
+    private static boolean hideNotConsumedFoods = false;
     public JButton deleteButton;
     public JTable table;
     private static DefaultTableModel model;
@@ -38,7 +40,7 @@ public class EatenMealPanel extends JPanel {
     private static ButtonGroup diningRadioGroup;
     private static Panel buttonPanel = new Panel();
     private static JButton isConsumedButton = new JButton();
-    private static JButton hideConsumedFoodsButton = new JButton();
+    private static JButton hideNotConsumedFoodsButton = new JButton();
     private static JSpinner fromMinuteTextField;
     private static JSpinner fromHourTextField;
     private static JSpinner toMinuteTextField;
@@ -145,12 +147,13 @@ public class EatenMealPanel extends JPanel {
             }
         });
 
-        hideConsumedFoodsButton.setText("Hide Consumed Food");
-        filterPanel.add(hideConsumedFoodsButton);
-        hideConsumedFoodsButton.addActionListener(e -> {
+        hideNotConsumedFoodsButton.setText("HIDE NOT CONSUMED");
+        hideNotConsumedFoodsButton.setBackground(Color.orange);
+//        filterPanel.add(hideNotConsumedFoodsButton);
+        hideNotConsumedFoodsButton.addActionListener(e -> {
             try {
-                unhideConsumedFoods = !unhideConsumedFoods;
-                hideConsumedFoodsButton.setText(unhideConsumedFoods ? "Hide Consumed Food" : "Unhide Consumed Food");
+                hideNotConsumedFoods = !hideNotConsumedFoods;
+                hideNotConsumedFoodsButton.setText(hideNotConsumedFoods ? "SHOW NOT CONSUMED" : "HIDE NOT CONSUMED");
                 updateMealsTable();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -172,16 +175,51 @@ public class EatenMealPanel extends JPanel {
             Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
         });
 
-        isConsumedButton = new JButton("MAKE FOOD AS CONSUMED");
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+                int row = table.getSelectedRow();
+                if (row > -1) {
+                    Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+                    try {
+                        if (MealController.findById(id).getIsConsumed() == true) {
+                            isConsumedButton.setText("NOT CONSUMED");
+                            isConsumedButton.setBackground(Color.magenta);
+                        }
+                        else {
+                            isConsumedButton.setText("CONSUMED");
+                            isConsumedButton.setBackground(Color.GREEN);
+                        }
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
+                    System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
+                }
+            }
+        });
+
+        isConsumedButton = new JButton("CONSUMED");
         isConsumedButton.setBackground(Color.GREEN);
         isConsumedButton.addActionListener(e -> {
+            boolean isConsumed = false;
             int row = table.getSelectedRow();
-            Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
-            MealController.makeFoodIsConsumed(id);
+            if (row > -1) {
+                Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+                try {
+                    if (MealController.findById(id).getIsConsumed() == true)
+                        isConsumed = false;
+                    else
+                        isConsumed = true;
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                MealController.makeFoodIsConsumed(id, isConsumed);
+            }
         });
 
         buttonPanel.add(deleteButton);
         buttonPanel.add(isConsumedButton);
+        buttonPanel.add(hideNotConsumedFoodsButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
 
@@ -208,7 +246,7 @@ public class EatenMealPanel extends JPanel {
             endDate = LocalDateTime.of(y, m, d, (int)toHourTextField.getValue(), (int) toMinuteTextField.getValue());
         }
 
-        if (unhideConsumedFoods){
+        if (hideNotConsumedFoods){
 
         }else{
 
@@ -216,11 +254,11 @@ public class EatenMealPanel extends JPanel {
 
         ArrayList<Meal> meals = new ArrayList<>();
         if(indiningRadioButton.isSelected()){
-            meals = MealController.getInDiningAllMeals(startDate, endDate, unhideConsumedFoods);
+            meals = MealController.getInDiningAllMeals(startDate, endDate, hideNotConsumedFoods);
         }else if(outdiningRadioButton.isSelected()){
-            meals = MealController.getOutDinigAllMeals(startDate, endDate, unhideConsumedFoods);
+            meals = MealController.getOutDinigAllMeals(startDate, endDate, hideNotConsumedFoods);
         }else if(allRadioButton.isSelected()){
-            meals = MealController.getAllMeals(startDate, endDate, unhideConsumedFoods);
+            meals = MealController.getAllMeals(startDate, endDate, hideNotConsumedFoods);
         }
 
 
@@ -245,7 +283,7 @@ public class EatenMealPanel extends JPanel {
                             LocationController.getLocationById(meal.getLocationId()).getName(),
                             GroupController.getGroupNames(FoodController.getFoodById(meal.getFoodId()).getGroups()),
                             meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")),
-                            meal.getIsConsumed() == 1 ? "Yes" : "No"});
+                            meal.getIsConsumed() == true ? "Yes" : "No"});
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

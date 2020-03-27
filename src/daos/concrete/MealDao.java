@@ -43,7 +43,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getInt("isConsumed")
+                    , rs.getBoolean("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -84,13 +84,13 @@ public class MealDao extends Observable implements MealDaoInterface {
      * @throws SQLException
      */
     @Override
-    public ArrayList<Meal> all(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
+    public ArrayList<Meal> all(LocalDateTime startDate, LocalDateTime endDate, boolean hideNotConsumedFoods) throws SQLException {
         ArrayList<Meal> meals = new ArrayList<Meal>();
         String sql = "SELECT * FROM meals WHERE dateTime >= '"
                 + startDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) +
                 "' AND dateTime <= '" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "'";
-        if(!hideConsumedFoods){
-            sql = sql + " AND isConsumed = " + hideConsumedFoods + "";
+        if(hideNotConsumedFoods){
+            sql = sql + " AND isConsumed = " + true + "";
         }
 
         System.out.println(sql);
@@ -108,7 +108,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getInt("isConsumed")
+                    , rs.getBoolean("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -116,15 +116,15 @@ public class MealDao extends Observable implements MealDaoInterface {
         return meals;
     }
 
-    public ArrayList<Meal> allInDinings(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
+    public ArrayList<Meal> allInDinings(LocalDateTime startDate, LocalDateTime endDate, boolean hideNotConsumedFoods) throws SQLException {
         ArrayList<Meal> meals = new ArrayList<Meal>();
         String sql = "SELECT * FROM meals WHERE dateTime >= '"
                 + startDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) +
                 "' AND dateTime <= '" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "' "+
                 " AND locationId = 0";
 
-        if(!hideConsumedFoods){
-            sql = sql + " AND isConsumed = " + hideConsumedFoods + "";
+        if(hideNotConsumedFoods){
+            sql = sql + " AND isConsumed = " + true + "";
         }
 
         System.out.println(sql);
@@ -142,7 +142,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getInt("isConsumed")
+                    , rs.getBoolean("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -150,15 +150,15 @@ public class MealDao extends Observable implements MealDaoInterface {
         return meals;
     }
 
-    public ArrayList<Meal> allOutDinings(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
+    public ArrayList<Meal> allOutDinings(LocalDateTime startDate, LocalDateTime endDate, boolean hideNotConsumedFoods) throws SQLException {
         ArrayList<Meal> meals = new ArrayList<Meal>();
         String sql = "SELECT * FROM meals WHERE dateTime >= '"
                 + startDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) +
                 "' AND dateTime <= '" + endDate.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "' " +
                 " AND locationId != 0";
 
-        if(!hideConsumedFoods){
-            sql = sql + " AND isConsumed = " + hideConsumedFoods + "";
+        if(hideNotConsumedFoods){
+            sql = sql + " AND isConsumed = " + true + "";
         }
 
         System.out.println(sql);
@@ -176,7 +176,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getInt("isConsumed")
+                    , rs.getBoolean("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -207,9 +207,25 @@ public class MealDao extends Observable implements MealDaoInterface {
      * @return
      */
     @Override
-    public Meal findById(long id) {
-        return _context.meals.stream().filter(meal -> meal.getId() == id).findFirst().orElse(null);
-    }
+    public Meal findById(long id) throws SQLException {
+        String sql = "SELECT * FROM meals WHERE id = " + id;
+        System.out.println(sql);
+        ResultSet rs = _context.getCall(sql);
+        return new Meal(rs.getLong("id")
+                , rs.getInt("foodId")
+                , rs.getInt("mealTypeId")
+                , rs.getLong("locationId")
+                , rs.getLong("amount")
+                , rs.getLong("calories")
+                , rs.getLong("fat")
+                , rs.getLong("carbohydrate")
+                , rs.getLong("salt")
+                , rs.getLong("protein")
+                , rs.getBoolean("isConsumed")
+                , LocalDateTime.parse(rs.getString("dateTime"))
+            );
+        }
+//        return _context.meals.stream().filter(meal -> meal.getId() == id).findFirst().orElse(null);
 
     /**
      * Queries the database using a specific date.
@@ -257,9 +273,9 @@ public class MealDao extends Observable implements MealDaoInterface {
     }
 
     @Override
-    public boolean makeFoodIsConsumed(Long id) {
+    public boolean makeFoodIsConsumed(Long id, boolean isConsumed) {
         String sql = "UPDATE meals\n" +
-                "SET isConsumed = 1\n" +
+                "SET isConsumed = "+ isConsumed +"\n" +
                 "WHERE id = " + id + ";";
         long rs = _context.updateCall(sql);
         setChanged();

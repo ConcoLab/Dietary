@@ -1,7 +1,6 @@
 package daos.concrete;
 
 import daoFactories.Context;
-import daoFactories.ContextFactory;
 import models.Food;
 import models.FoodGroup;
 import models.Group;
@@ -91,7 +90,7 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
             setChanged();
         }
 
-        return null;
+        return food;
     }
 
     public FoodGroup insertFoodGroup(FoodGroup foodGroup) {
