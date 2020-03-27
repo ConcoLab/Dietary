@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public interface MealDaoInterface {
     Meal insert(Meal meal);
-    ArrayList<Meal> all(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException;
+    ArrayList<Meal> all(LocalDateTime startDate, LocalDateTime endDate, boolean showConsumedFoods, boolean showNotConsumedFood) throws SQLException;
     int deleteAll();
     int delete(long id);
     Meal findById(long id) throws SQLException;

@@ -14,18 +14,18 @@ public class MealController {
         return newMeal;
     }
 
-    public static ArrayList<Meal> getAllMeals(LocalDateTime startDate,LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
-        ArrayList<Meal>  meals =  ContextFactory._MealDao().all(startDate, endDate, hideConsumedFoods);
+    public static ArrayList<Meal> getAllMeals(LocalDateTime startDate,LocalDateTime endDate, boolean showConsumedFoods, boolean showNotConsumedFoods) throws SQLException {
+        ArrayList<Meal>  meals =  ContextFactory._MealDao().all(startDate, endDate, showConsumedFoods, showNotConsumedFoods);
         return meals;
     }
 
-    public static ArrayList<Meal> getInDiningAllMeals(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
-        ArrayList<Meal>  meals =  ContextFactory._MealDao().allInDinings(startDate, endDate, hideConsumedFoods);
+    public static ArrayList<Meal> getInDiningAllMeals(LocalDateTime startDate, LocalDateTime endDate, boolean showConsumedFoods, boolean showNotConsumedFoods) throws SQLException {
+        ArrayList<Meal>  meals =  ContextFactory._MealDao().allInDinings(startDate, endDate, showConsumedFoods, showNotConsumedFoods);
         return meals;
     }
 
-    public static ArrayList<Meal> getOutDinigAllMeals(LocalDateTime startDate, LocalDateTime endDate, boolean hideConsumedFoods) throws SQLException {
-        ArrayList<Meal>  meals =  ContextFactory._MealDao().allOutDinings(startDate, endDate, hideConsumedFoods);
+    public static ArrayList<Meal> getOutDinigAllMeals(LocalDateTime startDate, LocalDateTime endDate, boolean showConsumedFoods, boolean showNotConsumedFoods) throws SQLException {
+        ArrayList<Meal>  meals =  ContextFactory._MealDao().allOutDinings(startDate, endDate, showConsumedFoods, showNotConsumedFoods);
         return meals;
     }
 

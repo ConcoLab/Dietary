@@ -25,7 +25,8 @@ import java.util.ArrayList;
 
 public class EatenMealPanel extends JPanel {
 //    public JButton addButton;
-    private static boolean hideNotConsumedFoods = false;
+    private static boolean showConsumedFoods = true;
+    private static boolean showNotConsumedFoods = true;
     public JButton deleteButton;
     public JTable table;
     private static DefaultTableModel model;
@@ -40,7 +41,8 @@ public class EatenMealPanel extends JPanel {
     private static ButtonGroup diningRadioGroup;
     private static Panel buttonPanel = new Panel();
     private static JButton isConsumedButton = new JButton();
-    private static JButton hideNotConsumedFoodsButton = new JButton();
+    private static JButton ConsumedFoodsButton = new JButton();
+    private static JButton NotConsumedFoodsButton = new JButton();
     private static JSpinner fromMinuteTextField;
     private static JSpinner fromHourTextField;
     private static JSpinner toMinuteTextField;
@@ -147,13 +149,26 @@ public class EatenMealPanel extends JPanel {
             }
         });
 
-        hideNotConsumedFoodsButton.setText("HIDE NOT CONSUMED");
-        hideNotConsumedFoodsButton.setBackground(Color.orange);
-//        filterPanel.add(hideNotConsumedFoodsButton);
-        hideNotConsumedFoodsButton.addActionListener(e -> {
+        ConsumedFoodsButton.setText("HIDE CONSUMED");
+        ConsumedFoodsButton.setBackground(Color.blue);
+        ConsumedFoodsButton.setForeground(Color.WHITE);
+        NotConsumedFoodsButton.setText("HIDE NOT CONSUMED");
+        NotConsumedFoodsButton.setBackground(Color.orange);
+//        filterPanel.add(NotConsumedFoodsButton);
+        ConsumedFoodsButton.addActionListener(e -> {
             try {
-                hideNotConsumedFoods = !hideNotConsumedFoods;
-                hideNotConsumedFoodsButton.setText(hideNotConsumedFoods ? "SHOW NOT CONSUMED" : "HIDE NOT CONSUMED");
+                showConsumedFoods = !showConsumedFoods;
+                ConsumedFoodsButton.setText(showConsumedFoods ? "HIDE CONSUMED" : "SHOW CONSUMED");
+                updateMealsTable();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        NotConsumedFoodsButton.addActionListener(e -> {
+            try {
+                showNotConsumedFoods = !showNotConsumedFoods;
+                NotConsumedFoodsButton.setText(showNotConsumedFoods ? "HIDE NOT CONSUMED" : "SHOW NOT CONSUMED");
                 updateMealsTable();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -219,7 +234,8 @@ public class EatenMealPanel extends JPanel {
 
         buttonPanel.add(deleteButton);
         buttonPanel.add(isConsumedButton);
-        buttonPanel.add(hideNotConsumedFoodsButton);
+        buttonPanel.add(ConsumedFoodsButton);
+        buttonPanel.add(NotConsumedFoodsButton);
         add(buttonPanel, BorderLayout.SOUTH);
 
 
@@ -246,7 +262,7 @@ public class EatenMealPanel extends JPanel {
             endDate = LocalDateTime.of(y, m, d, (int)toHourTextField.getValue(), (int) toMinuteTextField.getValue());
         }
 
-        if (hideNotConsumedFoods){
+        if (showNotConsumedFoods){
 
         }else{
 
@@ -254,11 +270,11 @@ public class EatenMealPanel extends JPanel {
 
         ArrayList<Meal> meals = new ArrayList<>();
         if(indiningRadioButton.isSelected()){
-            meals = MealController.getInDiningAllMeals(startDate, endDate, hideNotConsumedFoods);
+            meals = MealController.getInDiningAllMeals(startDate, endDate, showConsumedFoods, showNotConsumedFoods);
         }else if(outdiningRadioButton.isSelected()){
-            meals = MealController.getOutDinigAllMeals(startDate, endDate, hideNotConsumedFoods);
+            meals = MealController.getOutDinigAllMeals(startDate, endDate, showConsumedFoods, showNotConsumedFoods);
         }else if(allRadioButton.isSelected()){
-            meals = MealController.getAllMeals(startDate, endDate, hideNotConsumedFoods);
+            meals = MealController.getAllMeals(startDate, endDate, showConsumedFoods, showNotConsumedFoods);
         }
 
 
