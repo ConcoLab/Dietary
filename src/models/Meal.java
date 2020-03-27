@@ -13,9 +13,10 @@ public class Meal {
     private long carbohydrate;
     private long salt;
     private long protein;
+    private int isConsumed;
     private LocalDateTime dateTime;
 
-    public Meal(long id, long foodId, long mealTypeId, long locationId, long amount, long calories, long fat, long carbohydrate, long salt, long protein, LocalDateTime dateTime){
+    public Meal(long id, long foodId, long mealTypeId, long locationId, long amount, long calories, long fat, long carbohydrate, long salt, long protein, int isConsumed, LocalDateTime dateTime){
         this.id = id;
         this.foodId = foodId;
         this.mealTypeId = mealTypeId;
@@ -27,6 +28,7 @@ public class Meal {
         this.carbohydrate = carbohydrate;
         this.salt = salt;
         this.protein = protein;
+        this.isConsumed = isConsumed;
     }
 
     public long getId(){
@@ -99,5 +101,14 @@ public class Meal {
 
     public void setProtein(long protein) {
         this.protein = protein;
+    }
+
+
+    public int getIsConsumed() {
+        return isConsumed;
+    }
+
+    public void setIsConsumed(int isConsumed) {
+        this.isConsumed = isConsumed;
     }
 }

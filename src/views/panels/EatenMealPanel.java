@@ -4,10 +4,6 @@ import controllers.FoodController;
 import controllers.GroupController;
 import controllers.LocationController;
 import controllers.MealController;
-import daoFactories.Context;
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import models.Food;
 import models.Group;
 import models.Location;
@@ -21,17 +17,13 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.BrokenBarrierException;
-import java.util.stream.Collectors;
 
 public class EatenMealPanel extends JPanel {
 //    public JButton addButton;
+    private static boolean unhideConsumedFoods = true;
     public JButton deleteButton;
     public JTable table;
     private static DefaultTableModel model;
@@ -44,6 +36,13 @@ public class EatenMealPanel extends JPanel {
     private JPanel topPanel = new JPanel();
     private JPanel filterPanel = new JPanel();
     private static ButtonGroup diningRadioGroup;
+    private static Panel buttonPanel = new Panel();
+    private static JButton isConsumedButton = new JButton();
+    private static JButton hideConsumedFoodsButton = new JButton();
+    private static JSpinner fromMinuteTextField;
+    private static JSpinner fromHourTextField;
+    private static JSpinner toMinuteTextField;
+    private static JSpinner toHourTextField;
 
     public EatenMealPanel(ArrayList<Food> foods, String[] mealTypes, ArrayList<Location> locations, ArrayList<Group> groups) throws SQLException {
         mealTypesInPanel = mealTypes;
@@ -52,7 +51,7 @@ public class EatenMealPanel extends JPanel {
         //Table Model
         model = new DefaultTableModel(
                 new Object[][]{}, new Object[]{
-//                "ID",
+                "ID",
                 "Food Name",
                 "Meal Type",
                 "Number of Servings",
@@ -63,16 +62,42 @@ public class EatenMealPanel extends JPanel {
                 "Protein",
                 "Location",
                 "Food Group",
-                "Date"
+                "Date",
+                "Consumed?"
         }
         );
 
 
         // Components
+        JLabel fromTimeLabel = new JLabel("From:");
+        JPanel fromTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        SpinnerModel fromHourModel = new SpinnerNumberModel(0, 0, 23, 1);
+        fromHourTextField = new JSpinner(fromHourModel);
+        SpinnerModel fromMinuteModek = new SpinnerNumberModel(0, 0, 59, 1);
+        fromMinuteTextField = new JSpinner(fromMinuteModek);
+        fromTimePanel.add(fromTimeLabel);
+        fromTimePanel.add(fromHourTextField);
+        fromTimePanel.add(new JLabel(":"));
+        fromTimePanel.add(fromMinuteTextField);
+
+        JLabel toTimeLabel = new JLabel("To:");
+        JPanel toTimePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        SpinnerModel toHourModel = new SpinnerNumberModel(0, 0, 23, 1);
+        toHourTextField = new JSpinner(toHourModel);
+        toHourTextField.setValue(23);
+        SpinnerModel toMinuteModel = new SpinnerNumberModel(0, 0, 59, 1);
+        toMinuteTextField = new JSpinner(toMinuteModel);
+        toMinuteTextField.setValue(59);
+        toTimePanel.add(toTimeLabel);
+        toTimePanel.add(toHourTextField);
+        toTimePanel.add(new JLabel(":"));
+        toTimePanel.add(toMinuteTextField);
+
         diningRadioGroup = new ButtonGroup();
         diningRadioGroup.add(indiningRadioButton);
         diningRadioGroup.add(outdiningRadioButton);
         diningRadioGroup.add(allRadioButton);
+
 
         JTable table = new JTable(model);
         JLabel eatenLabel = new JLabel("List of Consumed Food");
@@ -82,6 +107,10 @@ public class EatenMealPanel extends JPanel {
         model.setDate(LocalDateTime.now().getYear(), LocalDateTime.now().getMonthValue()-1, LocalDateTime.now().getDayOfMonth());
         model.setSelected(true);
         filterDatePicker = new JDatePicker(model);
+
+        buttonPanel.setLayout(new FlowLayout());
+
+
 
         //Design
 
@@ -104,9 +133,24 @@ public class EatenMealPanel extends JPanel {
         filterPanel.add(allRadioButton);
         filterPanel.add(new JLabel("Date:"));
         filterPanel.add(filterDatePicker);
+        filterPanel.add(fromTimePanel);
+        filterPanel.add(toTimePanel);
         filterPanel.add(filterButton);
+
         filterButton.addActionListener(e -> {
             try {
+                updateMealsTable();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        });
+
+        hideConsumedFoodsButton.setText("Hide Consumed Food");
+        filterPanel.add(hideConsumedFoodsButton);
+        hideConsumedFoodsButton.addActionListener(e -> {
+            try {
+                unhideConsumedFoods = !unhideConsumedFoods;
+                hideConsumedFoodsButton.setText(unhideConsumedFoods ? "Hide Consumed Food" : "Unhide Consumed Food");
                 updateMealsTable();
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -119,7 +163,8 @@ public class EatenMealPanel extends JPanel {
 
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
-        deleteButton = new JButton("REMOVE FROM CONSUMED FOOD LIST");
+
+        deleteButton = new JButton("REMOVE FOOD FROM THE DIET LIST");
         deleteButton.setBackground(Color.RED);
         deleteButton.setForeground(Color.WHITE);
         deleteButton.addActionListener(e -> {
@@ -127,7 +172,17 @@ public class EatenMealPanel extends JPanel {
             Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
         });
 
-        add(deleteButton, BorderLayout.SOUTH);
+        isConsumedButton = new JButton("MAKE FOOD AS CONSUMED");
+        isConsumedButton.setBackground(Color.GREEN);
+        isConsumedButton.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+            MealController.makeFoodIsConsumed(id);
+        });
+
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(isConsumedButton);
+        add(buttonPanel, BorderLayout.SOUTH);
 
 
 
@@ -149,17 +204,23 @@ public class EatenMealPanel extends JPanel {
             y = filterDatePicker.getModel().getYear();
             m = filterDatePicker.getModel().getMonth() + 1; // JDatePicker returns 0-11 for months
             d = filterDatePicker.getModel().getDay();
-            startDate = LocalDateTime.of(y, m, d, 0, 00);
-            endDate = LocalDateTime.of(y, m, d, 23, 59);
+            startDate = LocalDateTime.of(y, m, d, (int)fromHourTextField.getValue(), (int) fromMinuteTextField.getValue());
+            endDate = LocalDateTime.of(y, m, d, (int)toHourTextField.getValue(), (int) toMinuteTextField.getValue());
+        }
+
+        if (unhideConsumedFoods){
+
+        }else{
+
         }
 
         ArrayList<Meal> meals = new ArrayList<>();
         if(indiningRadioButton.isSelected()){
-            meals = MealController.getInDiningAllMeals(startDate, endDate);
+            meals = MealController.getInDiningAllMeals(startDate, endDate, unhideConsumedFoods);
         }else if(outdiningRadioButton.isSelected()){
-            meals = MealController.getOutDinigAllMeals(startDate, endDate);
+            meals = MealController.getOutDinigAllMeals(startDate, endDate, unhideConsumedFoods);
         }else if(allRadioButton.isSelected()){
-            meals = MealController.getAllMeals(startDate, endDate);
+            meals = MealController.getAllMeals(startDate, endDate, unhideConsumedFoods);
         }
 
 
@@ -172,7 +233,7 @@ public class EatenMealPanel extends JPanel {
             for (Meal meal : meals) {
                 try {
                     model.addRow(new Object[]{
-    //                        meal.getId(),
+                            meal.getId(),
                             FoodController.getFoodById(meal.getFoodId()).getName(),
                             mealTypesInPanel[(int) meal.getMealTypeId()],
                             meal.getAmount(),
@@ -183,7 +244,8 @@ public class EatenMealPanel extends JPanel {
                             meal.getProtein(),
                             LocationController.getLocationById(meal.getLocationId()).getName(),
                             GroupController.getGroupNames(FoodController.getFoodById(meal.getFoodId()).getGroups()),
-                            meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"))});
+                            meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")),
+                            meal.getIsConsumed() == 1 ? "Yes" : "No"});
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

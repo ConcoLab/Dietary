@@ -101,8 +101,9 @@ public class FoodGroupDao extends Observable implements FoodGroupDaoInterface {
     @Override
     public ArrayList<Group> getGroupsOfOneFood(long foodId) throws SQLException {
         ArrayList<Group> groups = new ArrayList<Group>();
-        String sql = "SELECT * FROM groups " +
-                "WHERE id = '"+ foodId +"' \n";
+        String sql = "SELECT g.id, g.name FROM foodGroups fg " +
+                "JOIN groups g ON g.id = fg.groupId " +
+                "WHERE fg.foodId = '"+ foodId +"' \n";
         ResultSet rs = _context.getCall(sql);
         while (rs.next()) {
             groups.add(new Group(rs.getLong("id"), rs.getString("name"), new ArrayList<Food>()));

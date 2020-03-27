@@ -77,6 +77,19 @@ public class Context {
         return 0;
     }
 
+    synchronized public long updateCall(String sql){
+        try{
+
+            Statement stmt = conn.createStatement();
+
+            int rs    = stmt.executeUpdate(sql);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
+
     public ResultSet findByIdCall(long id, String tableName){
         try{
             Statement stmt = conn.createStatement();
