@@ -98,7 +98,7 @@ public class MealDao extends Observable implements MealDaoInterface {
             sql = sql + " AND isConsumed = " + false + "";
         }
         else if(!showConsumedFoods && !showNotConsumedFoods)
-            sql = "";
+            sql = "SELECT * FROM meals WHERE id = ?;";
 
         System.out.println(sql);
         ResultSet rs = _context.getCall(sql);
@@ -137,7 +137,7 @@ public class MealDao extends Observable implements MealDaoInterface {
             sql = sql + " AND isConsumed = " + false + "";
         }
         else if(!showConsumedFoods && !showNotConsumedFoods)
-            sql = "";
+            sql = "SELECT * FROM meals WHERE id = ?;";
 
         System.out.println(sql);
         ResultSet rs = _context.getCall(sql);
@@ -176,7 +176,7 @@ public class MealDao extends Observable implements MealDaoInterface {
             sql = sql + " AND isConsumed = " + false + "";
         }
         else if(!showConsumedFoods && !showNotConsumedFoods)
-            sql = "";
+            sql = "SELECT * FROM meals WHERE id = ?;";
 
         System.out.println(sql);
         ResultSet rs = _context.getCall(sql);
