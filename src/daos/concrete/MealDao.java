@@ -56,7 +56,7 @@ public class MealDao extends Observable implements MealDaoInterface {
      */
     @Override
     public Meal insert(Meal meal) {
-        String sql = "INSERT INTO meals (foodId, mealTypeId, locationId, amount, dateTime, calories, fat, carbohydrate, salt, protein)\n" +
+        String sql = "INSERT INTO meals (foodId, mealTypeId, locationId, amount, dateTime, calories, fat, carbohydrate, salt, protein, isConsumed)\n" +
                 "VALUES ('"+ meal.getFoodId() +"', " +
                 "'"+ meal.getMealTypeId() +"', " +
                 "'"+ meal.getLocationId() + "', " +
@@ -66,7 +66,8 @@ public class MealDao extends Observable implements MealDaoInterface {
                 "'"+ meal.getFat() +"', " +
                 "'"+ meal.getCarbohydrate() +"', " +
                 "'"+ meal.getSalt() +"', " +
-                "'"+ meal.getProtein() +"');";
+                "'"+ meal.getProtein() +"', " +
+                "'"+ meal.getIsConsumed() + "');";
         System.out.println("-- DEBUG: " + sql);
         long rs = _context.insertCall(sql);
         if(rs != 0){
