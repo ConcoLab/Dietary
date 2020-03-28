@@ -43,7 +43,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getBoolean("isConsumed")
+                    , rs.getInt("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -115,7 +115,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getBoolean("isConsumed")
+                    , rs.getInt("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -154,7 +154,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getBoolean("isConsumed")
+                    , rs.getInt("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -193,7 +193,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                     , rs.getLong("carbohydrate")
                     , rs.getLong("salt")
                     , rs.getLong("protein")
-                    , rs.getBoolean("isConsumed")
+                    , rs.getInt("isConsumed")
                     , LocalDateTime.parse(rs.getString("dateTime"))
             ));
         }
@@ -238,7 +238,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                 , rs.getLong("carbohydrate")
                 , rs.getLong("salt")
                 , rs.getLong("protein")
-                , rs.getBoolean("isConsumed")
+                , rs.getInt("isConsumed")
                 , LocalDateTime.parse(rs.getString("dateTime"))
             );
         }

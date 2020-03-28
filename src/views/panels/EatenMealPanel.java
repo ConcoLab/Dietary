@@ -200,7 +200,7 @@ public class EatenMealPanel extends JPanel {
                 if (row > -1) {
                     Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
                     try {
-                        if (MealController.findById(id).getIsConsumed() == true) {
+                        if (MealController.findById(id).getIsConsumed() == 1) {
                             isConsumedButton.setText("NOT CONSUMED");
                             isConsumedButton.setBackground(Color.magenta);
                         }
@@ -224,7 +224,7 @@ public class EatenMealPanel extends JPanel {
             if (row > -1) {
                 Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
                 try {
-                    if (MealController.findById(id).getIsConsumed() == true)
+                    if (MealController.findById(id).getIsConsumed() == 1)
                         isConsumed = false;
                     else
                         isConsumed = true;
@@ -303,7 +303,7 @@ public class EatenMealPanel extends JPanel {
                             LocationController.getLocationById(meal.getLocationId()).getName(),
                             GroupController.getGroupNames(FoodController.getFoodById(meal.getFoodId()).getGroups()),
                             meal.getDateTime().format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm")),
-                            meal.getIsConsumed() == true ? "Yes" : "No"});
+                            meal.getIsConsumed() == 1 ? "Yes" : "No"});
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

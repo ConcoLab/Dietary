@@ -13,12 +13,12 @@ public class Meal {
     private long carbohydrate;
     private long salt;
     private long protein;
-    private boolean isConsumed;
+    private long isConsumed;
     private LocalDateTime dateTime;
 
     public Meal(long id, long foodId, long mealTypeId, long locationId, long amount,
                 long calories, long fat, long carbohydrate, long salt, long protein,
-                boolean isConsumed, LocalDateTime dateTime){
+                long isConsumed, LocalDateTime dateTime){
         this.id = id;
         this.foodId = foodId;
         this.mealTypeId = mealTypeId;
@@ -106,11 +106,11 @@ public class Meal {
     }
 
 
-    public boolean getIsConsumed() {
+    public long getIsConsumed() {
         return isConsumed;
     }
 
-    public void setIsConsumed(boolean isConsumed) {
+    public void setIsConsumed(long isConsumed) {
         this.isConsumed = isConsumed;
     }
 }
