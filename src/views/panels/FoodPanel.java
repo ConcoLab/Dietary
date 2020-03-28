@@ -90,8 +90,8 @@ public class FoodPanel extends JPanel{
         insertButton.addActionListener(e -> {
             // validate the input for "Food Name", "Quantity", and "Calories" fields.
             String foodName=foodNameTextField.getText();
-            Long quantity;
-            Long calories;
+            Long quantity,calories,fat,carbohydrate,salt, protein;
+
             if(foodName.length()==0){
                 JOptionPane.showMessageDialog(this,"Please input the food name in the \"Food Name\" field!");
                 return;
@@ -118,6 +118,51 @@ public class FoodPanel extends JPanel{
                 JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Calories\" field!");
                 return;
             }
+            if(fatTextField.getText().length()==0 || fatTextField.getText().substring(0,1).equals("-")){
+                JOptionPane.showMessageDialog(this, "Please input zero or a positive integer in the \"Fat (g)\" field!");
+                return;
+            }
+            try{
+                fat=Long.parseLong(fatTextField.getText());
+            }
+            catch (NumberFormatException event){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Fat (g)\" field!");
+                return;
+            }
+            if(carbohydrateTextField.getText().length()==0 || carbohydrateTextField.getText().substring(0,1).equals("-")){
+                JOptionPane.showMessageDialog(this, "Please input zero or a positive integer in the \"Carbohydrate (g)\" field!");
+                return;
+            }
+            try{
+                carbohydrate=Long.parseLong(carbohydrateTextField.getText());
+            }
+            catch (NumberFormatException event){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Carbohydrate (g)\" field!");
+                return;
+            }
+            if(saltTextField.getText().length()==0 || saltTextField.getText().substring(0,1).equals("-")){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Salt (g)\" field!");
+                return;
+            }
+            try{
+                salt=Long.parseLong(saltTextField.getText());
+            }
+            catch (NumberFormatException event){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Salt (g)\" field!");
+                return;
+            }
+            if(proteinTextField.getText().length()==0 || proteinTextField.getText().substring(0,1).equals("-")){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Protein (g)\" field!");
+                return;
+            }
+            try{
+                protein=Long.parseLong(proteinTextField.getText());
+            }
+            catch (NumberFormatException event){
+                JOptionPane.showMessageDialog(this,"Please input zero or a positive integer in the \"Protein (g)\" field!");
+                return;
+            }
+
             int a = unitsComboBox.getSelectedIndex();
             // validate the input for "Food Group" checkboxes.
             int count=0;
@@ -134,10 +179,10 @@ public class FoodPanel extends JPanel{
             Food newFood = new Food(0,
                     foodName
                     , calories
-                    , Long.parseLong(fatTextField.getText())
-                    , Long.parseLong(carbohydrateTextField.getText())
-                    , Long.parseLong(saltTextField.getText())
-                    , Long.parseLong(proteinTextField.getText())
+                    , fat
+                    , carbohydrate
+                    , salt
+                    , protein
                     , unitItem.getId()
                     , quantity
                     , new ArrayList<Group>());
@@ -155,10 +200,14 @@ public class FoodPanel extends JPanel{
             }
 //            ContextFactory._FoodDao().insert(newFood);
             FoodController.create(newFood);
-            //clear the contents in the text fileds.
+            //clear the contents in the text fields.
             foodNameTextField.setText("");
             quantityTextField.setText("");
             caloriesTextField.setText("");
+            fatTextField.setText("");
+            carbohydrateTextField.setText("");
+            saltTextField.setText("");
+            proteinTextField.setText("");
         });
 
         deleteButton = new JButton("DELETE");
