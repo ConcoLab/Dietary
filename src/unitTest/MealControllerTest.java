@@ -51,12 +51,12 @@ class MealControllerTest {
     @Test
     void create() throws SQLException {
         LocalDateTime mealDate = LocalDateTime.of(2020,1,9, 12, 0);
-        Meal indiningTest1 = new Meal(0, foodId, 0, 0, 2, 300, 40, 30, 20, 10, mealDate);
+        Meal indiningTest1 = new Meal(0, foodId, 0, 0, 2, 300, 40, 30, 20, 10, 0, mealDate);
         LocalDateTime startDate = LocalDateTime.of(2020,1,9, 0, 0);
         LocalDateTime endDate = LocalDateTime.of(2020,1,10, 0, 0);
-        int expectedNum = ContextFactory._MealDao().all(startDate, endDate).size() + 1;
+        int expectedNum = ContextFactory._MealDao().all(startDate, endDate, true, true).size() + 1;
         MealController.create(indiningTest1);
-        int actualNum = MealController.getAllMeals(startDate, endDate).size();
+        int actualNum = MealController.getAllMeals(startDate, endDate, true, true).size();
         assertEquals(expectedNum, actualNum);
     }
 
@@ -66,32 +66,32 @@ class MealControllerTest {
         LocalDateTime endDate = LocalDateTime.of(2020,1,10, 0, 0);
         LocalDateTime mealDate = LocalDateTime.of(2020,1,9, 12, 0);
         LocalDateTime outsideBoundsDate = LocalDateTime.of(2020,1,10, 12, 0);
-        int expectedNum = ContextFactory._MealDao().all(startDate, endDate).size();
-        int actualNum = MealController.getAllMeals(startDate, endDate).size();
+        int expectedNum = ContextFactory._MealDao().all(startDate, endDate, true, true).size();
+        int actualNum = MealController.getAllMeals(startDate, endDate, true, true).size();
         assertEquals(expectedNum, actualNum);
 
-        int expectedAll = ContextFactory._MealDao().all(startDate, endDate).size() + 5;
-        int expectedIndining = ContextFactory._MealDao().allInDinings(startDate, endDate).size() + 2;
-        int expectedOutdining = ContextFactory._MealDao().allOutDinings(startDate, endDate).size() + 3;
+        int expectedAll = ContextFactory._MealDao().all(startDate, endDate, true, true).size() + 5;
+        int expectedIndining = ContextFactory._MealDao().allInDinings(startDate, endDate, true, true).size() + 2;
+        int expectedOutdining = ContextFactory._MealDao().allOutDinings(startDate, endDate, true, true).size() + 3;
 
-        Meal indiningTest1 = new Meal(0, foodId, 0, 0, 2, 300, 40, 30, 20, 10, mealDate);
+        Meal indiningTest1 = new Meal(0, foodId, 0, 0, 2, 300, 40, 30, 20, 10, 0, mealDate);
         MealController.create(indiningTest1);
-        Meal indiningTest2 = new Meal(0, foodId, 1, 0, 2, 300, 40, 30, 20, 10, mealDate);
+        Meal indiningTest2 = new Meal(0, foodId, 1, 0, 2, 300, 40, 30, 20, 10, 0, mealDate);
         MealController.create(indiningTest2);
-        Meal outdiningTest1 = new Meal(0, foodId, 2, 1, 2, 300, 40, 30, 20, 10, mealDate);
+        Meal outdiningTest1 = new Meal(0, foodId, 2, 1, 2, 300, 40, 30, 20, 10, 0, mealDate);
         MealController.create(outdiningTest1);
-        Meal outdiningTest2 = new Meal(0, foodId, 3, 1, 2, 300, 40, 30, 20, 10, mealDate);
+        Meal outdiningTest2 = new Meal(0, foodId, 3, 1, 2, 300, 40, 30, 20, 10, 0, mealDate);
         MealController.create(outdiningTest2);
-        Meal outdiningTest3 = new Meal(0, foodId, 4, 1, 2, 300, 40, 30, 20, 10, mealDate);
+        Meal outdiningTest3 = new Meal(0, foodId, 4, 1, 2, 300, 40, 30, 20, 10, 0, mealDate);
         MealController.create(outdiningTest3);
-        Meal outOfBoundsTest = new Meal(0, foodId, 4, 1, 2, 300, 40, 30, 20, 10, outsideBoundsDate);
+        Meal outOfBoundsTest = new Meal(0, foodId, 4, 1, 2, 300, 40, 30, 20, 10, 0, outsideBoundsDate);
         MealController.create(outOfBoundsTest);
 
-        int actualAll = MealController.getAllMeals(startDate, endDate).size();
+        int actualAll = MealController.getAllMeals(startDate, endDate, true, true).size();
         assertEquals(expectedAll, actualAll);
-        int actualIndining = MealController.getInDiningAllMeals(startDate, endDate).size();
+        int actualIndining = MealController.getInDiningAllMeals(startDate, endDate, true, true).size();
         assertEquals(expectedIndining, actualIndining);
-        int actualOutdining = MealController.getOutDinigAllMeals(startDate, endDate).size();
+        int actualOutdining = MealController.getOutDinigAllMeals(startDate, endDate, true, true).size();
         assertEquals(expectedOutdining, actualOutdining);
     }
 }

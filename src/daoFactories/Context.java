@@ -61,7 +61,7 @@ public class Context {
 
             Statement stmt = conn.createStatement();
 
-            int rs    = stmt.executeUpdate(sql);
+            int rs = stmt.executeUpdate(sql);
             if(rs == 1){
                 ResultSet generatedKeys = stmt.executeQuery("SELECT last_insert_rowid();" );
                 if (generatedKeys.next()) {

@@ -9,6 +9,7 @@ import observers.UnitObserver;
 import java.sql.*;
 
 public class ContextFactory {
+    private String url;
     private Connection connect() {
         // SQLite connection string
 
@@ -32,7 +33,7 @@ public class ContextFactory {
     private static LocationDao _LocationDao;
     private Context _context;
 
-    public ContextFactory() throws SQLException {
+    public ContextFactory(String url) throws SQLException {
         _context = new Context();
         _FoodDao = new FoodDao(_context);
         _FoodGroupDao = new FoodGroupDao(_context);
@@ -41,7 +42,7 @@ public class ContextFactory {
         _MealDao = new MealDao(_context);
 //        _mysqlMealTypeDao = new MysqlMealTypeDao(_context);
         _LocationDao = new LocationDao(_context);
-
+        this.url = url;
     }
 
     public static GroupDao _GroupDao() {
