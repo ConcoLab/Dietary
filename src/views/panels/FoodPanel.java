@@ -221,7 +221,7 @@ public class FoodPanel extends JPanel{
         // Adding Components to the Panel And Design
         setLayout(new GridLayout(2,1));
         JPanel dataEntryPanel = new JPanel();
-        dataEntryPanel.setLayout(new GridLayout(0,2));
+        dataEntryPanel.setLayout(new GridLayout(0,1));
         JPanel tablePanel = new JPanel(new BorderLayout());
         JPanel dataEntryPanelWrapper = new JPanel(new BorderLayout());
         JPanel wrapper = new JPanel(new BorderLayout());
