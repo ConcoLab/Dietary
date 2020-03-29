@@ -1,7 +1,6 @@
 package views.panels;
 
 import controllers.GroupController;
-import daoFactories.ContextFactory;
 import models.Group;
 import models.Meal;
 
@@ -63,7 +62,7 @@ public class ReportPanel extends JPanel {
         eatenPanel.setLayout(new BorderLayout());
         eatenTable.setFillsViewportHeight(true);
         JScrollPane eatenScrollPane = new JScrollPane(eatenTable);
-        eatenPanel.add(eatenScrollPane, BorderLayout.EAST);
+        eatenPanel.add(eatenScrollPane, BorderLayout.CENTER);
 
         JPanel notEatenPanel = new JPanel();
         TitledBorder notEatenPanelBorder = BorderFactory.createTitledBorder("Not Eaten food");

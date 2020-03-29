@@ -4,11 +4,9 @@ import controllers.FoodController;
 import controllers.LocationController;
 import controllers.MealController;
 import controllers.UnitController;
-import daoFactories.Context;
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import models.*;
+import models.Food;
+import models.Location;
+import models.Meal;
 import org.jdatepicker.JDatePicker;
 
 import javax.swing.*;
