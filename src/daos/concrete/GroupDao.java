@@ -51,7 +51,7 @@ public class GroupDao extends Observable implements GroupDaoInterface {
         long newId = _context.insertCall(sql);
         if(newId != 0){
             group.setId(newId);
-            _context.groups.add(group);
+//            _context.groups.add(group);
             setChanged();
         }
         return null;
