@@ -279,7 +279,7 @@ public class FoodPanel extends JPanel{
             model.removeRow(0);
         }
         //TODO: Implement the get food in controller
-        for (Food food : ContextFactory._FoodDao().all())
+        for (Food food : FoodController.getAll())
             model.addRow(new Object[]{
                     food.getId(),
                     food.getName(),
@@ -302,6 +302,7 @@ public class FoodPanel extends JPanel{
             checkBoxes[j] = new JCheckBox(group.getName());
             Long groupId = group.getId();
             checkBoxes[j].setActionCommand(groupId.toString());
+            checkBoxes[j].setMargin(new Insets(-2,0,-2,0));
             foodGroupPanel.add(checkBoxes[j]);
             j++;
         }
