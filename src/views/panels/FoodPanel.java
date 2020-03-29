@@ -3,11 +3,9 @@ package views.panels;
 import controllers.FoodController;
 import controllers.GroupController;
 import controllers.UnitController;
-import daoFactories.Context;
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
-import models.*;
+import models.Food;
+import models.Group;
+import models.Unit;
 import util.Item;
 
 import javax.swing.*;
@@ -221,39 +219,50 @@ public class FoodPanel extends JPanel{
 
 
         // Adding Components to the Panel And Design
-        setLayout(new BorderLayout(3,1));
+        setLayout(new GridLayout(2,1));
         JPanel dataEntryPanel = new JPanel();
-        dataEntryPanel.setLayout(new GridLayout(0, 1));
-        dataEntryPanel.add(foodNameLabel);
-        dataEntryPanel.add(foodNameTextField);
-        dataEntryPanel.add(quantityLabel);
-        dataEntryPanel.add(quantityTextField);
-        dataEntryPanel.add(unitLabel);
-        dataEntryPanel.add(unitsComboBox);
-        dataEntryPanel.add(caloriesLabel);
-        dataEntryPanel.add(caloriesTextField);
-        dataEntryPanel.add(fatLabel);
-        dataEntryPanel.add(fatTextField);
-        dataEntryPanel.add(carbohydrateLabel);
-        dataEntryPanel.add(carbohydrateTextField);
-        dataEntryPanel.add(saltLabel);
-        dataEntryPanel.add(saltTextField);
-        dataEntryPanel.add(proteinLabel);
-        dataEntryPanel.add(proteinTextField);
+        dataEntryPanel.setLayout(new GridLayout(0,2));
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        JPanel dataEntryPanelWrapper = new JPanel(new BorderLayout());
+        JPanel wrapper = new JPanel(new BorderLayout());
+        JScrollPane scrollPaneData = new JScrollPane(dataEntryPanel);
+        wrapper.add(scrollPaneData, BorderLayout.CENTER);
+        dataEntryPanelWrapper.add(wrapper, BorderLayout.CENTER);
+        dataEntryPanelWrapper.add(insertButton, BorderLayout.SOUTH);
+        {
+            dataEntryPanel.add(foodNameLabel);
+            dataEntryPanel.add(foodNameTextField);
+            dataEntryPanel.add(quantityLabel);
+            dataEntryPanel.add(quantityTextField);
+            dataEntryPanel.add(unitLabel);
+            dataEntryPanel.add(unitsComboBox);
+            dataEntryPanel.add(caloriesLabel);
+            dataEntryPanel.add(caloriesTextField);
+            dataEntryPanel.add(fatLabel);
+            dataEntryPanel.add(fatTextField);
+            dataEntryPanel.add(carbohydrateLabel);
+            dataEntryPanel.add(carbohydrateTextField);
+            dataEntryPanel.add(saltLabel);
+            dataEntryPanel.add(saltTextField);
+            dataEntryPanel.add(proteinLabel);
+            dataEntryPanel.add(proteinTextField);
+        }
 
         foodGroupPanel = new JPanel();
-        foodGroupPanel.setLayout(new FlowLayout());
+        foodGroupPanel.setLayout(new GridLayout(0,4));
         checkBoxes = new JCheckBox[groups.size()];
-        int i = 0;
+        JPanel groupPanelWrapper = new JPanel(new BorderLayout());
 
-        dataEntryPanel.add(groupLabel);
-        dataEntryPanel.add(foodGroupPanel);
-        dataEntryPanel.add(insertButton);
-        add(dataEntryPanel, BorderLayout.NORTH);
+        groupPanelWrapper.add(groupLabel, BorderLayout.WEST);
+        groupPanelWrapper.add(foodGroupPanel, BorderLayout.CENTER);
+        wrapper.add(groupPanelWrapper, BorderLayout.SOUTH);
+//        dataEntryPanel.add(insertButton);
+        add(dataEntryPanelWrapper);
 
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
-        add(scrollPane, BorderLayout.CENTER);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+        add(tablePanel);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridLayout(1,5));
@@ -261,7 +270,7 @@ public class FoodPanel extends JPanel{
         deleteButton.setBackground(Color.RED);
         deleteButton.setForeground(Color.WHITE);
         bottomPanel.add(deleteButton);
-        add(bottomPanel, BorderLayout.SOUTH);
+        tablePanel.add(bottomPanel, BorderLayout.SOUTH);
 
         updateFoodGroupCheckboxes();
     }
