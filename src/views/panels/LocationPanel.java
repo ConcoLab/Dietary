@@ -54,6 +54,7 @@ public class LocationPanel extends TemplatePanel {
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+            System.out.println("-- DEBUG: The location with following id should be deleted: " + id);
             LocationController.delete(id);
         });
 
