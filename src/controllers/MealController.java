@@ -39,4 +39,10 @@ public class MealController {
         return ContextFactory._MealDao().findById(id);
     }
 
+    public static boolean delete(Long id) {
+        ContextFactory._MealDao().delete(id);
+        ContextFactory._MealDao().notifyObservers();
+        return true;
+    }
+
 }
