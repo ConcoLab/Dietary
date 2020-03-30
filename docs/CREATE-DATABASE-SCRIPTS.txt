@@ -1,0 +1,66 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE units (
+	id INTEGER,
+	name TEXT,
+	CONSTRAINT units_PK PRIMARY KEY (id)
+);
+
+CREATE TABLE groups (
+	id INTEGER,
+	name TEXT,
+	CONSTRAINT groups_PK PRIMARY KEY (id)
+);
+
+
+
+CREATE TABLE locations (
+	id INTEGER NOT NULL,
+	name TEXT,
+	address TEXT,
+	CONSTRAINT locations_PK PRIMARY KEY (id)
+);
+
+
+CREATE TABLE foods (
+	id INTEGER,
+	name TEXT,
+	unitId INTEGER,
+	locationId INTEGER,
+	quantity INTEGER,
+	calories NUMERIC,
+	fat NUMERIC,
+	protein NUMERIC,
+	carbohydrate NUMERIC,
+	salt NUMERIC,
+	CONSTRAINT foods_pk PRIMARY KEY (id),
+	FOREIGN KEY(unitId) REFERENCES units(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE foodGroups (
+	foodId INTEGER,
+	groupId INTEGER,
+	FOREIGN KEY(foodId) REFERENCES foods(id) ON DELETE CASCADE,
+	FOREIGN KEY(groupId) REFERENCES groups(id) ON DELETE CASCADE
+);
+
+CREATE TABLE meals (
+	id INTEGER NOT NULL,
+	foodId INTEGER,
+	mealTypeId INTEGER,
+	locationId INTEGER,
+	amount INTEGER,
+	calories NUMERIC,
+	fat NUMERIC,
+	protein NUMERIC,
+	carbohydrate NUMERIC,
+	salt NUMERIC,
+	isConsumed NUMERIC,
+	dateTime TEXT,
+	CONSTRAINT meals_pk PRIMARY KEY (id),
+	FOREIGN KEY(locationId) REFERENCES locations(id) ON DELETE CASCADE,
+	FOREIGN KEY(foodId) REFERENCES foods(id) ON DELETE CASCADE
+);
+
+
