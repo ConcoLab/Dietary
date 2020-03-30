@@ -26,7 +26,7 @@ public class Context {
         locations = FXCollections.observableList(new ArrayList<Location>());
 
         try{
-            String url = "jdbc:sqlite:./src/db/dietary.db";
+            String url = "jdbc:sqlite:src/db/dietary.db";
             conn = DriverManager.getConnection(url);
         } catch (SQLException e) {
             System.out.println(e.getMessage());

@@ -64,7 +64,4 @@ public class ContextFactory {
 //    public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
     public Context getContext(){return _context;}
 
-
-
-
 }
