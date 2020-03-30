@@ -104,7 +104,7 @@ public class EatenMealPanel extends JPanel {
 
 
         JTable table = new JTable(model);
-        JLabel eatenLabel = new JLabel("List of Consumed Food");
+        JLabel eatenLabel = new JLabel("Diet Plan");
         filterButton = new JButton("Apply Filter");
 
         UtilDateModel model = new UtilDateModel();
@@ -119,7 +119,7 @@ public class EatenMealPanel extends JPanel {
         //Design
 
 
-        TitledBorder panelBorder = BorderFactory.createTitledBorder("LIST OF CONSUMED FOOD");
+        TitledBorder panelBorder = BorderFactory.createTitledBorder("DIET PLAN");
         panelBorder.setTitleFont(new Font("Arial", Font.PLAIN, 20));
         setBorder(panelBorder);
 
@@ -192,6 +192,7 @@ public class EatenMealPanel extends JPanel {
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
             Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+            MealController.delete(id);
         });
 
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
