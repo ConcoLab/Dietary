@@ -99,7 +99,7 @@ public class MealPanel extends JPanel{
         timePanel.add(new JLabel(" : "));
         timePanel.add(minuteTextField);
 
-        JButton insertButton = new JButton("Add to Consumed Food List");
+        JButton insertButton = new JButton("Add to Diet Plan");
         insertButton.addActionListener(e -> {
             //validate the input for the "Number of Serving" field.
             String numOfServ=amountTextField.getText();
