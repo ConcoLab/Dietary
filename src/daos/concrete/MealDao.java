@@ -214,7 +214,10 @@ public class MealDao extends Observable implements MealDaoInterface {
      */
     @Override
     public int delete(long id) {
-//        _context.meals.remove(meal);
+        int rs = _context.deleteCall(id, "meals");
+        if (rs == 1){
+            setChanged();
+        }
         return 0;
     }
 
