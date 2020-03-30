@@ -90,8 +90,8 @@ public class LocationDao extends Observable implements LocationDoaInterface {
      */
     @Override
     public int delete(long id) {
-        int rs = _context.deleteCall(id, "units");
-        if(rs == 1){
+        int rs = _context.deleteCall(id, "locations");
+        if(rs != 0){
             setChanged();
         }
         return 0;
