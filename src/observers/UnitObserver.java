@@ -1,5 +1,6 @@
 package observers;
 
+import views.panels.EatenMealPanel;
 import views.panels.FoodPanel;
 import views.panels.UnitPanel;
 
@@ -13,6 +14,7 @@ public class UnitObserver implements Observer {
         try {
             FoodPanel.updateUnitsCombobox();
             UnitPanel.updateModel();
+            EatenMealPanel.updateMealsTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
