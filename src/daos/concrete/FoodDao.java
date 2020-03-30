@@ -34,6 +34,7 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
 
         String sql = "SELECT * FROM foods";
         ResultSet rs = _context.getCall(sql);
+
         while (rs.next()) {
             _context.foods.add(new Food(rs.getLong("id")
                     , rs.getString("name")
