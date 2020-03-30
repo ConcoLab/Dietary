@@ -1,5 +1,6 @@
 package observers;
 
+import views.panels.EatenMealPanel;
 import views.panels.LocationPanel;
 import views.panels.MealPanel;
 
@@ -13,6 +14,7 @@ public class LocationObserver implements Observer {
         try {
             LocationPanel.locationUpdater();
             MealPanel.updateLocationCombobox();
+            EatenMealPanel.updateMealsTable();
         } catch (SQLException e) {
             e.printStackTrace();
         }
