@@ -142,7 +142,7 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
     public int delete(long id) {
 //        String sql = "DELETE FROM foods WHERE foods.id = "+food.getId()+";";
         int rs = _context.deleteCall(id, "foods");
-        if (rs == 1){
+        if (rs != 0){
             setChanged();
         }
 //        _context.foods.remove(food);

@@ -110,7 +110,7 @@ public class GroupDao extends Observable implements GroupDaoInterface {
     @Override
     public int delete(long id) {
         int rs = _context.deleteCall(id, "groups");
-        if(rs == 1){
+        if(rs != 0){
             setChanged();
         }
 //        _context.groups.remove(group);
