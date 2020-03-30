@@ -48,7 +48,10 @@ public class Context {
     public int deleteCall(long id, String tableName){
         try{
             Statement stmt = conn.createStatement();
-            int rs    = stmt.executeUpdate("DELETE FROM "+ tableName +" WHERE "+ tableName +".id = "+ id +";");
+            stmt.executeUpdate("PRAGMA foreign_keys = ON;");
+            String sql = "DELETE FROM "+ tableName +" WHERE "+ tableName +".id = "+ id +";";
+            System.out.println(sql);
+            int rs = stmt.executeUpdate(sql);
             return rs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
