@@ -173,7 +173,7 @@ public class FoodPanel extends JPanel{
                 return;
             }
 
-            MealPanel.Item unitItem = (MealPanel.Item) unitsComboBox.getSelectedItem();
+            Item unitItem = (Item) unitsComboBox.getSelectedItem();
             Food newFood = new Food(0,
                     foodName
                     , calories
