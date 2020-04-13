@@ -1,10 +1,11 @@
 package daos.concrete;
 
-import daoFactories.Context;
+import daoFactories.SqliteConnection;
 import models.Food;
 import models.FoodGroup;
 import models.Group;
 import observers.FoodObserver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,38 +17,21 @@ import java.util.Observable;
  * Be aware that these functions should be called only by the controllers
  */
 public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterface {
-    private Context _context;
+    private SqliteConnection _sqliteConnection;
 
 
     /**
      * This constructor is used to grab the whole data once the program starts and put them in
      * an ObservableList
-     * @param context
+     * @param sqliteConnection
      * @throws SQLException
      */
-    public FoodDao(Context context) throws SQLException {
-        _context = context;
+    public FoodDao(SqliteConnection sqliteConnection) throws SQLException {
+        _sqliteConnection = sqliteConnection;
 
         // Adds the observer to this
         FoodObserver foodObserver = new FoodObserver();
         this.addObserver(foodObserver);
-
-        String sql = "SELECT * FROM foods";
-        ResultSet rs = _context.getCall(sql);
-
-        while (rs.next()) {
-            _context.foods.add(new Food(rs.getLong("id")
-                    , rs.getString("name")
-                    , rs.getLong("calories")
-                    , rs.getLong("fat")
-                    , rs.getLong("carbohydrate")
-                    , rs.getLong("salt")
-                    , rs.getLong("protein")
-                    , rs.getLong("unitId")
-                    , rs.getLong("quantity")
-                    , getGroupsOfOneFood(rs.getLong("id"))));
-
-        }
     }
 
     public ArrayList<Group> getGroupsOfOneFood(long foodId) throws SQLException {
@@ -56,7 +40,7 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
                 "FROM foodGroups as f\n" +
                 "JOIN groups as g ON g.id = f.groupId\n" +
                 "WHERE f.foodId = " + foodId ;
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             groups.add(new Group(rs.getLong("id"), rs.getString("name"), new ArrayList<Food>()));
         }
@@ -80,10 +64,10 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
                 "'"+ food.getProtein() +"', " +
                 "'"+ food.getQuantity() + "', " +
                 "'"+ food.getUnitId() +"');";
-        long newId = _context.insertCall(sql);
+        long newId = _sqliteConnection.insertCall(sql);
         if(newId != 0){
             food.setId(newId);
-            _context.foods.add(food);
+//            _context.foods.add(food);
             for (Group group : food.getGroups())
             {
                 insertFoodGroup(new FoodGroup(newId, group.getId()));
@@ -95,10 +79,11 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
     }
 
     public FoodGroup insertFoodGroup(FoodGroup foodGroup) {
+        ArrayList<FoodGroup> foodGroups = new  ArrayList<FoodGroup>();
         String sql = "INSERT INTO foodGroups (foodId, groupId)\n" +
                 "VALUES ('"+ foodGroup.getFoodId() +"', '"+ foodGroup.getGroupId() +"')";
-        ResultSet rs = _context.getCall(sql);
-        _context.foodGroups.add(foodGroup);
+        ResultSet rs = _sqliteConnection.getCall(sql);
+//        foodGroups.add(foodGroup);
         return foodGroup;
     }
 
@@ -111,7 +96,7 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
     public ArrayList<Food> all() throws SQLException {
         ArrayList<Food> foods = new ArrayList<Food>();
         String sql = "SELECT * FROM foods";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             foods.add(new Food(rs.getLong("id")
                     , rs.getString("name")
@@ -129,7 +114,8 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
 
     @Override
     public int deleteAll() {
-        //foods.removeAll();
+        ResultSet rs = _sqliteConnection.truncate("foods");
+        setChanged();
         return 0;
     }
 
@@ -140,12 +126,10 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
      */
     @Override
     public int delete(long id) {
-//        String sql = "DELETE FROM foods WHERE foods.id = "+food.getId()+";";
-        int rs = _context.deleteCall(id, "foods");
+        int rs = _sqliteConnection.deleteCall(id, "foods");
         if (rs != 0){
             setChanged();
         }
-//        _context.foods.remove(food);
         return 0;
     }
 
@@ -156,7 +140,7 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
      */
     @Override
     public Food findById(long id) throws SQLException {
-        ResultSet rs = _context.findByIdCall(id, "foods");
+        ResultSet rs = _sqliteConnection.findByIdCall(id, "foods");
         if (rs.next()){
             Food food = new Food(rs.getLong("id")
                     , rs.getString("name")
@@ -182,10 +166,11 @@ public class FoodDao extends Observable implements daos.interfaces.FoodDaoInterf
     @Override
     public Food findByName(String name) {
         //TODO: This method should be implemented using the sql query.
-        return _context.foods.stream()
-                .filter(food -> food.getName().contains(name))
-                .findFirst()
-                .orElse(null);
+        throw new NotImplementedException();
+//        return _context.foods.stream()
+//                .filter(food -> food.getName().contains(name))
+//                .findFirst()
+//                .orElse(null);
     }
 
 }

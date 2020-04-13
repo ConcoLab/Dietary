@@ -1,9 +1,10 @@
 package daos.concrete;
 
-import daoFactories.Context;
+import daoFactories.SqliteConnection;
 import daos.interfaces.UnitDaoInterface;
 import models.Unit;
 import observers.UnitObserver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,28 +15,20 @@ import java.util.Observable;
  * This Data Access Object is used to get access to the data which we have on database and also on our observables
  */
 public class UnitDao extends Observable implements UnitDaoInterface {
-    public Context _context;
+    public SqliteConnection _sqliteConnection;
 
 
     /**
      * This is the constructor which initialized the list of units from the database
      * in this case the data come from the database and fetch to an array list.
      *
-     * @param context
+     * @param sqliteConnection
      * @throws SQLException
      */
-    public UnitDao(Context context) throws SQLException {
-        _context = context;
-
+    public UnitDao(SqliteConnection sqliteConnection) throws SQLException {
+        _sqliteConnection = sqliteConnection;
         UnitObserver unitObserver = new UnitObserver();
         this.addObserver(unitObserver);
-
-
-        String sql = "SELECT * FROM units";
-        ResultSet rs = _context.getCall(sql);
-        while (rs.next()) {
-            _context.units.add(new Unit(rs.getLong("id"), rs.getString("name")));
-        }
     }
 
     /**
@@ -47,10 +40,10 @@ public class UnitDao extends Observable implements UnitDaoInterface {
     public Unit insert(Unit unit) throws SQLException {
         String sql = "INSERT INTO units (name)\n" +
                 "VALUES ('"+ unit.getName() +"');";
-        long rs = _context.insertCall(sql);
+        long rs = _sqliteConnection.insertCall(sql);
         if(rs != 0){
             unit.setId(rs);
-            _context.units.add(unit);
+//            _context.units.add(unit);
             setChanged();
         }
 
@@ -66,7 +59,7 @@ public class UnitDao extends Observable implements UnitDaoInterface {
     public ArrayList<Unit> all() throws SQLException {
         ArrayList<Unit> units = new ArrayList<Unit>();
         String sql = "SELECT * FROM units";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             units.add(new Unit(rs.getLong("id"), rs.getString("name")));
         }
@@ -75,7 +68,8 @@ public class UnitDao extends Observable implements UnitDaoInterface {
 
     @Override
     public int deleteAll() {
-        //units.removeAll();
+        ResultSet rs = _sqliteConnection.truncate("units");
+        setChanged();
         return 0;
     }
 
@@ -86,7 +80,7 @@ public class UnitDao extends Observable implements UnitDaoInterface {
      */
     @Override
     public int delete(long id) {
-        int rs = _context.deleteCall(id, "units");
+        int rs = _sqliteConnection.deleteCall(id, "units");
         if(rs != 0){
 //            boolean result = _context.units.remove(unit.getId());
             setChanged();
@@ -103,7 +97,7 @@ public class UnitDao extends Observable implements UnitDaoInterface {
     @Override
     public Unit findById(long id) throws SQLException {
         String sql = "SELECT * FROM units WHERE units.id = " + id + " LIMIT 1;";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         Unit unit = new Unit(0, "");
         if(rs.next()){
             unit.setId(rs.getLong("id"));
@@ -121,10 +115,11 @@ public class UnitDao extends Observable implements UnitDaoInterface {
      */
     @Override
     public Unit findByName(String name) {
-        return _context.units.stream()
-                .filter(unit -> unit.getName().contains(name))
-                .findFirst()
-                .orElse(null);
+        throw new NotImplementedException();
+//        return _context.units.stream()
+//                .filter(unit -> unit.getName().contains(name))
+//                .findFirst()
+//                .orElse(null);
     }
 
 }

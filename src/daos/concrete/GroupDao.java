@@ -1,11 +1,12 @@
 package daos.concrete;
 
-import daoFactories.Context;
+import daoFactories.SqliteConnection;
 import daoFactories.ContextFactory;
 import daos.interfaces.GroupDaoInterface;
 import models.Food;
 import models.Group;
 import observers.GroupObserver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,26 +18,18 @@ import java.util.Observable;
  * This class should be called only from controllers not from the views.
  */
 public class GroupDao extends Observable implements GroupDaoInterface {
-    private Context _context;
+    private SqliteConnection _sqliteConnection;
 
 
     /**
      * This method initializes the list of the groups and fetches the to the memory list.
-     * @param context
+     * @param sqliteConnection
      * @throws SQLException
      */
-    public GroupDao(Context context) throws SQLException {
-        _context = context;
-
+    public GroupDao(SqliteConnection sqliteConnection) throws SQLException {
+        _sqliteConnection = sqliteConnection;
         GroupObserver groupObserver = new GroupObserver();
         this.addObserver(groupObserver);
-
-
-        String sql = "SELECT * FROM groups";
-        ResultSet rs = _context.getCall(sql);
-        while (rs.next()) {
-            _context.groups.add(new Group(rs.getLong("id"), rs.getString("name"), getFoodsInGroup(rs.getLong("id"))));
-        }
     }
 
     /**
@@ -48,7 +41,7 @@ public class GroupDao extends Observable implements GroupDaoInterface {
     public Group insert(Group group) {
         String sql = "INSERT INTO groups (name)\n" +
                 "VALUES ('"+ group.getName() +"')";
-        long newId = _context.insertCall(sql);
+        long newId = _sqliteConnection.insertCall(sql);
         if(newId != 0){
             group.setId(newId);
 //            _context.groups.add(group);
@@ -66,7 +59,7 @@ public class GroupDao extends Observable implements GroupDaoInterface {
     public ArrayList<Group> all() throws SQLException {
         ArrayList<Group> groups = new ArrayList<Group>();
         String sql = "SELECT * FROM groups";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             groups.add(new Group(rs.getLong("id"), rs.getString("name"), getFoodsInGroup(rs.getLong("id"))));
         }
@@ -78,7 +71,7 @@ public class GroupDao extends Observable implements GroupDaoInterface {
         ArrayList<Food> foods = new ArrayList<Food>();
         String sql = "SELECT * FROM foods " +
                 "WHERE id = '"+ groupId +"' \n";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             foods.add(new Food(rs.getLong("id")
                     , rs.getString("name")
@@ -97,8 +90,8 @@ public class GroupDao extends Observable implements GroupDaoInterface {
 
     @Override
     public int deleteAll() {
-        // "TRUNCATE groups"
-        //groups.removeAll();
+        ResultSet rs = _sqliteConnection.truncate("groups");
+        setChanged();
         return 0;
     }
 
@@ -109,7 +102,7 @@ public class GroupDao extends Observable implements GroupDaoInterface {
      */
     @Override
     public int delete(long id) {
-        int rs = _context.deleteCall(id, "groups");
+        int rs = _sqliteConnection.deleteCall(id, "groups");
         if(rs != 0){
             setChanged();
         }
@@ -119,20 +112,21 @@ public class GroupDao extends Observable implements GroupDaoInterface {
 
     @Override
     public Group findById(long id) {
-        return _context.groups.stream()
-                .filter(group -> group.getId() == id)
-                .findFirst()
-                .orElse(null);
+        throw new NotImplementedException();
+//        return _context.groups.stream()
+//                .filter(group -> group.getId() == id)
+//                .findFirst()
+//                .orElse(null);
     }
 
     @Override
     public Group findByName(String name) {
-
+        throw new NotImplementedException();
         // "SELECT * FROM groups WHERE groups.name IS LIKE "%name%"
-        return _context.groups.stream()
-                .filter(group -> group.getName().contains(name))
-                .findFirst()
-                .orElse(null);
+//        return _context.groups.stream()
+//                .filter(group -> group.getName().contains(name))
+//                .findFirst()
+//                .orElse(null);
     }
 
 }
