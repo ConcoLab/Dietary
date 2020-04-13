@@ -53,7 +53,7 @@ public class FoodPanel extends JPanel{
 
         //Components
         table = new JTable(model);
-        updateFoodsTable();
+
 
         foodNameLabel = new JLabel("Food Name:");
         foodNameTextField = new JTextField();
@@ -273,6 +273,7 @@ public class FoodPanel extends JPanel{
         tablePanel.add(bottomPanel, BorderLayout.SOUTH);
 
         updateFoodGroupCheckboxes();
+        updateFoodsTable();
     }
 
     public static void updateUnitsCombobox() throws SQLException {
@@ -287,7 +288,6 @@ public class FoodPanel extends JPanel{
         while(model.getRowCount() != 0){
             model.removeRow(0);
         }
-        //TODO: Implement the get food in controller
         for (Food food : FoodController.getAll())
             model.addRow(new Object[]{
                     food.getId(),
