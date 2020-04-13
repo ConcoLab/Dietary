@@ -1,10 +1,6 @@
 package views.panels;
 
 import controllers.LocationController;
-import daoFactories.Context;
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import models.Location;
 
 import javax.swing.*;
