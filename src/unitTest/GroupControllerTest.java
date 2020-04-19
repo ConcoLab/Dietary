@@ -59,7 +59,7 @@ class GroupControllerTest {
     @Test
     void create() throws SQLException {
         // Make a new group and check it was added.
-        ContextFactory._GroupDao().insert(new Group(3, "Group3", new ArrayList<Food>()));
+        GroupController.create(new Group(3, "Group3", new ArrayList<Food>()));
         ArrayList<Group> groups = GroupController.getAll();
 
         assertEquals(groups.size(), 3);
