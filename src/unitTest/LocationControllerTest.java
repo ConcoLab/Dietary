@@ -2,9 +2,12 @@ package unitTest;
 
 import controllers.LocationController;
 import daoFactories.ContextFactory;
+import models.Food;
 import models.Location;
+import models.Unit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import views.main.MainGUI;
 
@@ -25,51 +28,60 @@ class LocationControllerTest {
     @BeforeAll
     static void setUp() throws SQLException {
         // Necessary setup for anything to function.
-        context = new ContextFactory("jdbc:sqlite:./src/db/test_GroupController.db");
+        context = new ContextFactory("dietaryTest");
         main = new MainGUI();
+    }
+
+    @BeforeEach
+    void initEach() throws SQLException {
+        ContextFactory._LocationDao().deleteAll();
+        LocationController.create(new Location(1, "Location1", "Address1"));
+        LocationController.create(new Location(2, "Location2", "Address2"));
     }
 
     @AfterAll
     static void tearDown() {
-        // TODO: Wipe the database or reset it after testing.
-        context = null;
-        main = null;
+        ContextFactory._LocationDao().deleteAll();
     }
 
     @Test
     void getAllLocations() throws SQLException {
-        // Get from DAO (since no better option exists.)
-        int expected = ContextFactory._LocationDao().all().size();
-        // Get same value via controller and compare.
-        int actual = LocationController.getAllLocations().size();
-        assertEquals(expected, actual);
+        ArrayList<Location> locations = LocationController.getAllLocations();
+        assertEquals(2, locations.size());
+        assertEquals(1, locations.get(0).getId());
+        assertEquals("Location1", locations.get(0).getName());
+        assertEquals("Address1", locations.get(0).getAddress());
+        assertEquals(2, locations.get(1).getId());
+        assertEquals("Location2", locations.get(1).getName());
+        assertEquals("Address2", locations.get(1).getAddress());
     }
 
     @Test
-    void createAndGetById() throws SQLException {
-        // Expect one more than what we currently have.
-        int expected = LocationController.getAllLocations().size() + 1;
-        Location loc = new Location(0, "TestPlace","123 Test Lane");
-        // Create a new location and compare.
-        LocationController.create(loc);
-        int actual = LocationController.getAllLocations().size();
-        assertEquals(expected, actual);
-        // We have to do a more convoluted way of getting the idea to test whether getLocationById gets it correct.
-        ArrayList<Location> listOfLocs = LocationController.getAllLocations();
-        long locId = -1;
-        for (int i = 0; i < listOfLocs.size(); i++) {
-            if (listOfLocs.get(i).getName().equals("TestPlace")) {
-                locId = listOfLocs.get(i).getId();
-                break;
-            }
-        }
-        // Now we can test if getLocationById works
-        assertNotNull(LocationController.getLocationById(locId));
-        assertEquals(loc.getName(), LocationController.getLocationById(locId).getName());
+    void create() throws SQLException {
+        LocationController.create(new Location(3, "Location3", "Address3"));
+        ArrayList<Location> locations = LocationController.getAllLocations();
+        assertEquals(3, locations.size());
+        assertEquals(3, locations.get(2).getId());
+        assertEquals("Location3", locations.get(2).getName());
+        assertEquals("Address3", locations.get(2).getAddress());
     }
 
-    /*@Test
-    void delete() {
-        fail("This is not testable yet since deletion depends on data accessible through the UI.");
-    }*/
+    @Test
+    void delete() throws SQLException {
+        LocationController.delete(2);
+        ArrayList<Location> locations = LocationController.getAllLocations();
+        assertEquals(1, locations.size());
+        assertEquals(1, locations.get(0).getId());
+        assertEquals("Location1", locations.get(0).getName());
+        assertEquals("Address1", locations.get(0).getAddress());
+    }
+
+    @Test
+    void getLocationById() throws SQLException {
+        Location location = LocationController.getLocationById(2);
+        assertEquals(2, location.getId());
+        assertEquals("Location2", location.getName());
+        assertEquals("Address2", location.getAddress());
+    }
+
 }

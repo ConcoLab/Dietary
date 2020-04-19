@@ -1,9 +1,10 @@
 package daos.concrete;
 
-import daoFactories.Context;
+import daoFactories.SqliteConnection;
 import daos.interfaces.LocationDoaInterface;
 import models.Location;
 import observers.LocationObserver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,31 +16,17 @@ import java.util.Observable;
  *
  */
 public class LocationDao extends Observable implements LocationDoaInterface {
-    private Context _context;
+    private SqliteConnection _sqliteConnection;
 
     /**
      * This initializes the data from locations table
-     * @param context
+     * @param sqliteConnection
      * @throws SQLException
      */
-    public LocationDao(Context context) throws SQLException {
-
-        _context = context;
-
+    public LocationDao(SqliteConnection sqliteConnection) throws SQLException {
+        _sqliteConnection = sqliteConnection;
         LocationObserver locationObserver = new LocationObserver();
         this.addObserver(locationObserver);
-
-
-//        Location l0 = new Location("Home", "Mi Casa");
-//        Location l1 = new Location("Tim Hortons", "Snowdon");
-//        _context.locations.add(l0);
-//        _context.locations.add(l1);
-        String sql = "SELECT * FROM locations";
-        ResultSet rs = _context.getCall(sql);
-        while (rs.next()) {
-            _context.locations.add(new Location(rs.getLong("id"), rs.getString("name"), rs.getString("address")));
-        }
-
     }
 
     /**
@@ -51,10 +38,10 @@ public class LocationDao extends Observable implements LocationDoaInterface {
     public Location insert(Location location) {
         String sql = "INSERT INTO locations (name, address)\n" +
                     "VALUES ('"+ location.getName() +"', '"+ location.getAddress() +"');";
-        long newId = _context.insertCall(sql);
+        long newId = _sqliteConnection.insertCall(sql);
         if(newId != 0){
             location.setId(newId);
-            _context.locations.add(location);
+//            _context.locations.add(location);
             setChanged();
         }
         return null;
@@ -69,7 +56,7 @@ public class LocationDao extends Observable implements LocationDoaInterface {
     public ArrayList<Location> all() throws SQLException {
         ArrayList<Location> locations = new ArrayList<Location>();
         String sql = "SELECT * FROM locations";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             locations.add(new Location(rs.getLong("id"), rs.getString("name"), rs.getString("address")));
         }
@@ -79,7 +66,8 @@ public class LocationDao extends Observable implements LocationDoaInterface {
 
     @Override
     public int deleteAll() {
-//        locations.removeAll();
+        ResultSet rs = _sqliteConnection.truncate("locations");
+        setChanged();
         return 0;
     }
 
@@ -90,7 +78,7 @@ public class LocationDao extends Observable implements LocationDoaInterface {
      */
     @Override
     public int delete(long id) {
-        int rs = _context.deleteCall(id, "locations");
+        int rs = _sqliteConnection.deleteCall(id, "locations");
         if(rs != 0){
             setChanged();
         }
@@ -104,7 +92,7 @@ public class LocationDao extends Observable implements LocationDoaInterface {
      */
     @Override
     public Location findById(long id) throws SQLException {
-        ResultSet rs = _context.findByIdCall(id, "locations");
+        ResultSet rs = _sqliteConnection.findByIdCall(id, "locations");
         if(rs.next()){
             return new Location(rs.getLong("id"),rs.getString("name"), rs.getString("address"));
         }
@@ -120,18 +108,20 @@ public class LocationDao extends Observable implements LocationDoaInterface {
      */
     @Override
     public Location findByName(String name) {
-        return _context.locations.stream()
-                .filter(location -> location.getName().contains(name))
-                .findFirst()
-                .orElse(null);
+        throw new NotImplementedException();
+//        return _context.locations.stream()
+//                .filter(location -> location.getName().contains(name))
+//                .findFirst()
+//                .orElse(null);
     }
 
     @Override
     public Location findByAddress(String address) {
-        return _context.locations.stream()
-                .filter(location -> location.getAddress().contains(address))
-                .findFirst()
-                .orElse(null);
+        throw new NotImplementedException();
+//        return _context.locations.stream()
+//                .filter(location -> location.getAddress().contains(address))
+//                .findFirst()
+//                .orElse(null);
     }
 
 }

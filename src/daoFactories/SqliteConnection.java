@@ -1,32 +1,16 @@
 package daoFactories;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import models.*;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
-import java.util.ArrayList;
 
-public class Context {
-    public static ObservableList<Food> foods;
-    public static ObservableList<FoodGroup> foodGroups;
-    public static ObservableList<Group> groups;
-    public static ObservableList<Unit> units;
-    public static ObservableList<Meal> meals;
-    public static ObservableList<Location> locations;
+public class SqliteConnection {
     private Connection conn;
 
-    public Context() {
-        foods = FXCollections.observableList(new ArrayList<Food>());
-        foodGroups = FXCollections.observableList(new ArrayList<FoodGroup>());
-        groups = FXCollections.observableList(new ArrayList<Group>());
-//        units = FXCollections.observableList(new ArrayList<Unit>());
-        units = FXCollections.observableList(new ArrayList<Unit>());
-        meals = FXCollections.observableList(new ArrayList<Meal>());
-        locations = FXCollections.observableList(new ArrayList<Location>());
-
+    public SqliteConnection(String databaseName) {
         try{
-            String url = "jdbc:sqlite:src/db/dietary.db";
+            String url = "jdbc:sqlite:src/db/" + databaseName + ".db";
             conn = DriverManager.getConnection(url);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -38,6 +22,7 @@ public class Context {
         try{
             Statement stmt = conn.createStatement();
             ResultSet rs    = stmt.executeQuery(sql);
+            System.out.println("-- DEBUG: " + sql);
             return rs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -50,8 +35,8 @@ public class Context {
             Statement stmt = conn.createStatement();
             stmt.executeUpdate("PRAGMA foreign_keys = ON;");
             String sql = "DELETE FROM "+ tableName +" WHERE "+ tableName +".id = "+ id +";";
-            System.out.println(sql);
             int rs = stmt.executeUpdate(sql);
+            System.out.println("-- DEBUG: " + sql);
             return rs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -71,6 +56,7 @@ public class Context {
                     System.out.println("-- DEBUG: new unit id = " + generatedKeys.getLong(1));
 
                 }
+                System.out.println("-- DEBUG: " + sql);
                 return generatedKeys.getLong(1);
             }
 
@@ -81,22 +67,40 @@ public class Context {
     }
 
     synchronized public long updateCall(String sql){
-        try{
-
-            Statement stmt = conn.createStatement();
-
-            int rs    = stmt.executeUpdate(sql);
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return 0;
+        // TODO: the following code should be used to implement the update method
+        throw new NotImplementedException();
+//        try{
+//
+//
+//            Statement stmt = conn.createStatement();
+//            System.out.println("-- DEBUG: " + sql);
+////            int rs    = stmt.executeUpdate(sql);
+//
+//        } catch (SQLException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return 0;
     }
 
     public ResultSet findByIdCall(long id, String tableName){
         try{
             Statement stmt = conn.createStatement();
-            ResultSet rs    = stmt.executeQuery("SELECT * FROM "+ tableName +" WHERE "+ tableName +".id = "+ id +" LIMIT 1;");
+            String sql = "SELECT * FROM "+ tableName +" WHERE "+ tableName +".id = "+ id +" LIMIT 1;";
+            ResultSet rs    = stmt.executeQuery(sql);
+            System.out.println(sql);
+            return rs;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public ResultSet truncate(String tableName){
+        try{
+            Statement stmt = conn.createStatement();
+            String sql = "DELETE FROM " + tableName + ";";
+            ResultSet rs    = stmt.executeQuery(sql);
+            System.out.println(sql);
             return rs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());

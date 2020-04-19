@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
-        ContextFactory _context = new ContextFactory("jdbc:sqlite:./src/db/dietary.db");
+        ContextFactory _context = new ContextFactory("dietary");
 
         System.out.println();
         MainGUI main = new MainGUI();

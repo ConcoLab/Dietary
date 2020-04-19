@@ -1,6 +1,6 @@
 package daos.concrete;
 
-import daoFactories.Context;
+import daoFactories.SqliteConnection;
 import daoFactories.ContextFactory;
 import daos.interfaces.FoodGroupDaoInterface;
 import models.Food;
@@ -18,26 +18,18 @@ import java.util.Observable;
  * FoodGroups table. This mehtod only should be called from the controller only.
  */
 public class FoodGroupDao extends Observable implements FoodGroupDaoInterface {
-    private Context _context;
+    private SqliteConnection _sqliteConnection;
 
 
     /**
      * This method loads all the data from the database to the local memory and initializes the whole relations
-     * @param context
+     * @param sqliteConnection
      * @throws SQLException
      */
-    public FoodGroupDao(Context context) throws SQLException {
-        _context = context;
-
+    public FoodGroupDao(SqliteConnection sqliteConnection) throws SQLException {
+        _sqliteConnection = sqliteConnection;
         FoodGroupObserver foodGroupObserver = new FoodGroupObserver();
         this.addObserver(foodGroupObserver);
-
-
-        String sql = "SELECT * FROM foodGroups";
-        ResultSet rs = _context.getCall(sql);
-        while (rs.next()) {
-            _context.foodGroups.add(new FoodGroup(rs.getInt("foodId"), rs.getInt("groupId")));
-        }
     }
 
     /**
@@ -50,8 +42,8 @@ public class FoodGroupDao extends Observable implements FoodGroupDaoInterface {
     public FoodGroup insert(FoodGroup foodGroup) {
         String sql = "INSERT INTO groups (foodId, groupId)\n" +
                 "VALUES ('"+ foodGroup.getFoodId() +"', '"+ foodGroup.getGroupId() +"')";
-        ResultSet rs = _context.getCall(sql);
-        _context.foodGroups.add(foodGroup);
+        ResultSet rs = _sqliteConnection.getCall(sql);
+//        _context.foodGroups.add(foodGroup);
         return foodGroup;
     }
 
@@ -68,7 +60,7 @@ public class FoodGroupDao extends Observable implements FoodGroupDaoInterface {
         ArrayList<Food> foods = new ArrayList<Food>();
         String sql = "SELECT * FROM foods " +
                 "WHERE id = '"+ groupId +"' \n";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             foods.add(new Food(rs.getLong("id")
                     , rs.getString("name")
@@ -81,14 +73,6 @@ public class FoodGroupDao extends Observable implements FoodGroupDaoInterface {
                     , rs.getLong("quantity")
                     , ContextFactory._FoodGroupDao().getGroupsOfOneFood(rs.getLong("id"))));
         }
-
-//        _context.foodGroups.stream().forEach(foodGroup -> {
-//            if(foodGroup.getFoodId() == groupId)
-//                foods.add(_context.foods.stream()
-//                        .filter(food -> food.getId() == foodGroup.getFoodId())
-//                        .findFirst()
-//                        .orElse(null));
-//        });
         return foods;
     }
 
@@ -104,7 +88,7 @@ public class FoodGroupDao extends Observable implements FoodGroupDaoInterface {
         String sql = "SELECT g.id, g.name FROM foodGroups fg " +
                 "JOIN groups g ON g.id = fg.groupId " +
                 "WHERE fg.foodId = '"+ foodId +"' \n";
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             groups.add(new Group(rs.getLong("id"), rs.getString("name"), new ArrayList<Food>()));
         }
@@ -121,7 +105,8 @@ public class FoodGroupDao extends Observable implements FoodGroupDaoInterface {
 
     @Override
     public void deleteAll() {
-
+        ResultSet rs = _sqliteConnection.truncate("foodGroups");
+        setChanged();
     }
 
 }

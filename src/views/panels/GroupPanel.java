@@ -1,9 +1,6 @@
 package views.panels;
 
 import controllers.GroupController;
-import daoFactories.Context;
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
 import models.Group;
 
 import javax.swing.*;

@@ -1,11 +1,11 @@
 package daos.concrete;
 
-import daoFactories.Context;
+import daoFactories.SqliteConnection;
 import daos.interfaces.MealDaoInterface;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.Meal;
 import observers.MealObserver;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,34 +19,13 @@ import java.util.Observable;
  * database
  */
 public class MealDao extends Observable implements MealDaoInterface {
-    private Context _context;
+    private SqliteConnection _sqliteConnection;
 
-    public MealDao(Context context) throws SQLException {
-        _context = context;
+    public MealDao(SqliteConnection sqliteConnection) throws SQLException {
+        _sqliteConnection = sqliteConnection;
 
         MealObserver mealObserver = new MealObserver();
         this.addObserver(mealObserver);
-
-
-        String sql = "SELECT * FROM meals";
-        ResultSet rs = _context.getCall(sql);
-        while (rs.next()) {
-            LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
-            System.out.println(date);
-            _context.meals.add(new Meal(rs.getLong("id")
-                    , rs.getInt("foodId")
-                    , rs.getInt("mealTypeId")
-                    , rs.getLong("locationId")
-                    , rs.getLong("amount")
-                    , rs.getLong("calories")
-                    , rs.getLong("fat")
-                    , rs.getLong("carbohydrate")
-                    , rs.getLong("salt")
-                    , rs.getLong("protein")
-                    , rs.getInt("isConsumed")
-                    , LocalDateTime.parse(rs.getString("dateTime"))
-            ));
-        }
     }
 
     /**
@@ -69,7 +48,7 @@ public class MealDao extends Observable implements MealDaoInterface {
                 "'"+ meal.getProtein() +"', " +
                 "'"+ meal.getIsConsumed() + "');";
         System.out.println("-- DEBUG: " + sql);
-        long rs = _context.insertCall(sql);
+        long rs = _sqliteConnection.insertCall(sql);
         if(rs != 0){
             meal.setId(rs);
 //            _context.meals.add(meal);
@@ -101,7 +80,7 @@ public class MealDao extends Observable implements MealDaoInterface {
             sql = "SELECT * FROM meals WHERE id = ?;";
 
         System.out.println(sql);
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
             System.out.println(date);
@@ -140,7 +119,7 @@ public class MealDao extends Observable implements MealDaoInterface {
             sql = "SELECT * FROM meals WHERE id = ?;";
 
         System.out.println(sql);
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
             System.out.println(date);
@@ -179,7 +158,7 @@ public class MealDao extends Observable implements MealDaoInterface {
             sql = "SELECT * FROM meals WHERE id = ?;";
 
         System.out.println(sql);
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         while (rs.next()) {
             LocalDateTime date = LocalDateTime.parse(rs.getString("dateTime"));
             System.out.println(date);
@@ -203,7 +182,8 @@ public class MealDao extends Observable implements MealDaoInterface {
 
     @Override
     public int deleteAll() {
-        //meals.removeAll();
+        ResultSet rs = _sqliteConnection.truncate("meals");
+        setChanged();
         return 0;
     }
 
@@ -214,7 +194,7 @@ public class MealDao extends Observable implements MealDaoInterface {
      */
     @Override
     public int delete(long id) {
-        int rs = _context.deleteCall(id, "meals");
+        int rs = _sqliteConnection.deleteCall(id, "meals");
         if (rs != 0){
             setChanged();
         }
@@ -230,7 +210,7 @@ public class MealDao extends Observable implements MealDaoInterface {
     public Meal findById(long id) throws SQLException {
         String sql = "SELECT * FROM meals WHERE id = " + id;
         System.out.println(sql);
-        ResultSet rs = _context.getCall(sql);
+        ResultSet rs = _sqliteConnection.getCall(sql);
         return new Meal(rs.getLong("id")
                 , rs.getInt("foodId")
                 , rs.getInt("mealTypeId")
@@ -282,14 +262,15 @@ public class MealDao extends Observable implements MealDaoInterface {
 
     @Override
     public ObservableList<Meal> findInRange(LocalDateTime start, LocalDateTime end) {
-        ObservableList<Meal> mealsInRange = FXCollections.observableList(new ArrayList<Meal>());
-        // needs a second look
-        _context.meals.stream()
-                .forEach(meal -> {
-                    if (meal.getDateTime().isAfter(start) && meal.getDateTime().isBefore(end))
-                        mealsInRange.add(meal);
-                });
-        return mealsInRange;
+        throw new NotImplementedException();
+//        ObservableList<Meal> mealsInRange = FXCollections.observableList(new ArrayList<Meal>());
+//        // needs a second look
+//        _context.meals.stream()
+//                .forEach(meal -> {
+//                    if (meal.getDateTime().isAfter(start) && meal.getDateTime().isBefore(end))
+//                        mealsInRange.add(meal);
+//                });
+//        return mealsInRange;
     }
 
     @Override
@@ -297,7 +278,7 @@ public class MealDao extends Observable implements MealDaoInterface {
         String sql = "UPDATE meals\n" +
                 "SET isConsumed = "+ isConsumed +"\n" +
                 "WHERE id = " + id + ";";
-        long rs = _context.updateCall(sql);
+        long rs = _sqliteConnection.updateCall(sql);
         setChanged();
         return true;
     }

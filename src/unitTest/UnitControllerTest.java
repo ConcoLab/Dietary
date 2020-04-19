@@ -5,10 +5,12 @@ import daoFactories.ContextFactory;
 import models.Unit;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import views.main.MainGUI;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -23,41 +25,54 @@ class UnitControllerTest {
 
     @BeforeAll
     static void setUp() throws SQLException {
-        // Necessary setup for anything to function.
-        context = new ContextFactory("jdbc:sqlite:./src/db/test_GroupController.db");
+        context = new ContextFactory("dietaryTest");
         main = new MainGUI();
+    }
+
+    @BeforeEach
+    void initEach() throws SQLException {
+        ContextFactory._UnitDao().deleteAll();
+        ContextFactory._UnitDao().insert(new Unit(1, "Unit1"));
+        ContextFactory._UnitDao().insert(new Unit(2, "Unit2"));
     }
 
     @AfterAll
     static void tearDown() {
-        // TODO: Wipe the database or reset it after testing.
-        context = null;
-        main = null;
+        ContextFactory._UnitDao().deleteAll();
     }
 
     @Test
     void getAllUnits() throws SQLException {
         // Get from DAO and confirm it matches the controller.
-        int expected = ContextFactory._UnitDao().all().size();
-        int actual = UnitController.getAllUnits().size();
+        ArrayList<Unit> units = UnitController.getAllUnits();
+        int expected = 2;
+        int actual = units.size();
         assertEquals(expected, actual);
+        assertEquals(units.get(0).getId(), 1);
+        assertEquals(units.get(1).getId(), 2);
+        assertEquals(units.get(0).getName(), "Unit1");
+        assertEquals(units.get(1).getName(), "Unit2");
     }
 
     @Test
     void create() throws SQLException {
-        // Expect one more than what we currently have.
-        int expectedNum = UnitController.getAllUnits().size() + 1;
-        // Create a new unit and compare
-        Unit unit = new Unit(0, "TestUnit");
-        UnitController.create(unit);
-        int actualNum = UnitController.getAllUnits().size();
-        assertEquals(expectedNum, actualNum);
+        ArrayList<Unit> units = UnitController.getAllUnits();
+        UnitController.create(new Unit(3, "Unit3"));
+        ArrayList<Unit> unitsUpdated = UnitController.getAllUnits();
+        assertEquals(units.size() + 1, unitsUpdated.size());
+        assertEquals(unitsUpdated.get(unitsUpdated.size()-1).getId(), 3);
+        assertEquals(unitsUpdated.get(unitsUpdated.size()-1).getName(), "Unit3");
     }
 
-    /*@Test
-    void delete() {
-        fail("This is not testable yet since deletion depends on data accessible through the UI.");
-    }*/
+    @Test
+    void delete() throws SQLException {
+        ArrayList<Unit> units = UnitController.getAllUnits();
+        UnitController.delete(2);
+        ArrayList<Unit> unitsUpdated = UnitController.getAllUnits();
+        assertEquals(units.size() - 1, unitsUpdated.size());
+        assertEquals(units.get(0).getId(), 1);
+        assertEquals(units.get(0).getName(), "Unit1");
+    }
 
     /*@Test
     void getById() {
