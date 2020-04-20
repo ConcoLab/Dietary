@@ -109,10 +109,10 @@ public class MealPanel extends JPanel{
                 return;
             }
             try{
-                numOfServing=Float.parseFloat(numOfServ);
+                numOfServing=Long.parseLong(numOfServ);
             }
             catch (NumberFormatException event){
-                System.out.println("Please input a positive decimal fraction in the \"Number of Servings\" field!");
+                System.out.println("Please input a positive integer fraction in the \"Number of Servings\" field!");
                 return;
             }
 
