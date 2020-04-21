@@ -67,19 +67,15 @@ public class SqliteConnection {
     }
 
     synchronized public long updateCall(String sql){
-        // TODO: the following code should be used to implement the update method
-        throw new NotImplementedException();
-//        try{
-//
-//
-//            Statement stmt = conn.createStatement();
-//            System.out.println("-- DEBUG: " + sql);
-////            int rs    = stmt.executeUpdate(sql);
-//
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        return 0;
+        try{
+            Statement stmt = conn.createStatement();
+            System.out.println("-- DEBUG: " + sql);
+            int rs    = stmt.executeUpdate(sql);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return 0;
     }
 
     public ResultSet findByIdCall(long id, String tableName){
