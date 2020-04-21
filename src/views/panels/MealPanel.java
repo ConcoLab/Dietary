@@ -112,7 +112,7 @@ public class MealPanel extends JPanel{
                 numOfServing=Long.parseLong(numOfServ);
             }
             catch (NumberFormatException event){
-                System.out.println("Please input a positive integer fraction in the \"Number of Servings\" field!");
+                JOptionPane.showMessageDialog(this,"Please input a positive integer fraction in the \"Number of Servings\" field!");
                 return;
             }
 
