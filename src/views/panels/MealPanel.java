@@ -105,14 +105,14 @@ public class MealPanel extends JPanel{
             String numOfServ=amountTextField.getText();
             float numOfServing;
             if(numOfServ.length()==0 || numOfServ.equals("0") || numOfServ.substring(0,1).equals("-")){
-                JOptionPane.showMessageDialog(this,"Please input a positive integer fraction in the \"Number of Servings\" field!");
+                JOptionPane.showMessageDialog(this,"Please input a positive integer in the \"Number of Servings\" field!");
                 return;
             }
             try{
                 numOfServing=Long.parseLong(numOfServ);
             }
             catch (NumberFormatException event){
-                JOptionPane.showMessageDialog(this,"Please input a positive integer fraction in the \"Number of Servings\" field!");
+                JOptionPane.showMessageDialog(this,"Please input a positive integer in the \"Number of Servings\" field!");
                 return;
             }
 
