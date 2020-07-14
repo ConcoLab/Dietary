@@ -1,32 +1,22 @@
 package views.panels;
 
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import controllers.LocationController;
 import models.Location;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class LocationPanel extends TemplatePanel {
+    private static DefaultTableModel model;
 
-    public LocationPanel(ObservableList<Location> locations){
+    public LocationPanel(ArrayList<Location> locations){
         // Creating a model for the table in this panel
-        DefaultTableModel model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME", "ADDRESS"});
+        model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME", "ADDRESS"});
         for (Location location : locations)
             model.addRow(new Object[]{location.getId(), location.getName(), location.getAddress()});
-
-        // Refreshing the components' models according to any changes in the model
-
-        locations.addListener((ListChangeListener.Change<? extends Location> l) -> {
-            JOptionPane.showMessageDialog(this,"Change is applied successfully.");
-            while(model.getRowCount() != 0){
-                model.removeRow(0);
-            }
-            for (Location location : locations)
-                model.addRow(new Object[]{location.getId(), location.getName(), location.getAddress()});
-        });
 
         // Creating different Components
         JTable table = new JTable(model);
@@ -50,8 +40,8 @@ public class LocationPanel extends TemplatePanel {
                 JOptionPane.showMessageDialog(this, "Please input the location address in the \"Location Address\" field!");
                 return;
             }
-            Location newLocation = new Location(name, address);
-            ContextFactory._LocationDao().insert(newLocation);
+            Location newLocation = new Location(0, name, address);
+            LocationController.create(newLocation);
             locationName.setText("");
             locationAddress.setText("");
         });
@@ -59,10 +49,9 @@ public class LocationPanel extends TemplatePanel {
         JButton deleteButton = new JButton("DELETE");
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
-            if (row == -1)
-                return;
-            System.out.println("DEBUG: DELETING - " + locations.get(row).getId() + "  " + locations.get(row).getName());
-            ContextFactory._LocationDao().delete(locations.get(row));
+            Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+            System.out.println("-- DEBUG: The location with following id should be deleted: " + id);
+            LocationController.delete(id);
         });
 
         // Adding Components to the Panel And Design
@@ -89,6 +78,15 @@ public class LocationPanel extends TemplatePanel {
         deleteButton.setForeground(Color.WHITE);
         bottomPanel.add(deleteButton);
         add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    public static void locationUpdater() throws SQLException {
+//        JOptionPane.showMessageDialog(this,"Change is applied successfully.");
+        while(model.getRowCount() != 0){
+            model.removeRow(0);
+        }
+        for (Location location : LocationController.getAllLocations())
+            model.addRow(new Object[]{location.getId(), location.getName(), location.getAddress()});
     }
 
 }

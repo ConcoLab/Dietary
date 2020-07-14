@@ -1,31 +1,20 @@
 package views.panels;
 
-import daoFactories.ContextFactory;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import controllers.GroupController;
 import models.Group;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class GroupPanel extends TemplatePanel {
+    private static DefaultTableModel model;
 
-    public GroupPanel(ObservableList<Group> groups){
-        // Creating a model for the table in this panel
+    public GroupPanel(ArrayList<Group> groups) throws SQLException {
         model = new DefaultTableModel(new Object[][]{}, new Object[]{"ID", "NAME"});
-        for (Group group : groups)
-            model.addRow(new Object[]{group.getId(), group.getName()});
 
-        // Refreshing the components' models according to any changes in the model
-        groups.addListener((ListChangeListener.Change<? extends Group> g) -> {
-            JOptionPane.showMessageDialog(this,"Change is applied successfully.");
-            while(model.getRowCount() != 0){
-                model.removeRow(0);
-            }
-            for (Group group : groups)
-                model.addRow(new Object[]{group.getId(), group.getName()});
-        });
 
         //Components
         JTable table = new JTable(model);
@@ -43,18 +32,17 @@ public class GroupPanel extends TemplatePanel {
                 return;
             }
 
-            Group newGroup = new Group(name);
-            ContextFactory._GroupDao().insert(newGroup);
+            Group newGroup = new Group(0, name, null);
+//            ContextFactory._GroupDao().insert(newGroup);
+            GroupController.create(newGroup);
             groupName.setText("");
         });
 
         deleteButton = new JButton("DELETE");
         deleteButton.addActionListener(e -> {
             int row = table.getSelectedRow();
-            if (row == -1)
-                return;
-            System.out.println("DEBUG: DELETING - " + groups.get(row).getId() + "  " + groups.get(row).getName());
-            ContextFactory._GroupDao().delete(groups.get(row));
+            Long id = Long.parseLong(table.getModel().getValueAt(row, 0).toString());
+            GroupController.delete(id);
         });
 
 
@@ -80,5 +68,20 @@ public class GroupPanel extends TemplatePanel {
         deleteButton.setForeground(Color.WHITE);
         bottomPanel.add(deleteButton);
         add(bottomPanel, BorderLayout.SOUTH);
+
+        // Add data to the table
+        updateGroupModel();
+    }
+
+    public static void updateGroupModel() throws SQLException {
+        // Creating a model for the table in this panel
+
+        // Refreshing the components' models according to any changes in the model
+//        JOptionPane.showMessageDialog(this,"Change is applied successfully.");
+        while(model.getRowCount() != 0){
+            model.removeRow(0);
+        }
+        for (Group group : GroupController.getAll())
+            model.addRow(new Object[]{group.getId(), group.getName()});
     }
 }

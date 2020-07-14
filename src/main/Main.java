@@ -4,11 +4,11 @@ import daoFactories.ContextFactory;
 import models.*;
 import views.main.MainGUI;
 
+import java.sql.SQLException;
+
 public class Main {
-    public static void main(String[] args){
-        ContextFactory _context = new ContextFactory();
-        Food test = _context._FoodDao().findByName("Soup");
-        Location testLocation = _context._LocationDao().findByName("Home");
+    public static void main(String[] args) throws SQLException {
+        ContextFactory _context = new ContextFactory("dietary");
 
         System.out.println();
         MainGUI main = new MainGUI();

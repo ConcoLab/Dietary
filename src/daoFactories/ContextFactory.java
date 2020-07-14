@@ -2,48 +2,43 @@ package daoFactories;
 
 import daos.concrete.*;
 
+import java.sql.*;
+
 public class ContextFactory {
+    private static FoodDao _FoodDao;
+    private static FoodGroupDao _FoodGroupDao;
+    private static GroupDao _GroupDao;
+    private static UnitDao _UnitDao;
+    private static MealDao _MealDao;
+    private static LocationDao _LocationDao;
+    private SqliteConnection _sqliteConnection;
 
-    private static MysqlFoodDao _mysqlFoodDao;
-    private static MysqlFoodGroupDao _mysqlFoodGroupDao;
-    private static MysqlGroupDao _mysqlGroupDao;
-    private static MysqlUnitDao _mysqlUnitDao;
-    private static MysqlMealDao _mysqlMealDao;
-//    private static MysqlMealTypeDao _mysqlMealTypeDao;
-    private static MysqlLocationDao _mysqlLocationDao;
-    private Context _context;
-
-    public ContextFactory(){
-        _context = new Context();
-        _mysqlFoodDao = new MysqlFoodDao(_context);
-        _mysqlFoodGroupDao = new MysqlFoodGroupDao(_context);
-        _mysqlGroupDao = new MysqlGroupDao(_context);
-        _mysqlUnitDao = new MysqlUnitDao(_context);
-        _mysqlMealDao = new MysqlMealDao(_context);
-//        _mysqlMealTypeDao = new MysqlMealTypeDao(_context);
-        _mysqlLocationDao = new MysqlLocationDao(_context);
+    public ContextFactory(String databaseName) throws SQLException {
+        _sqliteConnection = new SqliteConnection(databaseName);
+        _FoodDao = new FoodDao(_sqliteConnection);
+        _FoodGroupDao = new FoodGroupDao(_sqliteConnection);
+        _GroupDao = new GroupDao(_sqliteConnection);
+        _UnitDao = new UnitDao(_sqliteConnection);
+        _MealDao = new MealDao(_sqliteConnection);
+        _LocationDao = new LocationDao(_sqliteConnection);
     }
 
-    public static MysqlGroupDao _GroupDao() {
-        return _mysqlGroupDao;
+    public static GroupDao _GroupDao() {
+        return _GroupDao;
     }
-    public static MysqlFoodGroupDao _FoodGroupDao() {
-        return _mysqlFoodGroupDao;
+    public static FoodGroupDao _FoodGroupDao() {
+        return _FoodGroupDao;
     }
-    public static MysqlFoodDao _FoodDao() {
-        return _mysqlFoodDao;
+    public static FoodDao _FoodDao() {
+        return _FoodDao;
     }
-    public static MysqlMealDao _MealDao() {
-        return _mysqlMealDao;
+    public static MealDao _MealDao() {
+        return _MealDao;
     }
-    public static MysqlLocationDao _LocationDao() {
-        return _mysqlLocationDao;
+    public static LocationDao _LocationDao() {
+        return _LocationDao;
     }
-    public static MysqlUnitDao _UnitDao(){return _mysqlUnitDao;};
-//    public static MysqlMealTypeDao get_mysqlMealTypeDao(){return _mysqlMealTypeDao;}
-    public Context getContext(){return _context;}
-
-
-
+    public static UnitDao _UnitDao(){return _UnitDao;};
+    public SqliteConnection getContext(){return _sqliteConnection;}
 
 }

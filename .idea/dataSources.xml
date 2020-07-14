@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="dietary" uuid="6e3d6a65-b07c-4284-9ace-cac2a4227cb5">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:D:\cloud storage\OneDrive - Concordia University - Canada\2020 winter, GraDip\Comp 5541\project\repo\src\db\dietary.db</jdbc-url>
+    </data-source>
+  </component>
+</project>

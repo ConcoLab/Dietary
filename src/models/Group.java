@@ -1,14 +1,17 @@
 package models;
 
+import java.util.ArrayList;
+
 public class Group {
     private static long ITERATOR = 0;
     private long id;
     private String name;
+    private ArrayList<Food> foods;
 
-    public Group(String name) {
-        this.id = ITERATOR;
+    public Group(long id, String name, ArrayList<Food> foods) {
+        this.id = id;
         this.name = name;
-        ITERATOR++;
+        this.foods = foods;
     }
 
     public long getId() {
@@ -25,6 +28,14 @@ public class Group {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ArrayList<Food> getFoods() {
+        return foods;
+    }
+
+    public void setFoods(ArrayList<Food> foods) {
+        this.foods = foods;
     }
 
 }
